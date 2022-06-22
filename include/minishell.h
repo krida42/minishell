@@ -8,18 +8,27 @@
 # include <signal.h>
 # include <unistd.h>
 
-# define LITERAL 42
-# define PIPE 7
-# define REDIRECTION 18
+# define CMD_AG 0
+# define CMD_IN 1
+# define CMD_OUT 2
+# define CMD_APPEND 3
+# define CMD_HEREDOC 4
 
-typedef int	t_toktype;
+typedef struct s_cmd {
+	char			*ag;
+	char			*in;
+	char			*out;
+	char			*append;
+	char			*heredoc;
+	struct s_cmd	*prev;
+	struct s_cmd	*next;
+}	t_cmd;
 
-typedef struct s_token {
-	char			*value;
-	t_toktype		type;
-	struct s_token	*prev;
-	struct s_token	*next;
-}	t_token;
+typedef struct s_info {
+	t_cmd	*cmd;
+	int		size;
+	char	**env;
+}	t_info;
 
 int		m_prompt(const char *prompt);
 
@@ -32,9 +41,8 @@ int		parse(char *input);
 int		check_unclosed(char *input);
 int		check_special(char *input);
 
-
-t_token	*get_first(t_token *token); // no tested
-t_token	*get_last(t_token *token); // no tested
-void	add_back(t_token **token, char *value, t_toktype type); //no teste
-int		token_size(t_token *token); // no tested
+t_cmd	*get_first(t_cmd *cmd); // no tested
+t_cmd	*get_last(t_cmd *cmd); // no tested
+void	add_back(t_cmd **cmd, char *properties[]); //no teste
+int		cmd_size(t_cmd *cmd); // no tested
 #endif

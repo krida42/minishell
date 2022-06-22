@@ -1,53 +1,56 @@
 #include "minishell.h"
 
-static t_token	*new_token(char *value, t_toktype type)
+static t_cmd	*new_cmd(char *properties[])
 {
-	t_token	*token;
+	t_cmd	*cmd;
 
-	token = malloc(sizeof(t_token));
-	token->value = value;
-	token->type = type;
-	token->prev = NULL;
-	token->next = NULL;
-	return (token);
+	cmd = malloc(sizeof(t_cmd));
+	cmd->ag = properties[CMD_AG];
+	cmd->in = properties[CMD_IN];
+	cmd->out = properties[CMD_OUT];
+	cmd->append = properties[CMD_APPEND];
+	cmd->heredoc = properties[CMD_HEREDOC];
+	cmd->prev = NULL;
+	cmd->next = NULL;
+	return (cmd);
 }
 
-t_token	*get_first(t_token *token)
+t_cmd	*get_first(t_cmd *cmd)
 {
-	while (token->prev)
-		token = token->prev;
-	return (token);
+	while (cmd->prev)
+		cmd = cmd->prev;
+	return (cmd);
 }
 
-t_token	*get_last(t_token *token)
+t_cmd	*get_last(t_cmd *cmd)
 {
-	while (token->next)
-		token = token->next;
-	return (token);
+	while (cmd->next)
+		cmd = cmd->next;
+	return (cmd);
 }
 
-void	add_back(t_token **token, char *value, t_toktype type)
+void	add_back(t_cmd **cmd, char *properties[])
 {
-	t_token	*last;
+	t_cmd	*last;
 
-	if (!*token)
+	if (!*cmd)
 	{
-		*token = new_token(value, type);
+		*cmd = new_cmd(properties);
 		return ;
 	}
-	last = get_last(*token);
-	last->next = new_token(value, type);
+	last = get_last(*cmd);
+	last->next = new_cmd(properties);
 	(last->next)->prev = last;
 }
 
-int	token_size(t_token *token)
+int	cmd_size(t_cmd *cmd)
 {
 	int	i;
 
 	i = 0;
-	while (token)
+	while (cmd)
 	{
-		token = token->next;
+		cmd = cmd->next;
 		i++;
 	}
 	return (i);

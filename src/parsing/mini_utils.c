@@ -1,6 +1,6 @@
 #include "libft.h"
 
-int		ft_strchri(const char *s, char c)
+int	ft_strchri(const char *s, char c)
 {
 	int	i;
 

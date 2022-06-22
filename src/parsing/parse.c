@@ -13,5 +13,5 @@ int	parse(char *input)
 	cursor = input;
 	while (next_token(cursor))
 		cursor = ft_strchr(input, ' ') + 1;
-	return 0;
+	return (0);
 }

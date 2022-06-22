@@ -3,7 +3,6 @@
 
 static void	treat_input(char *input)
 {
-
 	if (check_unclosed(input))
 		printf(RED"Unclosed quote\n"WHITE);
 	else if (check_special(input))
