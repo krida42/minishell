@@ -1,4 +1,5 @@
 #include "libft.h"
+#include <stddef.h>
 
 int	ft_strchri(const char *s, char c)
 {
@@ -29,4 +30,22 @@ int	ft_strcmp(char *s1, char *s2)
 		i++;
 	}
 	return (0);
+}
+
+char	*ft_strndup(const char *s, size_t n)
+{
+	char	*cpy;
+	size_t	i;
+
+	cpy = malloc(sizeof(char ) * (n + 1));
+	if (!cpy)
+		return (NULL);
+	i = 0;
+	while (s[i] && i < n)
+	{
+		cpy[i] = s[i];
+		i++;
+	}
+	*cpy = '\0';
+	return (cpy);
 }
