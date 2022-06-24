@@ -38,7 +38,7 @@ int		ft_strcmp(char *s1, char *s2);
 char	*ft_strndup(const char *s, size_t n);
 
 int		strs_len(char **strs); //not tested
-char	**strs_insert(const char *s, char **strs); //not tested
+char	**strs_insert(const char *s, char ***strs); //not tested
 
 void	init_signals(void);
 
@@ -48,7 +48,6 @@ int		check_special(char *input);
 
 t_cmd	*get_first(t_cmd *cmd); // no tested
 t_cmd	*get_last(t_cmd *cmd); // no tested
-
 void	add_back(t_cmd **cmd, char **ag); //no teste
 int		cmd_size(t_cmd *cmd); // no tested
 

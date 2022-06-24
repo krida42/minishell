@@ -34,7 +34,7 @@ int	parse(char *input)
 			printf("next_token_i : %d\n", next_token_i(cursor));
 		else 
 			break;
-		strs_insert(ft_strndup(cursor, next_token_i(cursor)), ag);
+		strs_insert(ft_strndup(cursor, next_token_i(cursor)), &ag);
 		cursor = next_token(cursor);
 	}
 	//DONT FORGET TO FREE ag
