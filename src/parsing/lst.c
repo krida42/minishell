@@ -1,15 +1,21 @@
 #include "minishell.h"
 
-static t_cmd	*new_cmd(char *properties[])
+static t_cmd	*new_cmd(char **ag)
 {
 	t_cmd	*cmd;
 
 	cmd = malloc(sizeof(t_cmd));
-	cmd->ag = properties[CMD_AG];
-	cmd->in = properties[CMD_IN];
-	cmd->out = properties[CMD_OUT];
-	cmd->append = properties[CMD_APPEND];
-	cmd->heredoc = properties[CMD_HEREDOC];
+	cmd->ag = ag;
+	cmd->in = NULL;
+	cmd->out = NULL;
+	cmd->append = NULL;
+	cmd->heredoc = NULL;
+    cmd->cmd_path = NULL;
+    cmd->pipefd[0] = -1;
+    cmd->pipefd[1] = -1;
+    cmd->fdin = -1;
+    cmd->fdout = -1;
+    cmd->pid = -1;
 	cmd->prev = NULL;
 	cmd->next = NULL;
 	return (cmd);
@@ -29,17 +35,17 @@ t_cmd	*get_last(t_cmd *cmd)
 	return (cmd);
 }
 
-void	add_back(t_cmd **cmd, char *properties[])
+void	add_back(t_cmd **cmd, char **ag)
 {
 	t_cmd	*last;
 
 	if (!*cmd)
 	{
-		*cmd = new_cmd(properties);
+		*cmd = new_cmd(ag);
 		return ;
 	}
 	last = get_last(*cmd);
-	last->next = new_cmd(properties);
+	last->next = new_cmd(ag);
 	(last->next)->prev = last;
 }
 

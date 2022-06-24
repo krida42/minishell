@@ -4,6 +4,7 @@ CC := gcc
 CFLAGS := -Wall -Werror -Wextra
 SANI = -g -fsanitize=address -fsanitize=leak
 INC_PATH := include/
+SHELL = /bin/bash
 
 PARSING_SRC := main.c prompt.c mini_utils.c signals.c \
 			   parse.c check.c lst.c
