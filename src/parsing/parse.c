@@ -5,8 +5,10 @@ static char	*next_token(char *input)
 {
 	char	*next;
 
-	next = ft_strchr(input, ' ') + 1;
-	return (next);
+	next = ft_strchr(input, ' ');
+	if (!next)
+		return (NULL);
+	return (next + 1);
 }
 
 static int	next_token_i(char *input)
@@ -26,16 +28,13 @@ int	parse(char *input)
 	ag = NULL;
 	(void)ag;
 	cursor = input;
-	char *cui = ft_strndup("test", 7);
-	printf("\nduped : %s\n", cui);
-	while (*cursor && 0)
+	while (cursor && *cursor)
 	{
 		next_i = next_token_i(cursor);
-		if (next_i > 0)
-			printf("next_token_i : %d\n", next_token_i(cursor));
-		else 
-			break;
-		strs_insert(ft_strndup(cursor, next_token_i(cursor)), &ag);
+		if (next_i != -1)
+			strs_insert(ft_strndup(cursor, next_i + 1), &ag);
+		//else
+			//strs_insert(ft_strndup(cursor, ), &ag)
 		cursor = next_token(cursor);
 	}
 	//DONT FORGET TO FREE ag
