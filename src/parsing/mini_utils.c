@@ -46,6 +46,6 @@ char	*ft_strndup(const char *s, size_t n)
 		cpy[i] = s[i];
 		i++;
 	}
-	*cpy = '\0';
+	cpy[i] = '\0';
 	return (cpy);
 }

@@ -1,7 +1,7 @@
 #include <stdio.h>
 void	desc_token(char **strs)
 {
-	printf("yo : %s\n", strs[0]);
+	//printf("yo : %s\n", strs[0]);
 	
 	while (strs && *strs)
 	{

@@ -37,8 +37,8 @@ int		ft_strchri(const char *s, char c);
 int		ft_strcmp(char *s1, char *s2);
 char	*ft_strndup(const char *s, size_t n);
 
-int		strs_len(char **strs); //not tested
-char	**strs_insert(const char *s, char ***strs); //not tested
+int		strs_len(char **strs);
+char	**strs_insert(const char *s, char ***strs); 
 
 void	init_signals(void);
 

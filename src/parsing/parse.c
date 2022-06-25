@@ -17,7 +17,6 @@ static int	next_token_i(char *input)
 	return (next_token(input) - input);
 }
 
-
 int	parse(char *input)
 {
 	char	*cursor;
@@ -27,7 +26,9 @@ int	parse(char *input)
 	ag = NULL;
 	(void)ag;
 	cursor = input;
-	while (*cursor)
+	char *cui = ft_strndup("test", 7);
+	printf("\nduped : %s\n", cui);
+	while (*cursor && 0)
 	{
 		next_i = next_token_i(cursor);
 		if (next_i > 0)
@@ -38,8 +39,6 @@ int	parse(char *input)
 		cursor = next_token(cursor);
 	}
 	//DONT FORGET TO FREE ag
-	//
 	desc_token(ag);
-	
 	return (0);
 }

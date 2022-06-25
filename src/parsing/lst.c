@@ -10,12 +10,12 @@ static t_cmd	*new_cmd(char **ag)
 	cmd->out = NULL;
 	cmd->append = NULL;
 	cmd->heredoc = NULL;
-    cmd->cmd_path = NULL;
-    cmd->pipefd[0] = -1;
-    cmd->pipefd[1] = -1;
-    cmd->fdin = -1;
-    cmd->fdout = -1;
-    cmd->pid = -1;
+	cmd->cmd_path = NULL;
+	cmd->pipefd[0] = -1;
+	cmd->pipefd[1] = -1;
+	cmd->fdin = -1;
+	cmd->fdout = -1;
+	cmd->pid = -1;
 	cmd->prev = NULL;
 	cmd->next = NULL;
 	return (cmd);
