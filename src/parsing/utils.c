@@ -21,7 +21,7 @@ char	**strs_insert(char ***strs, const char *s)
 	new_strs = malloc(sizeof(char *) * (new_len + 1));
 	if (!*strs)
 	{
-		new_strs[0] = strdup(s);
+		new_strs[0] = ft_strdup(s);
 		new_strs[1] = NULL;
 		*strs = new_strs;
 		return (new_strs);
@@ -29,7 +29,7 @@ char	**strs_insert(char ***strs, const char *s)
 	i = -1;
 	while ((*strs)[++i])
 		new_strs[i] = (*strs)[i];
-	new_strs[i++] = strdup(s);
+	new_strs[i++] = ft_strdup(s);
 	new_strs[i] = NULL;
 	free(*strs);
 	*strs = new_strs;
@@ -42,4 +42,16 @@ int	isinset(char c, const char *set)
 		if (*set++ == c)
 			return (1);
 	return (0);
+}
+
+void	free_strs(char	**strs)
+{
+	int	i;
+
+	i = -1;
+	if (!strs)
+		return ;
+	while (strs[++i])
+		free(strs[i]);
+	free(strs);
 }
