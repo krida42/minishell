@@ -20,7 +20,7 @@ static int	next_token_i(char *input)
 }
 */
 
-static int	end_token_i(char *input)
+static int	end_token_i0(char *input)
 {
 	char	*end = ft_strchr(input, ' ');
 	if (!end)
@@ -37,10 +37,13 @@ static int	end_token_i(char *input)
 	i = -1;
 	while (input[++i])
 	{
-		if ()
+		if (isinset(input[i], "<>| "))
+			return (i - 1);
 	}
+	return (i - 1);
 }
 */
+
 int	parse(char *input)
 {
 	char	*cursor;
@@ -52,8 +55,7 @@ int	parse(char *input)
 	cursor = input;
 	while (cursor && *cursor)
 	{
-		printf("len : %d\n", strs_len(ag));
-		end_i = end_token_i(cursor);
+		end_i = end_token_i0(cursor);
 		strs_insert(&ag, ft_strndup(cursor, end_i + 1));
 		cursor = next_token(cursor);
 	}

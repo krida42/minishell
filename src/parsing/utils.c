@@ -35,3 +35,11 @@ char	**strs_insert(char ***strs, const char *s)
 	*strs = new_strs;
 	return (new_strs);
 }
+
+int	isinset(char c, const char *set)
+{
+	while (*set)
+		if (*set++ == c)
+			return (1);
+	return (0);
+}

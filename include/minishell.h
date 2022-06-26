@@ -39,6 +39,7 @@ char	*ft_strndup(const char *s, size_t n);
 
 int		strs_len(char **strs);
 char	**strs_insert(char ***strs, const char *s); 
+int		isinset(char c, const char *set);
 
 void	init_signals(void);
 
