@@ -38,7 +38,7 @@ int		ft_strcmp(char *s1, char *s2);
 char	*ft_strndup(const char *s, size_t n);
 
 int		strs_len(char **strs);
-char	**strs_insert(const char *s, char ***strs); 
+char	**strs_insert(char ***strs, const char *s); 
 
 void	init_signals(void);
 

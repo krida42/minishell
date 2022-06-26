@@ -11,7 +11,7 @@ int	strs_len(char **strs)
 	return (i);
 }
 
-char	**strs_insert(const char *s, char ***strs)
+char	**strs_insert(char ***strs, const char *s)
 {
 	int		new_len;
 	char	**new_strs;
