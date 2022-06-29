@@ -39,8 +39,11 @@ char	*ft_strndup(const char *s, size_t n);
 
 int		strs_len(char **strs);
 char	**strs_insert(char ***strs, const char *s); 
-int		isinset(char c, const char *set);
 void	free_strs(char	**strs);
+int		isinset(char c, const char *set);
+
+char	*skip_spaces(char *s);
+int		skip_spaces_i(char *s);
 
 void	init_signals(void);
 

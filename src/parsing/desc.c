@@ -5,7 +5,7 @@ void	desc_token(char **strs)
 	
 	while (strs && *strs)
 	{
-		printf("token : '%s'\n", *strs);
+		printf("token : |%s|\n", *strs);
 		strs++;
 	}
 }

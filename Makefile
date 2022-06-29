@@ -7,7 +7,7 @@ INC_PATH := include/
 SHELL = /bin/bash
 
 PARSING_SRC := main.c prompt.c mini_utils.c signals.c \
-			   parse.c check.c lst.c utils.c desc.c
+			   parse.c check.c lst.c utils.c utils2.c desc.c
 EXEC_SRC := tes_fichiers.c
 
 SRC := $(addprefix parsing/,$(PARSING_SRC))

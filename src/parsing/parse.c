@@ -1,8 +1,9 @@
 #include "libft.h"
 #include "minishell.h"
+#include <stdio.h>
 
 /*
-static char	*next_token0(char *input)
+static char	*next_token(char *input)
 {
 	char	*next;
 
@@ -34,26 +35,46 @@ static char	*next_token0(char *input)
 static char	*next_token(char *input)
 {
 	int	i;
+	int	dquote;
+	int	squote;
 
+	dquote = 0;
+	squote = 0;
 	i = -1;
 	while (input[++i])
-		if (isinset(input[i], "<>| "))
-			break;
-	while (input[i])
 	{
-
+		if (input[i] == '\'' && !dquote)
+			squote = !squote;
+		else if (input[i] == '"' && !squote)
+			dquote = !dquote;
+		if (isinset(input[i], "<>| ") && !(dquote || squote))
+			break;
 	}
-	return input;
+	if (input[i] == ' ')
+		i += skip_spaces_i(input + i);
+	
+	return (input + i);
 }
 
 static int	end_token_i(char *input)
 {
 	int	i;
+	int	dquote;
+	int	squote;
+
+	dquote = 0;
+	squote = 0;
 
 	i = -1;
 	while (input[++i])
-		if (isinset(input[i], "<>| "))
+	{
+		if (input[i] == '\'' && !dquote)
+			squote = !squote;
+		else if (input[i] == '"' && !squote)
+			dquote = !dquote;
+		if (isinset(input[i], "<>| ") && !(dquote || squote))
 			return (i - 1);
+	}
 	return (i - 1);
 }
 
@@ -65,7 +86,6 @@ int	parse(char *input)
 	char	*token;
 
 	ag = NULL;
-	(void)ag;
 	cursor = input;
 	while (cursor && *cursor)
 	{
