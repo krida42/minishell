@@ -78,12 +78,20 @@ static int	end_token_i(char *input)
 	return (i - 1);
 }
 
+static int	set_ag(char ***ag, char *cursor)
+{
+	char	*token;
+
+	token = ft_strndup(cursor, end_token_i(cursor) + 1);
+	strs_insert(ag, token);
+	free(token);
+	return (0);
+}
 
 int	parse(char *input)
 {
 	char	*cursor;
 	char	**ag;
-	char	*token;
 	t_cmd	*cmd;
 
 	cmd = NULL;
@@ -91,9 +99,7 @@ int	parse(char *input)
 	cursor = input;
 	while (cursor && *cursor)
 	{
-		token = ft_strndup(cursor, end_token_i(cursor) + 1);
-		strs_insert(&ag, token);
-		free(token);
+		set_ag(&ag, cursor);
 		cursor = next_token(cursor);
 	}
 	add_back(&cmd, ag);

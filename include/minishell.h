@@ -48,6 +48,8 @@ int		skip_spaces_i(char *s);
 void	init_signals(void);
 
 int		parse(char *input);
+//IMPORTANT - - - - - JE DOIS PRENDRE EN COMPTE LES QUOTES DANS LES QUOTES 
+//PAREIL POUR LES CHARACTER SPECIAUX ENTRE COMPTE CE NE SONT PAS DES ERREURS
 int		check_unclosed(char *input);
 int		check_special(char *input);
 
