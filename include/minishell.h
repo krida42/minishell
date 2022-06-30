@@ -34,6 +34,8 @@ int		m_prompt(const char *prompt);
 
 char	*ft_strstr(const char *big, const char *little);
 int		ft_strchri(const char *s, char c);
+int		ft_strcmp(char *s1, char *s2);
+
 
 void	init_signals(void);
 
