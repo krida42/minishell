@@ -56,5 +56,9 @@ t_cmd	*get_last(t_cmd *cmd); // no tested
 void	add_back(t_cmd **cmd, char **ag); //no teste
 int		cmd_size(t_cmd *cmd); // no tested
 
+void	free_cmd(t_cmd *cmd);
+void	free_allcmd(t_cmd *cmd);
+
 void	desc_token(char **strs);
+void	desc_allcmd(t_cmd *cmd);
 #endif

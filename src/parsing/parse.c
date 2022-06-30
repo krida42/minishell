@@ -84,7 +84,9 @@ int	parse(char *input)
 	char	*cursor;
 	char	**ag;
 	char	*token;
+	t_cmd	*cmd;
 
+	cmd = NULL;
 	ag = NULL;
 	cursor = input;
 	while (cursor && *cursor)
@@ -94,8 +96,11 @@ int	parse(char *input)
 		free(token);
 		cursor = next_token(cursor);
 	}
+	add_back(&cmd, ag);
 	//DONT FORGET TO FREE ag
-	desc_token(ag);
-	free_strs(ag);
+	//desc_token(ag);
+	desc_allcmd(cmd);
+	free_allcmd(cmd);
+	//free_strs(ag);
 	return (0);
 }
