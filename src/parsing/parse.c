@@ -1,6 +1,7 @@
 #include "libft.h"
 #include "minishell.h"
 #include <stdio.h>
+#include <string.h>
 
 static char	*next_token(char *input)
 {
@@ -60,6 +61,66 @@ static int	set_ag(t_cmd *cmd, char *cursor)
 	return (0);
 }
 
+static int	set_redirect2(t_cmd *cmd, char *cursor, int *dir)
+{
+	char	*token;
+	const int	inout = dir[0];
+	const int	heredoc = dir[1];
+	const int	append = dir[2];
+	const int	end = end_token_i(cursor);
+
+	token = ft_strndup(cursor, end + 1);
+
+	if (heredoc)
+		cmd->heredoc = token;
+	else if (append)
+		cmd->append = token;
+	else 
+		if (inout == 0)
+			cmd->in = token;
+		else if (inout == 1)
+			cmd->out = token;
+	return (end);
+
+}
+
+static int	set_redirect(t_cmd *cmd, char *cursor)
+{
+	int	i;
+	int	append;
+	int	heredoc;
+	int	inout;
+
+	append = 0;
+	heredoc = 0;
+	i = 0;
+	if (!isinset(cursor[i], "<>"))
+		exit(printf(RED"DANGER - - set_redirect - - cursor is not on <> character"WHITE));
+	inout = cursor[i] == '>';
+	while (cursor[++i])
+	{
+		if (isinset(cursor[i], "<>") && (append || heredoc))
+			exit(printf(RED"Later in return: forbidden input too much >>> <<<"WHITE));
+		if (isinset(cursor[i], "<>"))
+		{
+			if ((cursor[i] == '<' && cursor[i - 1] != '<') || (cursor[i] == '>' && cursor[i - 1] != '>'))
+				exit(printf(RED"Later in return: forbidden input <>" WHITE));
+			else if (cursor[i] == '<')
+				heredoc = 1;
+			else if (cursor[i] == '>')
+				append = 1;
+		}
+		else
+			break ;
+
+	}
+	if (!cursor[i])
+		exit(printf(RED"Later in return: forbidden input  > or < in last character" WHITE));
+	i += skip_spaces_i(cursor + i);
+	i = set_redirect2(cmd, cursor + i, (int[]) {inout, heredoc, append});
+	return (i);
+}
+
 static int	set_token(t_cmd **cmd, char *cursor)
 {
 
@@ -67,8 +128,11 @@ static int	set_token(t_cmd **cmd, char *cursor)
 		add_back(cmd, NULL);
 	if  (!isinset(*cursor, "<>|"))
 		set_ag(*cmd, cursor);
-	//else if (*cursor, "<>")
-		//set_redirect()
+	else if (isinset(*cursor, "<>"))
+	{
+		printf("salut ! \n");
+		return (set_redirect(*cmd, cursor));
+	}
 	//else if (isinset(*cursor, "<>"))
 	//	set_redirect()
 	return (0);
@@ -83,7 +147,7 @@ int	parse(char *input)
 	cursor = input;
 	while (cursor && *cursor)
 	{
-		set_token(&cmd, cursor);
+		cursor = cursor + set_token(&cmd, cursor);
 		cursor = next_token(cursor);
 	}
 	//add_back(&cmd, ag);
