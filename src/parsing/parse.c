@@ -54,7 +54,7 @@ static int	set_ag(t_cmd *cmd, char *cursor)
 	char	*token;
 	char	***ag;
 
-	ag = &get_last(cmd)->ag;
+	ag = &cmd->ag;
 	token = ft_strndup(cursor, end_token_i(cursor) + 1);
 	strs_insert(ag, token);
 	free(token);
@@ -127,7 +127,7 @@ static int	set_token(t_cmd **cmd, char *cursor)
 	if (!*cmd || *cursor == '|')
 		add_back(cmd, NULL);
 	if  (!isinset(*cursor, "<>|"))
-		set_ag(*cmd, cursor);
+		set_ag(get_last(*cmd), cursor);
 	else if (isinset(*cursor, "<>"))
 	{
 		printf("salut ! \n");
