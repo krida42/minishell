@@ -4,6 +4,8 @@ void	desc_token(char **strs)
 {
 	//printf("yo : %s\n", strs[0]);
 	
+	if (!strs)
+		printf("no token strs NULL\n");
 	while (strs && *strs)
 	{
 		printf("token : |%s|\n", *strs);
@@ -15,7 +17,7 @@ void	desc_allcmd(t_cmd *cmd)
 {
 	while (cmd)
 	{
-		printf("- - - -\n");
+		printf("cmd - - - -\n");
 		desc_token(cmd->ag);
 		cmd = cmd->next;
 		printf("- - - -\n");
