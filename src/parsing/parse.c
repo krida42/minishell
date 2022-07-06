@@ -21,9 +21,10 @@ static char	*next_token(char *input)
 		if (isinset(input[i], "<>| ") && !(dquote || squote))
 			break;
 	}
+	if (input[i] == '|' && i == 0)
+		i++;
 	if (input[i] == ' ')
 		i += skip_spaces_i(input + i);
-	
 	return (input + i);
 }
 
@@ -133,8 +134,6 @@ static int	set_token(t_cmd **cmd, char *cursor)
 		printf("salut ! \n");
 		return (set_redirect(*cmd, cursor));
 	}
-	//else if (isinset(*cursor, "<>"))
-	//	set_redirect()
 	return (0);
 }
 
