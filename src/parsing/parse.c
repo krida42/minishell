@@ -130,10 +130,7 @@ static int	set_token(t_cmd **cmd, char *cursor)
 	if  (!isinset(*cursor, "<>|"))
 		set_ag(get_last(*cmd), cursor);
 	else if (isinset(*cursor, "<>"))
-	{
-		printf("salut ! \n");
-		return (set_redirect(*cmd, cursor));
-	}
+		return (set_redirect(get_last(*cmd), cursor));
 	return (0);
 }
 
