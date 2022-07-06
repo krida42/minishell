@@ -73,14 +73,28 @@ static int	set_redirect2(t_cmd *cmd, char *cursor, int *dir)
 	token = ft_strndup(cursor, end + 1);
 
 	if (heredoc)
+	{
+		free(cmd->heredoc);
 		cmd->heredoc = token;
+	}
 	else if (append)
+	{
+		free(cmd->append);
 		cmd->append = token;
+	}
 	else 
+	{
 		if (inout == 0)
+		{
+			free(cmd->in);
 			cmd->in = token;
+		}
 		else if (inout == 1)
+		{
+			free(cmd->out);
 			cmd->out = token;
+		}
+	}
 	return (end);
 
 }
