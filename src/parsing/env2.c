@@ -20,14 +20,14 @@ void	env_rm(t_env **env, char *name)
 		}
 		cur = cur->next;
 	}
-	exit(printf("Later in return : Trying to remove a variable that doesnt exist !"));
+	exit(printf(RED"Later in return : Trying to remove a variable that doesnt exist !\n"WHITE));
 }
 
 void	env_set_val(t_env *env, char *name, char *val)
 {
 	env = env_get_ptr(env, name);
 	if (!env)
-		exit(printf("DANGER - - env_set_val : Trying to edit a variable that doesnt exist"));
+		exit(printf(RED"DANGER - - env_set_val : Trying to edit a variable that doesnt exist\n"WHITE));
 	free(env->val);
 	env->val = ft_strdup(val);
 }
@@ -36,7 +36,7 @@ void	env_set_export(t_env *env, char *name, int is_export)
 {
 	env = env_get_ptr(env, name);
 	if (!env)
-		exit(printf("DANGER - - env_set_export : setting is_export for var that doesnt exist"));
+		exit(printf(RED"DANGER - - env_set_export : setting is_export for var that doesnt exist\n"WHITE));
 	env->is_export = is_export;
 }
 
