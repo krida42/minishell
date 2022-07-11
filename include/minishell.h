@@ -23,6 +23,15 @@ typedef struct s_cmd {
 	struct s_cmd	*next;
 }	t_cmd;
 
+
+typedef struct s_env {
+	char			*name;
+	char			*val;
+	int				is_export;
+	struct s_env	*prev;
+	struct s_env	*next;
+}	t_env;
+
 typedef struct s_info {
 	t_cmd	*cmd;
 	int		size;
@@ -63,4 +72,16 @@ void	free_allcmd(t_cmd *cmd);
 
 void	desc_token(char **strs);
 void	desc_allcmd(t_cmd *cmd);
+
+
+void	env_add(t_env **env, char *name, char *val, int is_export);
+void	env_rm(t_env **env, char *name);
+t_env	*env_get_ptr(t_env *env, char *name);
+char	*env_get_val(t_env *env, char *name);
+void	env_set_val(t_env *env, char *name, char *val);
+void	env_set_export(t_env *env, char *name, int is_export);
+t_env	*env_strs_toenv(char **strs_envp);
+char	**env_env_tostrs(t_env *env);
+void	free_env(t_env *env);
+void	free_allenv(t_env *env);
 #endif
