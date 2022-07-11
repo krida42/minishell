@@ -39,7 +39,7 @@ typedef struct s_info {
 	char	*path;
 }	t_info;
 
-int		m_prompt(const char *prompt);
+int		m_prompt(const char *prompt, char **envp);
 
 char	*ft_strstr(const char *big, const char *little);
 int		ft_strchri(const char *s, char c);
@@ -56,7 +56,7 @@ int		skip_spaces_i(char *s);
 
 void	init_signals(void);
 
-int		parse(char *input);
+int		parse(char *input, char **envp);
 //IMPORTANT - - - - - JE DOIS PRENDRE EN COMPTE LES QUOTES DANS LES QUOTES 
 //PAREIL POUR LES CHARACTER SPECIAUX ENTRE COMPTE CE NE SONT PAS DES ERREURS
 int		check_unclosed(char *input);
@@ -64,14 +64,15 @@ int		check_special(char *input);
 
 t_cmd	*get_first(t_cmd *cmd); // no tested
 t_cmd	*get_last(t_cmd *cmd); // no tested
-void	add_back(t_cmd **cmd, char **ag); //no teste
-int		cmd_size(t_cmd *cmd); // no tested
+void	add_back(t_cmd **cmd, char **ag); 
+int		cmd_size(t_cmd *cmd);
 
 void	free_cmd(t_cmd *cmd);
 void	free_allcmd(t_cmd *cmd);
 
 void	desc_token(char **strs);
 void	desc_allcmd(t_cmd *cmd);
+void	desc_info(t_info *info);
 
 
 void	env_add(t_env **env, char *name, char *val, int is_export);
@@ -84,4 +85,7 @@ t_env	*env_strs_toenv(char **strs_envp);
 char	**env_env_tostrs(t_env *env);
 void	free_env(t_env *env);
 void	free_allenv(t_env *env);
+
+t_info	*init_info(t_cmd *cmd, t_env *env);
+void	free_info(t_info *info);
 #endif

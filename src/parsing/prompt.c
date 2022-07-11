@@ -1,18 +1,18 @@
 #include "minishell.h"
 #include <readline/readline.h>
 
-static void	treat_input(char *input)
+static void	treat_input(char *input, char **envp)
 {
 	if (check_unclosed(input))
 		printf(RED"Unclosed quote\n"WHITE);
 	else if (check_special(input))
 		printf(RED"Special character not authorized\n"WHITE);
 	else
-		printf("You havre wrote : %s\n", input);
-	parse(input);
+		printf("\nYou havre wrote : %s\n\n", input);
+	parse(input, envp);
 }
 
-int	m_prompt(const char *prompt)
+int	m_prompt(const char *prompt, char **envp)
 {
 	char	*input;
 
@@ -27,7 +27,7 @@ int	m_prompt(const char *prompt)
 		}
 		//else if (ft_strstr(input, "clear") == input)
 		//	rl_clear_history();
-		treat_input(input);
+		treat_input(input, envp);
 		add_history(input);
 		free(input);
 	}

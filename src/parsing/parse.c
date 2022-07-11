@@ -148,11 +148,14 @@ static int	set_token(t_cmd **cmd, char *cursor)
 	return (0);
 }
 
-int	parse(char *input)
+int	parse(char *input, char **envp)
 {
 	char	*cursor;
 	t_cmd	*cmd;
+	t_env	*env;
+	t_info	*info;
 
+	env = env_strs_toenv(envp);
 	cmd = NULL;
 	cursor = input;
 	while (cursor && *cursor)
@@ -161,7 +164,11 @@ int	parse(char *input)
 		cursor = next_token(cursor);
 	}
 	//add_back(&cmd, ag);
-	desc_allcmd(cmd);
-	free_allcmd(cmd);
+	info = init_info(cmd, env);
+	desc_info(info);
+	//desc_allcmd(cmd);
+	//free_allcmd(cmd);
+	free_allenv(env);
+	free_info(info);
 	return (0);
 }
