@@ -36,18 +36,18 @@ void	desc_allcmd(t_cmd *cmd)
 
 void	desc_info(t_info *info)
 {
-	int	i;
+//	int	i;
 
-	i = -1;
+//	i = -1;
 	if (!info)
 		exit(printf(RED"info is NULL"WHITE));
 	printf(CYAN"INFO DESCRIBING\n***********************************\n\n"WHITE);
 	desc_allcmd(info->cmd);
-	printf("\ninfo->env : \n");
-	while (info->env[++i])
-		printf("%s\n", info->env[i]);
+	//printf("\ninfo->env : \n");
+	//while (info->env[++i])
+	//	printf("%s\n", info->env[i]);
 	printf("\n\ninfo->size : %d\n", info->size);
 	printf("info->path : %s\n", info->path);
-	printf(CYAN"\n*********************************************\n"WHITE);
+	printf(CYAN"\n*********************************************"WHITE"\n");
 
 }

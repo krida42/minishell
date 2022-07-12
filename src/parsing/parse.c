@@ -163,10 +163,9 @@ int	parse(char *input, char **envp)
 		cursor = cursor + set_token(&cmd, cursor);
 		cursor = next_token(cursor);
 	}
-	//add_back(&cmd, ag);
 	info = init_info(cmd, env);
+	desc_info(info);
 	execute(info);
-	//desc_info(info);
 	free_allenv(env);
 	free_info(info);
 	return (0);
