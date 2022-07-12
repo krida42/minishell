@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipes.h"
+#include "minishell.h"
 
 // count nbr of words in the initial string
 static int	ft_word_count(char const *s, char c)

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipes.h"
+#include "minishell.h"
 
 void	open_files(t_cmd *cmd)
 {

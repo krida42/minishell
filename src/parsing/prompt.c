@@ -7,8 +7,8 @@ static void	treat_input(char *input, char **envp)
 		printf(RED"Unclosed quote\n"WHITE);
 	else if (check_special(input))
 		printf(RED"Special character not authorized\n"WHITE);
-	else
-		printf("\nYou havre wrote : %s\n\n", input);
+	//else
+	//	printf("\nYou havre wrote : %s\n\n", input);
 	parse(input, envp);
 }
 

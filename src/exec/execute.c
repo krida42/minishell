@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipes.h"
+#include "minishell.h"
 
 static void	redirect_fd(int fd, int stdstream_no, t_info *info)
 {

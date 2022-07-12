@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipes.h"
+#include "minishell.h"
 
 static void	ft_free_ag(t_cmd *cmd)
 {

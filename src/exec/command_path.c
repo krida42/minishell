@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipes.h"
+#include "minishell.h"
 
 static void	ft_av_cmd_error_msg_check(char **ag, t_info *info) // a voir s il est possble faire differement
 {

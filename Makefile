@@ -9,9 +9,20 @@ SHELL = /bin/bash
 PARSING_SRC := main.c prompt.c mini_utils.c signals.c \
 			   parse.c check.c lst.c lst2.c utils.c utils2.c desc.c \
 			   env.c env2.c env3.c info.c
-EXEC_SRC := tes_fichiers.c
+
+EXEC_SRC :=  	execute.c		\
+				command_path.c	\
+				ft_split_pipex.c\
+				exec_builtin.c	\
+				ft_builtins.c	\
+				open.c			\
+				close.c			\
+				free.c			\
+				msg_close_free_exit.c\
+				utils_exec.c
 
 SRC := $(addprefix parsing/,$(PARSING_SRC))
+SRC += $(addprefix exec/,$(EXEC_SRC))
 
 OBJ := $(SRC:.c=.o)
 

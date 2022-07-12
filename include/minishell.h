@@ -2,11 +2,21 @@
 # define MINISHELL_H
 # include "libft.h"
 # include "color.h"
+# include <unistd.h>
 # include <stdio.h>
+# include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
 # include <unistd.h>
+
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
 
 typedef struct s_cmd {
 	char	**ag;
@@ -88,4 +98,33 @@ void	free_allenv(t_env *env);
 
 t_info	*init_info(t_cmd *cmd, t_env *env);
 void	free_info(t_info *info);
+
+//  - - - - - - - - - - - - EXEC - - - - - - - - - - - - - - - - - -
+//  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+void	execute(t_info *info);
+char	*command_path(char **ag, t_info *info);
+void	ft_path(char **env, t_info *info);
+char	**path_tab(t_info *info);
+char	**ft_split_pipex(char const *s, char c);
+int		is_builtin(t_cmd *cmd);
+int		exec_builtin(t_cmd  *cmd, t_info *info);
+int		ft_builtin_cd(char *path);
+int		ft_builtin_pwd(void);
+int		ft_builtin_echo(t_cmd *cmd);
+void	msg_close_free_exit(char *str, t_info *info);
+void	open_files(t_cmd *cmd);
+void	open_pipes(t_cmd *cmd, t_info *info);
+void	close_pipes(t_cmd *cmd);
+void	close_files(t_cmd *cmd);
+void	close_std(void);
+void	ft_free(t_info *info); // a REVOIR Supprimer ?
+void	ft_free_tab(char **tab); // a revoir
+
+//lib
+void	ft_putchar(char c);
+void	ft_putstr(char *s);
+
+
 #endif

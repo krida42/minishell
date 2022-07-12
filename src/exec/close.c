@@ -1,47 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_exec.c                                       :+:      :+:    :+:   */
+/*   close.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/30 10:44:16 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/05 19:26:25 by esmirnov         ###   ########.fr       */
+/*   Created: 2022/07/01 19:10:26 by esmirnov          #+#    #+#             */
+/*   Updated: 2022/07/06 14:29:59 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipes.h"
+#include "minishell.h"
 
-int	ft_strcmp(char *s1, char *s2)
+void	close_pipes(t_cmd *cmd)
 {
-	int	i;
-
-	i = 0;
-	while ((s1[i] != '\0') || (s2[i] != '\0'))
+	while(cmd->next != NULL)
 	{
-		if (s1[i] != s2[i])
-			return (s1[i] - s2[i]);
-		i++;
-	}
-	return (0);
-}
-
-void	ft_putstr(char *s)
-{
-	int	i;
-
-	if (s == NULL)
-		return ;
-	i = 0;
-	while (s[i] != '\0')
-	{
-		ft_putchar(s[i]);
-		i++;
+		close(cmd->pipefd[0]);
+		close(cmd->pipefd[1]);
+		cmd = cmd->next;
 	}
 }
 
-void	ft_putchar(char c)
+void	close_files(t_cmd *cmd)
 {
-	if (write (1, &c, 1) < 0)
-		exit(EXIT_FAILURE);
+	while(cmd->next)
+	{
+		close(cmd->fdin);
+		close(cmd->fdout);
+		cmd = cmd->next;
+	}
+}
+
+void	close_std(void)
+{
+	close (STDIN_FILENO); // a voir avec input etc
+	close (STDOUT_FILENO); // a voir avec input etc
+	close (STDERR_FILENO); // a voir avec input etc
 }
