@@ -2,7 +2,8 @@
 	
 CC := gcc
 CFLAGS := -Wall -Wextra -Werror
-SANI = -g -fsanitize=address -fsanitize=leak
+SANI2 = -g -fsanitize=address -fsanitize=leak
+SANI = -g
 INC_PATH := include/
 SHELL = /bin/bash
 

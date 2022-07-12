@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/11 18:13:59 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/12 19:44:07 by kisikaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,9 @@ void	execute(t_info *info)
 		open_files(info->cmd);
 		pipex(info->cmd, info);
 	}
-	ft_free(info); // voir avec Kévin pour n'est pas faire 2x
-	close_std();
+	//ft_free(info); // voir avec Kévin pour n'est pas faire 2x
+	//close_std();
+	return;
 }
 
 // static void	pipex(t_cmd *cmd, t_info *info)
