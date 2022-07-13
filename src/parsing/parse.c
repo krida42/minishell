@@ -162,6 +162,7 @@ int	parse(char *input, char **envp)
 		cursor = next_token(cursor);
 	}
 	info = init_info(cmd, envp);
+	treat_allcmd(cmd);
 	desc_info(info);
 	//execute(info);
 	free_info(info);
