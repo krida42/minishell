@@ -132,7 +132,10 @@ static int	set_redirect(t_cmd *cmd, char *cursor)
 	if (!cursor[i])
 		exit(printf(RED"Later in return: forbidden input  > or < in last character" WHITE));
 	i += skip_spaces_i(cursor + i);
-	i = set_redirect2(cmd, cursor + i, (int[]) {inout, heredoc, append});
+	i += set_redirect2(cmd, cursor + i, (int[]) {inout, heredoc, append});
+
+	if (isinset(cursor[i], "\"'"))
+		i++;
 	return (i);
 }
 

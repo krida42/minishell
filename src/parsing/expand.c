@@ -75,15 +75,19 @@ static char	*manipulate_param(char *s)
 	//char	*var_expanded;
 	char	*concatened;
 
+	if (!s)
+		return (NULL);
 	//var_expanded = var_expand(*s);
 	concatened = concatenate(s);
 	return (concatened);
 }
 
-static void	treat_allparam(char **ag)
+static void	treat_allparam(t_cmd *cmd)
 {
 	char	*tmp;
+	char	**ag;
 
+	ag = cmd->ag;
 	while (*ag)
 	{
 		tmp = *ag;
@@ -91,13 +95,19 @@ static void	treat_allparam(char **ag)
 		free(tmp);
 		ag++;
 	}
+	//tmp = cmd->in;
+	//cmd->in = manipulate_param(cmd->in);
+	//free(tmp);
+	//tmp = cmd->out;
+	//cmd->out = manipulate_param(cmd->out);
+	//free(tmp);
 }
 
 void	treat_allcmd(t_cmd *cmd)
 {
 	while (cmd)
 	{
-		treat_allparam(cmd->ag);
+		treat_allparam(cmd);
 		cmd = cmd->next;
 	}
 }
