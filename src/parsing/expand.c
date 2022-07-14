@@ -79,28 +79,24 @@ static char	*manipulate_param(char *s)
 		return (NULL);
 	//var_expanded = var_expand(*s);
 	concatened = concatenate(s);
+	free(s);
 	return (concatened);
 }
 
 static void	treat_allparam(t_cmd *cmd)
 {
-	char	*tmp;
 	char	**ag;
 
 	ag = cmd->ag;
 	while (*ag)
 	{
-		tmp = *ag;
 		*ag = manipulate_param(*ag);
-		free(tmp);
 		ag++;
 	}
-	//tmp = cmd->in;
-	//cmd->in = manipulate_param(cmd->in);
-	//free(tmp);
-	//tmp = cmd->out;
-	//cmd->out = manipulate_param(cmd->out);
-	//free(tmp);
+	cmd->in = manipulate_param(cmd->in);
+	cmd->out = manipulate_param(cmd->out);
+	cmd->append = manipulate_param(cmd->append);
+	cmd->heredoc = manipulate_param(cmd->heredoc);
 }
 
 void	treat_allcmd(t_cmd *cmd)
