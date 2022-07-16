@@ -6,116 +6,145 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/12 19:44:07 by kisikaya         ###   ########.fr       */
+/*   Updated: 2022/07/17 00:11:39 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	redirect_fd(int fd, int stdstream_no, t_info *info)
+// static void	dupfds(t_cmd *cmd, t_info *info)
+// {
+// 	fprintf(stderr,"dupfds start\n");
+// 	if (cmd->prev)
+// 	{
+// 		if (dup2(cmd->prev->pipefd[0], STDIN_FILENO) < 0)
+// 			msg_close_free_exit("dup2 failed", info);
+// 	}
+// 	if (cmd->next)
+// 	{
+// 		if (dup2(cmd->pipefd[1], STDOUT_FILENO) < 0)
+// 			msg_close_free_exit("dup2 failed", info);
+// 	}
+// }
+
+// static int	dupfds_file(t_cmd *cmd)
+// {
+// 	fprintf(stderr,"dupfds files start\n");
+// 	if (cmd->fdin == -1 ||cmd->fdout == -1)
+// 	{
+// 		close_pipes(cmd);
+// 		close_files(cmd);
+// 		exit (1);// a voir pour l'erreur
+// 	}
+// 	if (cmd->in != NULL || cmd->heredoc != NULL)
+// 	{
+// 		if (dup2(cmd->fdin, STDIN_FILENO) == -1)
+// 		{
+// 			close_pipes(cmd);
+// 			close_files(cmd);
+// 			exit (1);// a voir pour l'erreur
+// 		}
+// 	}
+// 	if (cmd->out != NULL || cmd->append != NULL)
+// 	{
+// 		if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
+// 		{
+// 			close_pipes(cmd);
+// 			close_files(cmd);
+// 			exit (1);// a voir pour l'erreur
+// 		}
+// 	}
+// 	return (0);
+// }
+
+static int	dupfd_in(t_cmd *cmd)
 {
-	if (fd == -1)
+	if (cmd->prev) // && cmd->prev->out == NULL && cmd->prev->append == NULL
 	{
-		close_pipes(info->cmd);
-		close_files(info->cmd);
-		ft_free(info);
-		exit(EXIT_FAILURE);
+		if (dup2(cmd->prev->pipefd[0], STDIN_FILENO) == -1)
+		{
+			perror("dup2 failed dupfds in pipefd[0] ");
+			return (1);
+		}
 	}
-	if (dup2(fd, stdstream_no) == -1)
-		msg_close_free_exit("dup2 failed ", info);
+	if (cmd->fdin == -1)
+	{
+
+		return (1); ;// a voir pour l'erreur
+	}
+	if (cmd->in != NULL || cmd->heredoc != NULL)
+	{
+		if (dup2(cmd->fdin, STDIN_FILENO) == -1)
+		{
+			perror("dup2 failed dupfds fdin ");
+			exit (1);
+		}
+	}
+	return (0);
 }
 
-static void	dupfds(t_cmd *cmd, t_info *info)
+static int	dupfd_out(t_cmd *cmd)
 {
-	if (cmd->prev)
+	if (cmd->next) // && cmd->next->in == NULL && cmd->next->heredoc == NULL
 	{
-		if (dup2(cmd->prev->pipefd[0], STDIN_FILENO) < 0)
-			msg_close_free_exit("dup2 failed", info);
+		if (dup2(cmd->pipefd[1], STDOUT_FILENO) == -1)
+		{
+			perror("dup2 failed dupfds in pipefd[1] ");
+			return (1);
+		}
 	}
-	if (cmd->next)
+	if (cmd->fdout == -1)
 	{
-		if (dup2(cmd->pipefd[1], STDOUT_FILENO) < 0)
-			msg_close_free_exit("dup2 failed", info);
+		close_pipes(cmd);
+		close_files(cmd);
+		exit (1) ;// a voir pour l'erreur
 	}
+	if (cmd->out != NULL || cmd->append != NULL)
+	{
+		if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
+		{
+			perror("dup2 failed dupfds fdout ");
+			return (1);
+		}
+	}
+	return (0);
 }
 
-void	one_cmd(t_cmd *cmd, t_info *info)
+static void	child(t_cmd *cmd, t_info *info)
 {
-	if (exec_builtin(cmd, info) == 0)
+	fprintf(stderr,"cmd %s\n",cmd->ag[0]);
+	if (dupfd_in(cmd) == 1 || dupfd_out(cmd) == 1)
 	{
-		close_std();
-		ft_free(info);
-		exit(EXIT_SUCCESS); // voir status de retour 0 si exec ok 1 si pas de buitlin autre chiffre si erreur?
+		close_pipes(cmd);
+		close_files(cmd);
+		exit (1);
+	}
+	// dupfds(cmd, info);
+	// close_pipes(info->cmd);
+	// dupfds_file(cmd);
+	// close_files(info->cmd);
+	if (is_builtin(cmd) == 1)
+	{
+		if (exec_builtin(cmd, info) == 1)
+		{
+			perror("exec_built in failed ") ;
+			exit (1);
+		}
+		exit (0);
 	}
 	else
 	{
 		cmd->cmd_path = command_path(cmd->ag, info);
 		if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
-			msg_close_free_exit("execve failed", info);
+			msg_close_return("execve failed", info);
 	}
-}
-
-static void	child(t_cmd *cmd, t_info *info)
-{
-	if (info->size == 1)
-		one_cmd(cmd, info);
-	dupfds(cmd, info);
-	close_pipes(info->cmd);
-	if (cmd->in != NULL || cmd->out != NULL || cmd->append != NULL
-		|| cmd->heredoc)
-	{
-		redirect_fd(cmd->fdin, STDIN_FILENO, info);
-		redirect_fd(cmd->fdout, STDOUT_FILENO, info);
-	}
-	one_cmd(cmd, info);
-}
-
-static void	pipex(t_cmd *cmd, t_info *info)
-{
-	int	status;
-	
-	cmd->pid = fork();
-	if (cmd->pid == -1)
-		msg_close_free_exit("fork failed", info);
-	else if (cmd->pid == 0)
-	{
-		//signal(SIGQUIT, ft_handler_exec);
-		//signal(SIGQUIT, ft_shandler); //Interruption forte (ctrl-\)//Terminaison + core dump
-		child(cmd, info);
-	}
-	if (cmd->next)
-		pipex(cmd->next, info);
-	close_pipes(info->cmd);
-	while (cmd)
-	{
-		waitpid (cmd->pid, &status, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
-		//if (WIFEXITED(status))
-		//	//x = WEXITSTATUS(status) // returns the exit status of the child. exit etc
-		//else if (WIFSIGNALED(status))
-		//	//x = WTERMSIG(status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
-		cmd = cmd->next;
-	}
-}
-
-void	execute(t_info *info)
-{
-	if (info->cmd->next == NULL && is_builtin(info->cmd) == 1) // juste pour les builtin, cd... voir pour else in one_cmd
-		one_cmd(info->cmd, info);
-	else
-	{
-		open_pipes(info->cmd, info);
-		open_files(info->cmd);
-		pipex(info->cmd, info);
-	}
-	//ft_free(info); // voir avec Kévin pour n'est pas faire 2x
-	//close_std();
-	return;
 }
 
 // static void	pipex(t_cmd *cmd, t_info *info)
 // {
 // 	t_cmd	*tmp;
 	
+// 	fprintf(stderr,"pipex start\n");
 // 	while (cmd)
 // 	{
 // 		cmd->pid = fork();
@@ -138,16 +167,88 @@ void	execute(t_info *info)
 // 	}
 // }
 
-// static void	dup_fd(int fd, int stdstream_no, t_cmd *cmd, t_info *info)
-// {
-// 	if (cmd)
-// 	{
-// 		if (dup2(fd, stdstream_no) == -1)
-// 			msg_close_free_exit("dup2 failed", info);
-// 	}
-// }
-//dans le child
-	// if (cmd->prev)
-	// 	dup_fd(cmd->prev->pipefd[0], STDIN_FILENO, cmd->prev, info);
-	// // if (cmd->next)
-	// 	dup_fd(cmd->pipefd[1], STDOUT_FILENO, cmd->next, info);
+/* NOTE
+ a clarifier redirection fds car pas claire du tout le pricipe
+ en plus fermeture des fds pipes et files aussi a un impact
+ 
+  retracer ce que se passe avec dup2 car vraiment bizzarre 
+  En plus gestion d erreur n'est pas clarifié*/
+  
+static void	pipex(t_cmd *cmd, t_info *info)
+{
+	int	status;
+		
+	cmd->pid = fork();
+	if (cmd->pid == -1)
+		msg_close_return("fork failed", info);
+	else if (cmd->pid == 0)
+	{
+		//signal(SIGQUIT, ft_handler_exec);
+		//signal(SIGQUIT, ft_shandler); //Interruption forte (ctrl-\)//Terminaison + core dump
+		child(cmd, info);
+	}
+	if (cmd->next != NULL)
+		pipex(cmd->next, info);
+	close_pipes(info->cmd);
+	close_files(info->cmd);
+	while (cmd != NULL)
+	{
+		waitpid (cmd->pid, &status, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
+		//if (WIFEXITED(status))
+		//	//x = WEXITSTATUS(status) // returns the exit status of the child. exit etc
+		//else if (WIFSIGNALED(status))
+		//	//x = WTERMSIG(status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
+		cmd = cmd->next;
+	}
+	return ;
+}
+
+static int	save_stdinout(int n)
+{
+	static int	tmpin;
+	static int	tmpout;
+
+	if (n == 1)
+	{
+		tmpin = dup(STDIN_FILENO);
+		tmpout = dup(STDOUT_FILENO);
+	}
+	if (n == 2)
+	{
+		if (dup2(tmpin, STDIN_FILENO) == -1)
+		{
+			perror("dup2 failes save_stdinout ");
+			return (1);
+		}
+		if (dup2(tmpout, STDOUT_FILENO) == -1)
+		{
+			perror("dup2 failes save_stdinout ");
+			return (1);
+		}
+	}
+	return (0);
+}
+
+void	execute(t_info *info)
+{
+	open_files(info->cmd);
+	save_stdinout(1);
+	if (info->cmd->next == NULL && is_builtin(info->cmd) == 1) // juste pour les builtin, cd... voir pour else in one_cmd
+	{
+		if (dupfd_in(info->cmd) == 1 || dupfd_out(info->cmd) == 1)
+		{
+			close_files(info->cmd);
+			return ;
+		}
+		exec_builtin(info->cmd, info);
+		close_files(info->cmd);
+		save_stdinout(2);
+	}
+	else
+	{
+		open_pipes(info->cmd, info);
+		pipex(info->cmd, info);
+		save_stdinout(2);
+	}
+	return;
+}

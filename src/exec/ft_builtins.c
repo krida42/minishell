@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 22:09:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/11 18:05:12 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/16 14:54:37 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,25 +52,26 @@ int	ft_builtin_echo(t_cmd *cmd)
 {
 	int	i;
 	int	j;
-	int	fd;
 	
 	i = 1;
 	j = 0;
-	while (ft_check_n(cmd->ag[i]) == 0)
+	if (cmd->ag[i])
 	{
-		j = 1;
-		i++;
-	}
-	fd = 1;
-	while (cmd->ag[i])
-	{
-		ft_putstr_fd(cmd->ag[i], fd);
-		if (cmd->ag[i + 1] != NULL)
-			ft_putstr_fd(" ", fd);
-		i++;
+		while (ft_check_n(cmd->ag[i]) == 0)
+		{
+			j = 1;
+			i++;
+		}
+		while (cmd->ag[i] != NULL)
+		{
+			ft_putstr_fd(cmd->ag[i], 1);
+			if (cmd->ag[i + 1] != NULL)
+				ft_putstr_fd(" ", 1);
+			i++;
+		}
 	}
 	if (j == 0)
-		ft_putstr_fd("\n", fd);
+		ft_putstr_fd("\n", 1);
 	return (0);
 }
 

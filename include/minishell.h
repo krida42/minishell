@@ -115,7 +115,8 @@ int		exec_builtin(t_cmd  *cmd, t_info *info);
 int		ft_builtin_cd(char *path);
 int		ft_builtin_pwd(void);
 int		ft_builtin_echo(t_cmd *cmd);
-void	msg_close_free_exit(char *str, t_info *info);
+void	msg_close_free_exit(char *str, t_info *info); // p.e to be deleted
+void	msg_close_return(char *str, t_info *info);
 void	open_files(t_cmd *cmd);
 void	open_pipes(t_cmd *cmd, t_info *info);
 void	close_pipes(t_cmd *cmd);
