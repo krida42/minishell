@@ -3,7 +3,7 @@
 void	desc_token(char **strs)
 {
 	//printf("yo : %s\n", strs[0]);
-	
+
 	if (!strs)
 		printf("no token_ag strs NULL\n");
 	while (strs && *strs)
@@ -36,18 +36,20 @@ void	desc_allcmd(t_cmd *cmd)
 
 void	desc_info(t_info *info)
 {
-//	int	i;
+	//int	i;
 
-//	i = -1;
+	//i = -1;
 	if (!info)
 		exit(printf(RED"info is NULL"WHITE));
 	printf(CYAN"INFO DESCRIBING\n***********************************\n\n"WHITE);
 	desc_allcmd(info->cmd);
-	//printf("\ninfo->env : \n");
-	//while (info->env[++i])
-	//	printf("%s\n", info->env[i]);
+	printf("\ninfo->env : \n");
+	//char **env = env_env_tostrs(info->env);
+	//while (env[++i])
+	//	printf("%s\n", env[i]);
 	printf("\n\ninfo->size : %d\n", info->size);
 	printf("info->path : %s\n", info->path);
 	printf(CYAN"\n*********************************************"WHITE"\n");
+	//free_strs(env);
 
 }

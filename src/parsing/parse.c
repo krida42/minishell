@@ -82,7 +82,7 @@ static int	set_redirect2(t_cmd *cmd, char *cursor, int *dir)
 		free(cmd->append);
 		cmd->append = token;
 	}
-	else 
+	else
 	{
 		if (inout == 0)
 		{
@@ -152,10 +152,8 @@ int	parse(char *input, char **envp)
 {
 	char	*cursor;
 	t_cmd	*cmd;
-	t_env	*env;
 	t_info	*info;
 
-	env = env_strs_toenv(envp);
 	cmd = NULL;
 	cursor = input;
 	while (cursor && *cursor)
@@ -163,10 +161,9 @@ int	parse(char *input, char **envp)
 		cursor = cursor + set_token(&cmd, cursor);
 		cursor = next_token(cursor);
 	}
-	info = init_info(cmd, env);
+	info = init_info(cmd, envp);
 	desc_info(info);
-	execute(info);
-	free_allenv(env);
+	//execute(info);
 	free_info(info);
 	return (0);
 }

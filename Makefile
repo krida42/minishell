@@ -1,9 +1,9 @@
 .PHONY : all clean fclean re
 	
 CC := gcc
-CFLAGS := -Wall -Wextra -Werror
-SANI2 = -g -fsanitize=address -fsanitize=leak
-SANI = -g
+CFLAGS := -Wall -Wextra
+SANI = -g -fsanitize=address -fsanitize=leak
+SANI2 = -g
 INC_PATH := include/
 SHELL = /bin/bash
 

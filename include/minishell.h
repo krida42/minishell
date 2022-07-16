@@ -45,7 +45,7 @@ typedef struct s_env {
 typedef struct s_info {
 	t_cmd	*cmd;
 	int		size;
-	char	**env;
+	t_env	*env;
 	char	*path;
 }	t_info;
 
@@ -57,7 +57,7 @@ int		ft_strcmp(char *s1, char *s2);
 char	*ft_strndup(const char *s, size_t n);
 
 int		strs_len(char **strs);
-char	**strs_insert(char ***strs, const char *s); 
+char	**strs_insert(char ***strs, const char *s);
 void	free_strs(char	**strs);
 int		isinset(char c, const char *set);
 
@@ -74,7 +74,7 @@ int		check_special(char *input);
 
 t_cmd	*get_first(t_cmd *cmd); // no tested
 t_cmd	*get_last(t_cmd *cmd); // no tested
-void	add_back(t_cmd **cmd, char **ag); 
+void	add_back(t_cmd **cmd, char **ag);
 int		cmd_size(t_cmd *cmd);
 
 void	free_cmd(t_cmd *cmd);
@@ -96,7 +96,7 @@ char	**env_env_tostrs(t_env *env);
 void	free_env(t_env *env);
 void	free_allenv(t_env *env);
 
-t_info	*init_info(t_cmd *cmd, t_env *env);
+t_info	*init_info(t_cmd *cmd, char **envp);
 void	free_info(t_info *info);
 
 //  - - - - - - - - - - - - EXEC - - - - - - - - - - - - - - - - - -
