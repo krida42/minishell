@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_builtins.c                                      :+:      :+:    :+:   */
+/*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 22:09:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/17 17:35:21 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/17 20:47:29 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,17 @@ int	ft_builtin_echo(t_cmd *cmd) //20220717 ok
 	
 	i = 1;
 	j = 0;
-	if (cmd->ag[i])
+	while (cmd->ag[i] && ft_check_n(cmd->ag[i]) == 0)
 	{
-		while (ft_check_n(cmd->ag[i]) == 0)
-		{
-			j = 1;
-			i++;
-		}
-		while (cmd->ag[i] != NULL)
-		{
-			ft_putstr_fd(cmd->ag[i], 1);
-			if (cmd->ag[i + 1] != NULL)
-				ft_putstr_fd(" ", 1);
-			i++;
-		}
+		j = 1;
+		i++;
+	}
+	while (cmd->ag[i] != NULL)
+	{
+		ft_putstr_fd(cmd->ag[i], 1);
+		if (cmd->ag[i + 1] != NULL)
+			ft_putstr_fd(" ", 1);
+		i++;
 	}
 	if (j == 0)
 		ft_putstr_fd("\n", 1);

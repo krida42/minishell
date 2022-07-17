@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/17 20:19:25 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/17 20:39:50 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 		//	//x = WEXITSTATUS(status) // returns the exit status of the child. exit etc
 		//else if (WIFSIGNALED(status))
 		//	//x = WTERMSIG(status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
-		fprintf(stderr,"after waitpid start tmp->ag[0] is %s\n", tmp->ag[0]);
+		fprintf(stderr,"waitpid done tmp->ag[0] is %s\n", tmp->ag[0]);
 		tmp = tmp->next;
 	}
 	fprintf(stderr,"after waitpid\n");
@@ -156,28 +156,24 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 
 void	execute(t_info *info) //20220717 ok
 {
-	t_cmd	*cmd;
-
-	cmd = info->cmd;
-	save_stdinout(1);
-	open_files(cmd);
-	if (info->size == 1 && is_builtin(cmd) == 1)
+	open_files(info->cmd);
+	if (info->size == 1 && is_builtin(info->cmd) == 1)
 	{
-
-		if (dup_filefds(cmd) == 1 || exec_builtin(cmd, info) == 1)
+		save_stdinout(1);
+		if (dup_filefds(info->cmd) == 1 || exec_builtin(info->cmd, info) == 1)
 		{
-			close_files(cmd);
+			close_files(info->cmd);
 			return (perror("dup_filesfd failed "));
 		}
-		// save_stdinout(2);
+		save_stdinout(2);
 	}
 	else
 	{
-		open_pipes(cmd, info);
+		open_pipes(info->cmd, info);
 		pipex(info->cmd, info);
 	}
-	fprintf(stderr,"execute after pipex\n");
-	save_stdinout(2);
+	fprintf(stderr,"execute pipex done\n");
+	// save_stdinout(2);
 	return ;
 }
 
