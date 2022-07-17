@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 11:59:35 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/01 20:14:56 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/17 23:55:24 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,19 @@ static void	ft_av_cmd_error_msg_check(char **ag, t_info *info) // a voir s il es
 }
 
 
-void	ft_path(char **env, t_info *info)
-{
-	if (*env)
-	{
-		while (env)
-		{
-			if (ft_strncmp(*env, "PATH=", 5) == 0)
-				break ;
-			env++;
-		}
-		info->path = *env + 5;
-	}
-}
+// void	ft_path(char **env, t_info *info)
+// {
+// 	if (*env)
+// 	{
+// 		while (env)
+// 		{
+// 			if (ft_strncmp(*env, "PATH=", 5) == 0)
+// 				break ;
+// 			env++;
+// 		}
+// 		info->path = *env + 5;
+// 	}
+// }
 
 char	**path_tab(t_info *info)
 {
@@ -48,9 +48,10 @@ char	**path_tab(t_info *info)
 	char	**pathtab;
 	int		i;
 
-	ft_path(info->env, info);
+	// ft_path(info->env, info);
 	pathtab = NULL;
-	path_tmp = info->path;
+	// path_tmp = info->path;
+	path_tmp = env_get_val(info->env, "PATH");
 	if (path_tmp != NULL)
 	{
 		pathtab = ft_split_pipex((char const *)path_tmp, ':');
@@ -66,6 +67,7 @@ char	**path_tab(t_info *info)
 			i++;
 		}
 	}
+	free (path_tmp);
 	return (pathtab);
 }
 

@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/17 21:14:11 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/17 23:38:20 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,9 @@ static int	dup_pipefds(t_cmd *cmd)
 
 static void	child(t_cmd *cmd, t_info *info)
 {
+	char	**env_child;
+
+	env_child = env_env_tostrs(info->env);
 	dup_pipefds(cmd);
 	close_pipes(info->cmd);
 	dup_filefds(cmd);
@@ -103,7 +106,8 @@ static void	child(t_cmd *cmd, t_info *info)
 	else
 	{
 		cmd->cmd_path = command_path(cmd->ag, info);
-		if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
+		// if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
+		if (execve(cmd->cmd_path, cmd->ag, env_child) == -1)
 		perror("exec_builtin failed ");
 		exit (1);
 	}
