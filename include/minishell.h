@@ -46,7 +46,6 @@ typedef struct s_info {
 	t_cmd	*cmd;
 	int		size;
 	t_env	*env;
-	char	*path;
 }	t_info;
 
 int		m_prompt(const char *prompt, char **envp);
