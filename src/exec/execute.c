@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/17 20:39:50 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/17 21:14:11 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ static int	dup_filefds(t_cmd *cmd) //20220717 ok
 
 static int	dup_pipefds(t_cmd *cmd)
 {
-	if (cmd->prev != NULL && cmd->in == NULL && cmd->append == NULL)
+	if (cmd->prev != NULL && cmd->in == NULL && cmd->append == NULL &&
+		cmd->prev->out == NULL && cmd->prev->append == NULL)
 	{
 		if (dup2(cmd->prev->pipefd[0], STDIN_FILENO) == -1)
 		{
@@ -74,7 +75,8 @@ static int	dup_pipefds(t_cmd *cmd)
 			exit (1);
 		}
 	}
-	if (cmd->next != NULL && cmd->out == NULL && cmd->append == NULL)
+	if (cmd->next != NULL && cmd->out == NULL && cmd->append == NULL &&
+		cmd->next->in == NULL && cmd->next->heredoc == NULL)
 	{
 		if (dup2(cmd->pipefd[1], STDOUT_FILENO) == -1)
 		{
@@ -89,13 +91,13 @@ static int	dup_pipefds(t_cmd *cmd)
 static void	child(t_cmd *cmd, t_info *info)
 {
 	dup_pipefds(cmd);
+	close_pipes(info->cmd);
 	dup_filefds(cmd);
+	close_files(info->cmd);
 	if (is_builtin(cmd) == 1)
 	{
 		if (exec_builtin(cmd, info) == 1)
 			ft_putstr_fd("exec_builtin failed ", 2);
-		close_pipes(info->cmd);
-		close_files(info->cmd);
 		exit (1);
 	}
 	else
@@ -103,8 +105,6 @@ static void	child(t_cmd *cmd, t_info *info)
 		cmd->cmd_path = command_path(cmd->ag, info);
 		if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
 		perror("exec_builtin failed ");
-		close_pipes(info->cmd);
-		close_files(info->cmd);
 		exit (1);
 	}
 	exit (0);
@@ -152,14 +152,17 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 		tmp = tmp->next;
 	}
 	fprintf(stderr,"after waitpid\n");
+	save_stdinout(2);
+	return ;
 }
 
 void	execute(t_info *info) //20220717 ok
 {
+	save_stdinout(1);
 	open_files(info->cmd);
 	if (info->size == 1 && is_builtin(info->cmd) == 1)
 	{
-		save_stdinout(1);
+
 		if (dup_filefds(info->cmd) == 1 || exec_builtin(info->cmd, info) == 1)
 		{
 			close_files(info->cmd);
