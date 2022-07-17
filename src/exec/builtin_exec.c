@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:31:02 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/11 18:05:02 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/17 17:35:11 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 
 
-int	exec_builtin(t_cmd *cmd, t_info *info)
+int	exec_builtin(t_cmd *cmd, t_info *info) //20220717 ok
 {
 	(void)info;
 	if (ft_strcmp(cmd->ag[0], "pwd") == 0)
@@ -34,7 +34,7 @@ int	exec_builtin(t_cmd *cmd, t_info *info)
 	return(1);
 }
 
-int	is_builtin(t_cmd *cmd)
+int	is_builtin(t_cmd *cmd) //20220717 ok
 {
 	if (ft_strcmp(cmd->ag[0], "pwd") == 0)
 		return (1);

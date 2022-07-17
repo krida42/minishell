@@ -14,8 +14,8 @@ PARSING_SRC := main.c prompt.c mini_utils.c signals.c \
 EXEC_SRC :=  	execute.c		\
 				command_path.c	\
 				ft_split_pipex.c\
-				exec_builtin.c	\
-				ft_builtins.c	\
+				builtin_exec.c	\
+				builtins.c	\
 				open.c			\
 				close.c			\
 				free.c			\

@@ -6,13 +6,13 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 22:09:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/16 14:54:37 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/17 17:35:21 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_builtin_pwd(void)
+int	ft_builtin_pwd(void) //20220717 ok
 {
 	char	cwd[PATH_MAX + 1];
 	int		fd;
@@ -28,7 +28,7 @@ int	ft_builtin_pwd(void)
 	return (0);
 }
 
-static int ft_check_n(char *str)
+static int ft_check_n(char *str) //20220717 ok
 {
 	int i;
 
@@ -48,7 +48,7 @@ static int ft_check_n(char *str)
 		return (1);
 }
 
-int	ft_builtin_echo(t_cmd *cmd)
+int	ft_builtin_echo(t_cmd *cmd) //20220717 ok
 {
 	int	i;
 	int	j;
