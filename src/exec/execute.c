@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/17 23:38:20 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/18 19:41:15 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,14 @@ static int	save_stdinout(int n) //20220717 ok
 	return (0);
 }
 
-static int	dup_filefds(t_cmd *cmd) //20220717 ok
+static int	dup_filefds(t_cmd *cmd, t_info *info) //20220717 ok
 {
 	if (cmd->in != NULL || cmd->heredoc != NULL)
 	{
 		if (dup2(cmd->fdin, STDIN_FILENO) == -1)
 		{
 			perror("dup2 failed dup_filefds in ");
-			close_files(cmd);
+			close_files(info->cmd);
 			exit (1);
 		}
 	}
@@ -56,22 +56,22 @@ static int	dup_filefds(t_cmd *cmd) //20220717 ok
 		if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
 		{
 			perror("dup2 failed dup_filefds out ");
-			close_files(cmd);
+			close_files(info->cmd);
 			exit (1);
 		}
 	}
 	return (0);
 }
 
-static int	dup_pipefds(t_cmd *cmd)
+static int	dup_pipefds(t_cmd *cmd, t_info *info)
 {
-	if (cmd->prev != NULL && cmd->in == NULL && cmd->append == NULL &&
+	if (cmd->prev != NULL && cmd->in == NULL && cmd->heredoc == NULL &&
 		cmd->prev->out == NULL && cmd->prev->append == NULL)
 	{
 		if (dup2(cmd->prev->pipefd[0], STDIN_FILENO) == -1)
 		{
 			perror("dup2 failed dup_pipefds in ");
-			close_pipes(cmd);
+			close_pipes(info->cmd);
 			exit (1);
 		}
 	}
@@ -81,7 +81,7 @@ static int	dup_pipefds(t_cmd *cmd)
 		if (dup2(cmd->pipefd[1], STDOUT_FILENO) == -1)
 		{
 			perror("dup2 failed dup_pipefds in ");
-			close_pipes(cmd);
+			close_pipes(info->cmd);
 			exit (1);
 		}
 	}
@@ -93,9 +93,9 @@ static void	child(t_cmd *cmd, t_info *info)
 	char	**env_child;
 
 	env_child = env_env_tostrs(info->env);
-	dup_pipefds(cmd);
+	dup_pipefds(cmd, info);
 	close_pipes(info->cmd);
-	dup_filefds(cmd);
+	dup_filefds(cmd, info);
 	close_files(info->cmd);
 	if (is_builtin(cmd) == 1)
 	{
@@ -139,23 +139,23 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 		}
 		tmp = tmp->next;
 	}
-	fprintf(stderr,"pipex after while\n");
+	// fprintf(stderr,"pipex after while\n");
 	close_pipes(info->cmd);
 	close_files(info->cmd);
 	tmp = info->cmd;
 	while (tmp != NULL)
 	{
-		fprintf(stderr,"waitpid start tmp->ag[0] is %s\n", tmp->ag[0]);
+		// fprintf(stderr,"waitpid start tmp->ag[0] is %s\n", tmp->ag[0]);
 		waitpid (tmp->pid, NULL, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
 		// waitpid (tmp->pid, &status, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
 		//if (WIFEXITED(status))
 		//	//x = WEXITSTATUS(status) // returns the exit status of the child. exit etc
 		//else if (WIFSIGNALED(status))
 		//	//x = WTERMSIG(status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
-		fprintf(stderr,"waitpid done tmp->ag[0] is %s\n", tmp->ag[0]);
+		// fprintf(stderr,"waitpid done tmp->ag[0] is %s\n", tmp->ag[0]);
 		tmp = tmp->next;
 	}
-	fprintf(stderr,"after waitpid\n");
+	// fprintf(stderr,"after waitpid\n");
 	save_stdinout(2);
 	return ;
 }
@@ -167,7 +167,7 @@ void	execute(t_info *info) //20220717 ok
 	if (info->size == 1 && is_builtin(info->cmd) == 1)
 	{
 
-		if (dup_filefds(info->cmd) == 1 || exec_builtin(info->cmd, info) == 1)
+		if (dup_filefds(info->cmd, info) == 1 || exec_builtin(info->cmd, info) == 1)
 		{
 			close_files(info->cmd);
 			return (perror("dup_filesfd failed "));
@@ -179,7 +179,7 @@ void	execute(t_info *info) //20220717 ok
 		open_pipes(info->cmd, info);
 		pipex(info->cmd, info);
 	}
-	fprintf(stderr,"execute pipex done\n");
+	// fprintf(stderr,"execute pipex done\n");
 	// save_stdinout(2);
 	return ;
 }
