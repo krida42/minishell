@@ -1,7 +1,8 @@
 #include "libft.h"
 #include "minishell.h"
+#include <stdio.h>
 
-static char	*next_part(char *s)
+char	*next_part(char *s)
 {
 	char	delimiter;
 	int		i;
@@ -20,13 +21,13 @@ static char	*next_part(char *s)
 			break;
 		i++;
 	}
-	if (s[i])
+	if (isinset(delimiter, "\"'"))
 		i++;
 	return (s + i);
 
 }
 
-static char	*dup_part(char *s)
+char	*dup_part(char *s)
 {
 	char	delimiter;
 	int		i;
@@ -99,8 +100,11 @@ static void	treat_allparam(t_cmd *cmd)
 	cmd->heredoc = manipulate_param(cmd->heredoc);
 }
 
-void	treat_allcmd(t_cmd *cmd)
+void	treat_allcmd(t_info *info)
 {
+	t_cmd	*cmd;
+
+	cmd = info->cmd;
 	while (cmd)
 	{
 		treat_allparam(cmd);
