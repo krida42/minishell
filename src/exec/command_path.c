@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 11:59:35 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/17 23:55:24 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/18 22:00:10 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static void	ft_av_cmd_error_msg_check(char **ag, t_info *info) // a voir s il es
 	}
 	close_pipes(info->cmd);
 	close_files(info->cmd);
-	ft_free(info);
 	exit(EXIT_FAILURE);
 }
 
@@ -55,6 +54,7 @@ char	**path_tab(t_info *info)
 	if (path_tmp != NULL)
 	{
 		pathtab = ft_split_pipex((char const *)path_tmp, ':');
+		free(path_tmp);
 		i = 0;
 		while (pathtab[i])
 		{
@@ -67,7 +67,7 @@ char	**path_tab(t_info *info)
 			i++;
 		}
 	}
-	free (path_tmp);
+	// free (path_tmp);
 	return (pathtab);
 }
 
