@@ -101,6 +101,8 @@ void	free_info(t_info *info);
 
 void	treat_allcmd(t_info *info);
 
+void	var_expand(t_env *env, char **s);
+
 //  - - - - - - - - - - - - EXEC - - - - - - - - - - - - - - - - - -
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
