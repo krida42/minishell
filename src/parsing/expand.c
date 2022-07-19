@@ -1,7 +1,8 @@
 #include "libft.h"
 #include "minishell.h"
+#include <stdio.h>
 
-static char	*next_part(char *s)
+char	*next_part(char *s)
 {
 	char	delimiter;
 	int		i;
@@ -20,13 +21,13 @@ static char	*next_part(char *s)
 			break;
 		i++;
 	}
-	if (s[i])
+	if (isinset(delimiter, "\"'"))
 		i++;
 	return (s + i);
 
 }
 
-static char	*dup_part(char *s)
+char	*dup_part(char *s)
 {
 	char	delimiter;
 	int		i;
@@ -51,7 +52,7 @@ static char	*dup_part(char *s)
 	return (ft_strndup(s, i));
 }
 
-static char	*concatenate(char *s)
+static char	*concatenate(t_env *env, char *s)
 {
 	char	*joined;
 	char	*part;
@@ -62,6 +63,8 @@ static char	*concatenate(char *s)
 	{
 		tmp = joined;
 		part = dup_part(s);
+		if (*s != '\'')
+			var_expand(env, &part);
 		joined = ft_strjoin(joined, part);
 		free(tmp);
 		free(part);
@@ -70,40 +73,41 @@ static char	*concatenate(char *s)
 	return (joined);
 }
 
-static char	*manipulate_param(char *s)
+static char	*manipulate_param(t_env *env, char *s)
 {
-	//char	*var_expanded;
 	char	*concatened;
 
 	if (!s)
 		return (NULL);
-	//var_expanded = var_expand(*s);
-	concatened = concatenate(s);
+	concatened = concatenate(env, s);
 	free(s);
 	return (concatened);
 }
 
-static void	treat_allparam(t_cmd *cmd)
+static void	treat_allparam(t_env *env, t_cmd *cmd)
 {
 	char	**ag;
 
 	ag = cmd->ag;
 	while (*ag)
 	{
-		*ag = manipulate_param(*ag);
+		*ag = manipulate_param(env, *ag);
 		ag++;
 	}
-	cmd->in = manipulate_param(cmd->in);
-	cmd->out = manipulate_param(cmd->out);
-	cmd->append = manipulate_param(cmd->append);
-	cmd->heredoc = manipulate_param(cmd->heredoc);
+	cmd->in = manipulate_param(env, cmd->in);
+	cmd->out = manipulate_param(env, cmd->out);
+	cmd->append = manipulate_param(env, cmd->append);
+	cmd->heredoc = manipulate_param(env, cmd->heredoc);
 }
 
-void	treat_allcmd(t_cmd *cmd)
+void	treat_allcmd(t_info *info)
 {
+	t_cmd	*cmd;
+
+	cmd = info->cmd;
 	while (cmd)
 	{
-		treat_allparam(cmd);
+		treat_allparam(info->env ,cmd);
 		cmd = cmd->next;
 	}
 }

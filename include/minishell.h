@@ -99,7 +99,9 @@ t_info	*init_info(t_cmd *cmd, char **envp);
 void	free_info(t_info *info);
 
 
-void	treat_allcmd(t_cmd *cmd);
+void	treat_allcmd(t_info *info);
+
+void	var_expand(t_env *env, char **s);
 
 //  - - - - - - - - - - - - EXEC - - - - - - - - - - - - - - - - - -
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
