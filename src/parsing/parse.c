@@ -18,12 +18,12 @@ static char	*next_token(char *input)
 			squote = !squote;
 		else if (input[i] == '"' && !squote)
 			dquote = !dquote;
-		if (isinset(input[i], "<>| ") && !(dquote || squote))
+		if (isinset(input[i], "<>| \t") && !(dquote || squote))
 			break;
 	}
 	if (input[i] == '|' && i == 0)
 		i++;
-	if (input[i] == ' ')
+	if (input[i] == ' ' || input[i] == '\t')
 		i += skip_spaces_i(input + i);
 	return (input + i);
 }
@@ -44,7 +44,7 @@ static int	end_token_i(char *input)
 			squote = !squote;
 		else if (input[i] == '"' && !squote)
 			dquote = !dquote;
-		if (isinset(input[i], "<>| ") && !(dquote || squote))
+		if (isinset(input[i], "<>| \t") && !(dquote || squote))
 			return (i - 1);
 	}
 	return (i - 1);
@@ -154,16 +154,20 @@ static int	set_token(t_cmd **cmd, char *cursor)
 int	parse(char *input, char **envp)
 {
 	char	*cursor;
+	char	*tmp;
 	t_cmd	*cmd;
 	t_info	*info;
 
 	cmd = NULL;
-	cursor = input;
+	//cursor = input;
+	cursor = ft_strtrim(input, " \t");
+	tmp = cursor;
 	while (cursor && *cursor)
 	{
 		cursor = cursor + set_token(&cmd, cursor);
 		cursor = next_token(cursor);
 	}
+	free(tmp);
 	info = init_info(cmd, envp);
 	treat_allcmd(info);
 	desc_info(info);

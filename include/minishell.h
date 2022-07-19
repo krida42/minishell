@@ -54,6 +54,7 @@ char	*ft_strstr(const char *big, const char *little);
 int		ft_strchri(const char *s, char c);
 int		ft_strcmp(char *s1, char *s2);
 char	*ft_strndup(const char *s, size_t n);
+int		ft_isblank(char c); 
 
 int		strs_len(char **strs);
 char	**strs_insert(char ***strs, const char *s);

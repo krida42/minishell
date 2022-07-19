@@ -49,3 +49,8 @@ char	*ft_strndup(const char *s, size_t n)
 	cpy[i] = '\0';
 	return (cpy);
 }
+
+int		ft_isblank(char c)
+{
+	return (c == ' ' || c == '\t');
+}

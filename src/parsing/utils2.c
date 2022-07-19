@@ -1,5 +1,5 @@
 #include <minishell.h>
-
+/*
 char	*skip_spaces(char *s)
 {
 	if (!*s)
@@ -7,6 +7,19 @@ char	*skip_spaces(char *s)
 	if (s[0] != ' ' && s[1] != ' ')
 		return (s);
 	while (*++s && *s == ' ')
+		;
+	return (s);
+
+}
+*/
+
+char	*skip_spaces(char *s)
+{
+	if (!*s)
+		exit(printf(RED"DANGER - - skip_spaces - - Already at end of *s"WHITE));
+	if (!ft_isblank(s[0]) && !ft_isblank(s[1]))
+		return (s);
+	while (*++s && ft_isblank(*s))
 		;
 	return (s);
 
