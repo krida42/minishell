@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:31:02 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/18 22:38:18 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/19 22:22:47 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int	exec_builtin(t_cmd *cmd, t_info *info) //20220717 ok
 	(void)info;
 	if (ft_strcmp(cmd->ag[0], "pwd") == 0)
 		return(ft_builtin_pwd());
-	// else if (ft_strcmp(cmd->ag[0], "cd") == 0)
-	// 	return(ft_builtin_cd(cmd->ag[1]));
+	else if (ft_strcmp(cmd->ag[0], "cd") == 0)
+		return(ft_builtin_cd(cmd->ag, info->env));
 	else if (ft_strcmp(cmd->ag[0], "echo") == 0)
 		return(ft_builtin_echo(cmd));
 	// else if (ft_strcmp(cmd[0], "export") == 0)
@@ -36,8 +36,8 @@ int	is_builtin(t_cmd *cmd) //20220717 ok
 {
 	if (ft_strcmp(cmd->ag[0], "pwd") == 0)
 		return (1);
-	// else if (ft_strcmp(cmd->ag[0], "cd") == 0)
-	// 	return (1);
+	else if (ft_strcmp(cmd->ag[0], "cd") == 0)
+		return (1);
 	else if (ft_strcmp(cmd->ag[0], "echo") == 0)
 		return (1);
 	// else if (ft_strcmp(cmd->ag[0], "export") == 0)

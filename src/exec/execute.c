@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/18 19:41:15 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/19 22:36:37 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,7 @@ static int	dup_filefds(t_cmd *cmd, t_info *info) //20220717 ok
 
 static int	dup_pipefds(t_cmd *cmd, t_info *info)
 {
-	if (cmd->prev != NULL && cmd->in == NULL && cmd->heredoc == NULL &&
-		cmd->prev->out == NULL && cmd->prev->append == NULL)
+	if (cmd->prev != NULL && cmd->in == NULL && cmd->heredoc == NULL) // && cmd->prev->out == NULL && cmd->prev->append == NULL
 	{
 		if (dup2(cmd->prev->pipefd[0], STDIN_FILENO) == -1)
 		{
@@ -75,8 +74,7 @@ static int	dup_pipefds(t_cmd *cmd, t_info *info)
 			exit (1);
 		}
 	}
-	if (cmd->next != NULL && cmd->out == NULL && cmd->append == NULL &&
-		cmd->next->in == NULL && cmd->next->heredoc == NULL)
+	if (cmd->next != NULL && cmd->out == NULL && cmd->append == NULL) //&& cmd->next->in == NULL && cmd->next->heredoc == NULL
 	{
 		if (dup2(cmd->pipefd[1], STDOUT_FILENO) == -1)
 		{
@@ -100,18 +98,17 @@ static void	child(t_cmd *cmd, t_info *info)
 	if (is_builtin(cmd) == 1)
 	{
 		if (exec_builtin(cmd, info) == 1)
-			ft_putstr_fd("exec_builtin failed ", 2);
-		exit (1);
+			exit (1);
 	}
 	else
 	{
 		cmd->cmd_path = command_path(cmd->ag, info);
 		// if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
 		if (execve(cmd->cmd_path, cmd->ag, env_child) == -1)
-		perror("exec_builtin failed ");
+		perror("exec failed ");
 		exit (1);
 	}
-	exit (0);
+	exit (0) ;
 }
 
 static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
@@ -166,8 +163,12 @@ void	execute(t_info *info) //20220717 ok
 	open_files(info->cmd);
 	if (info->size == 1 && is_builtin(info->cmd) == 1)
 	{
-
-		if (dup_filefds(info->cmd, info) == 1 || exec_builtin(info->cmd, info) == 1)
+		if (exec_builtin(info->cmd, info) == 1)
+		{
+			close_files(info->cmd);
+			return ;
+		}
+		if (dup_filefds(info->cmd, info) == 1)
 		{
 			close_files(info->cmd);
 			return (perror("dup_filesfd failed "));
