@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 22:09:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/17 20:47:29 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/21 00:13:08 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_builtin_pwd(void) //20220717 ok
 		ft_putstr_fd("\n", fd);
 	}
 	else
-		perror("getcwd()");
+		perror("buildin_pwd failed ");
 	return (0);
 }
 
@@ -72,6 +72,32 @@ int	ft_builtin_echo(t_cmd *cmd) //20220717 ok
 	return (0);
 }
 
+int	ft_builtin_cd(char **ag, t_env *env)
+{
+	char	*tmp_pwd;
+	
+	if (ag[2] != NULL)
+	{
+			ft_putstr_fd("cd: too many arguments\n", 2);
+			return (1);
+	}
+	if (ag[1] == NULL || ag[1][0] == '~')
+	{
+		if (chdir (env_get_val(env, "HOME")) == -1)
+		{
+			perror("cd failed");
+			return (1);
+		}
+	}
+	else if (chdir (ag[1]) == -1)
+	{
+		perror("cd failed");
+		return (1);
+	}
+	tmp_pwd = getenv("PWD");
+	env_set_val(env, "PWD", tmp_pwd);
+	return (0);
+}
 // int	ft_builtin_echo(t_cmd *cmd)
 // {
 // 	int	i;
