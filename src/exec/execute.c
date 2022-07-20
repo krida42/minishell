@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/19 22:36:37 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/21 00:22:55 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,15 +163,15 @@ void	execute(t_info *info) //20220717 ok
 	open_files(info->cmd);
 	if (info->size == 1 && is_builtin(info->cmd) == 1)
 	{
-		if (exec_builtin(info->cmd, info) == 1)
-		{
-			close_files(info->cmd);
-			return ;
-		}
 		if (dup_filefds(info->cmd, info) == 1)
 		{
 			close_files(info->cmd);
 			return (perror("dup_filesfd failed "));
+		}
+		if (exec_builtin(info->cmd, info) == 1)
+		{
+			close_files(info->cmd);
+			return ;
 		}
 		save_stdinout(2);
 	}

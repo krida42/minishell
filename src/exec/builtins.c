@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 22:09:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/19 22:33:48 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/21 00:13:08 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,22 @@ int	ft_builtin_cd(char **ag, t_env *env)
 {
 	char	*tmp_pwd;
 	
-	if (ag[1] == NULL)
+	if (ag[2] != NULL)
+	{
+			ft_putstr_fd("cd: too many arguments\n", 2);
+			return (1);
+	}
+	if (ag[1] == NULL || ag[1][0] == '~')
 	{
 		if (chdir (env_get_val(env, "HOME")) == -1)
 		{
-			perror("chdir : ");
+			perror("cd failed");
 			return (1);
 		}
 	}
 	else if (chdir (ag[1]) == -1)
 	{
-		perror("ft_builtin_cd failed : ");
+		perror("cd failed");
 		return (1);
 	}
 	tmp_pwd = getenv("PWD");
