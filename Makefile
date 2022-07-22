@@ -12,6 +12,7 @@ PARSING_SRC := main.c prompt.c mini_utils.c signals.c \
 			   env.c env2.c env3.c info.c expand.c expand2.c
 
 EXEC_SRC :=  	execute.c		\
+				exec_fds.c		\
 				command_path.c	\
 				ft_split_pipex.c\
 				builtin_exec.c	\

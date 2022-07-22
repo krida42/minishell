@@ -6,85 +6,13 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/22 10:41:48 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/22 14:27:29 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	save_stdinout(int n) //20220717 ok
-{
-	static int	tmpin;
-	static int	tmpout;
 
-	if (n == 1)
-	{
-		tmpin = dup(STDIN_FILENO);
-		tmpout = dup(STDOUT_FILENO);
-	}
-	if (n == 2)
-	{
-		if (dup2(tmpin, STDIN_FILENO) == -1)
-		{
-			perror("dup2 failed save_stdinout 2 temp in");
-			return (1);
-		}
-		close(tmpin);
-		if (dup2(tmpout, STDOUT_FILENO) == -1)
-		{
-			perror("dup2 failed save_stdinout  2 temp in");
-			return (1);
-		}
-		close(tmpout);
-	}
-	return (0);
-}
-
-static int	dup_filefds(t_cmd *cmd, t_info *info) //20220717 ok
-{
-	if (cmd->in != NULL || cmd->heredoc != NULL)
-	{
-		if (dup2(cmd->fdin, STDIN_FILENO) == -1)
-		{
-			perror("dup2 failed dup_filefds in ");
-			close_files(info->cmd);
-			exit (1);
-		}
-	}
-	if (cmd->out != NULL || cmd->append != NULL)
-	{
-		if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
-		{
-			perror("dup2 failed dup_filefds out ");
-			close_files(info->cmd);
-			exit (1);
-		}
-	}
-	return (0);
-}
-
-static int	dup_pipefds(t_cmd *cmd, t_info *info)
-{
-	if (cmd->prev != NULL && cmd->in == NULL && cmd->heredoc == NULL) // && cmd->prev->out == NULL && cmd->prev->append == NULL
-	{
-		if (dup2(cmd->prev->pipefd[0], STDIN_FILENO) == -1)
-		{
-			perror("dup2 failed dup_pipefds in ");
-			close_pipes(info->cmd);
-			exit (1);
-		}
-	}
-	if (cmd->next != NULL && cmd->out == NULL && cmd->append == NULL) //&& cmd->next->in == NULL && cmd->next->heredoc == NULL
-	{
-		if (dup2(cmd->pipefd[1], STDOUT_FILENO) == -1)
-		{
-			perror("dup2 failed dup_pipefds in ");
-			close_pipes(info->cmd);
-			exit (1);
-		}
-	}
-	return (0);
-}
 
 static void	child(t_cmd *cmd, t_info *info)
 {
@@ -132,30 +60,26 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 		else if (tmp->pid == 0)
 		{
 			{
-				//signal(SIGQUIT, ft_shandler); //Interruption forte (ctrl-\)//Terminaison + core dump
+				//signal(SIGQUIT, ft_handle_sig); //Interruption forte (ctrl-\)//Terminaison + core dump
 				child(tmp, info);
 			}
 		}
 		tmp = tmp->next;
 	}
-	// fprintf(stderr,"pipex after while\n");
 	close_pipes(info->cmd);
 	close_files(info->cmd);
 	tmp = info->cmd;
 	while (tmp != NULL)
 	{
-		// fprintf(stderr,"waitpid start tmp->ag[0] is %s\n", tmp->ag[0]);
 		waitpid (tmp->pid, NULL, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
-		// waitpid (tmp->pid, &status, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
-		//if (WIFEXITED(status))
-		//	//x = WEXITSTATUS(status) // returns the exit status of the child. exit etc
-		//else if (WIFSIGNALED(status))
-		//	//x = WTERMSIG(status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
-		// fprintf(stderr,"waitpid done tmp->ag[0] is %s\n", tmp->ag[0]);
+		// waitpid (tmp->pid, &cmd->status, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
+		//if (WIFEXITED(cmd->status))
+		//	//info->error_n = WEXITSTATUS(cmd->status) // returns the exit status of the child. exit etc
+		//else if (WIFSIGNALED(cmd->status))
+		//	//info->error_n = WTERMSIG(status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
 		tmp = tmp->next;
 	}
-	// fprintf(stderr,"after waitpid\n");
-	save_stdinout(2);
+	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
 	return ;
 }
 
@@ -182,8 +106,6 @@ void	execute(t_info *info) //20220717 ok
 		open_pipes(info->cmd, info);
 		pipex(info->cmd, info);
 	}
-	// fprintf(stderr,"execute pipex done\n");
-	// save_stdinout(2);
 	return ;
 }
 

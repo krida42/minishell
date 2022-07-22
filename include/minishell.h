@@ -28,6 +28,8 @@ typedef struct s_cmd {
 	int		pipefd[2]; // execution: pour pipe
 	int		fdin; // execution: pour entrée
 	int		fdout; // execution: pour sortie
+	int		status;
+	int		error_n;
 	pid_t	pid; // execution: pour fork
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
@@ -109,6 +111,9 @@ void	var_expand(t_env *env, char **s);
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 void	execute(t_info *info);
+int		save_stdinout(int n);
+int		dup_filefds(t_cmd *cmd, t_info *info);
+int		dup_pipefds(t_cmd *cmd, t_info *info);
 char	*command_path(char **ag, t_info *info);
 void	ft_path(char **env, t_info *info);
 char	**path_tab(t_info *info);
