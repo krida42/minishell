@@ -126,16 +126,11 @@ int		ft_builtin_echo(t_cmd *cmd);
 void	msg_close_free_exit(char *str, t_info *info); // p.e to be deleted
 void	msg_close_return(char *str, t_info *info);
 void	open_files(t_cmd *cmd);
-void	open_pipes(t_cmd *cmd, t_info *info);
+int		open_pipes(t_cmd *cmd, t_info *info);
 void	close_pipes(t_cmd *cmd);
 void	close_files(t_cmd *cmd);
 void	close_std(void);
 void	ft_free(t_info *info); // a REVOIR Supprimer ?
 void	ft_free_tab(char **tab); // a revoir
-
-//lib
-void	ft_putchar(char c);
-void	ft_putstr(char *s);
-
 
 #endif

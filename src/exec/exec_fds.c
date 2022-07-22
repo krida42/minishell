@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 14:27:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/22 14:27:44 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/22 14:58:24 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	dup_filefds(t_cmd *cmd, t_info *info) //20220717 ok
 		{
 			perror("dup2 failed dup_filefds in ");
 			close_files(info->cmd);
-			exit (1);
+			exit (EXIT_FAILURE);
 		}
 	}
 	if (cmd->out != NULL || cmd->append != NULL)
@@ -57,7 +57,7 @@ int	dup_filefds(t_cmd *cmd, t_info *info) //20220717 ok
 		{
 			perror("dup2 failed dup_filefds out ");
 			close_files(info->cmd);
-			exit (1);
+			exit (EXIT_FAILURE);
 		}
 	}
 	return (0);
@@ -71,7 +71,7 @@ int	dup_pipefds(t_cmd *cmd, t_info *info)
 		{
 			perror("dup2 failed dup_pipefds in ");
 			close_pipes(info->cmd);
-			exit (1);
+			exit (EXIT_FAILURE);
 		}
 	}
 	if (cmd->next != NULL && cmd->out == NULL && cmd->append == NULL) //&& cmd->next->in == NULL && cmd->next->heredoc == NULL
@@ -80,7 +80,7 @@ int	dup_pipefds(t_cmd *cmd, t_info *info)
 		{
 			perror("dup2 failed dup_pipefds in ");
 			close_pipes(info->cmd);
-			exit (1);
+			exit (EXIT_FAILURE);
 		}
 	}
 	return (0);

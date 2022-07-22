@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/22 14:27:29 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/22 15:08:02 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ static void	child(t_cmd *cmd, t_info *info)
 	dup_filefds(cmd, info);
 	close_files(info->cmd);
 	if (cmd->ag == NULL)
-		exit (0);
+		exit (EXIT_SUCCESS);
 	else if (is_builtin(cmd) == 1)
 	{
 		if (exec_builtin(cmd, info) == 1)
-			exit (1);
+			exit (EXIT_FAILURE);
 	}
 	else
 	{
@@ -36,38 +36,15 @@ static void	child(t_cmd *cmd, t_info *info)
 		// if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
 		if (execve(cmd->cmd_path, cmd->ag, env_child) == -1)
 		perror("exec failed ");
-		exit (1);
+		exit (EXIT_FAILURE);
 	}
-	exit (0) ;
+	exit (EXIT_SUCCESS);
 }
 
-static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
+static void	ft_waitpid(t_info *info)
 {
-	// int		status;
 	t_cmd	*tmp;
-
-	tmp = cmd;
-	while (tmp != NULL)
-	{
-		tmp->pid = fork();
-		if (tmp->pid == -1)
-		{
-			perror("fork failed ");
-			close_pipes(info->cmd);
-			close_files(info->cmd);
-			return ;
-		}
-		else if (tmp->pid == 0)
-		{
-			{
-				//signal(SIGQUIT, ft_handle_sig); //Interruption forte (ctrl-\)//Terminaison + core dump
-				child(tmp, info);
-			}
-		}
-		tmp = tmp->next;
-	}
-	close_pipes(info->cmd);
-	close_files(info->cmd);
+	
 	tmp = info->cmd;
 	while (tmp != NULL)
 	{
@@ -79,6 +56,33 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 		//	//info->error_n = WTERMSIG(status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
 		tmp = tmp->next;
 	}
+	return ;
+}
+
+static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
+{
+	while (cmd != NULL)
+	{
+		cmd->pid = fork();
+		if (cmd->pid == -1)
+		{
+			perror("fork failed ");
+			close_pipes(info->cmd);
+			close_files(info->cmd);
+			return ;
+		}
+		else if (cmd->pid == 0)
+		{
+			{
+				//signal(SIGQUIT, ft_handle_sig); //Interruption forte (ctrl-\)//Terminaison + core dump
+				child(cmd, info);
+			}
+		}
+		cmd = cmd->next;
+	}
+	close_pipes(info->cmd);
+	close_files(info->cmd);
+	ft_waitpid(info);
 	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
 	return ;
 }
@@ -103,7 +107,8 @@ void	execute(t_info *info) //20220717 ok
 	}
 	else
 	{
-		open_pipes(info->cmd, info);
+		if (open_pipes(info->cmd, info) == 1)
+			return;
 		pipex(info->cmd, info);
 	}
 	return ;

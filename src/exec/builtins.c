@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 22:09:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/21 00:13:08 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/22 15:04:43 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,14 @@
 int	ft_builtin_pwd(void) //20220717 ok
 {
 	char	cwd[PATH_MAX + 1];
-	int		fd;
 
-	fd = 1;
 	if (getcwd(cwd, sizeof(cwd)) != NULL) // return a null-terminated string containing an absolute pathname that is the current working directory of the calling process.
 	{
-		ft_putstr_fd(cwd, fd);
-		ft_putstr_fd("\n", fd);
+		ft_putstr_fd(cwd, 1);
+		ft_putstr_fd("\n", 1);
 	}
 	else
-		perror("buildin_pwd failed ");
+		perror("pwd failed ");
 	return (0);
 }
 
@@ -85,13 +83,13 @@ int	ft_builtin_cd(char **ag, t_env *env)
 	{
 		if (chdir (env_get_val(env, "HOME")) == -1)
 		{
-			perror("cd failed");
+			perror("cd failed ");
 			return (1);
 		}
 	}
 	else if (chdir (ag[1]) == -1)
 	{
-		perror("cd failed");
+		perror("cd failed ");
 		return (1);
 	}
 	tmp_pwd = getenv("PWD");

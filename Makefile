@@ -19,9 +19,7 @@ EXEC_SRC :=  	execute.c		\
 				builtins.c	\
 				open.c			\
 				close.c			\
-				free.c			\
-				msg_close_free_exit.c\
-				utils_exec.c
+				free.c
 
 SRC := $(addprefix parsing/,$(PARSING_SRC))
 SRC += $(addprefix exec/,$(EXEC_SRC))
