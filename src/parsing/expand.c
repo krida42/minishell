@@ -107,6 +107,7 @@ void	treat_allcmd(t_info *info)
 	cmd = info->cmd;
 	while (cmd)
 	{
+		//init_allvar(cmd);
 		treat_allparam(info->env ,cmd);
 		cmd = cmd->next;
 	}

@@ -9,7 +9,7 @@ SHELL = /bin/bash
 
 PARSING_SRC := main.c prompt.c mini_utils.c signals.c \
 			   parse.c check.c lst.c lst2.c utils.c utils2.c desc.c \
-			   env.c env2.c env3.c info.c expand.c expand2.c
+			   env.c env2.c env3.c info.c expand.c expand2.c #var.c
 
 EXEC_SRC :=  	execute.c		\
 				command_path.c	\
