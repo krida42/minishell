@@ -37,6 +37,32 @@ char	**strs_insert(char ***strs, const char *s)
 	return (new_strs);
 }
 
+char	**strs_remove(char ***strs, int index)
+{
+	int		len;
+	char	**new_strs;
+	int		i;
+	int		k;
+
+	if (!*strs)
+		exit(printf("DANGER - strs_remove - *strs is NULL"));
+	len = strs_len(*strs);
+	if (index >= len || index < 0)
+		exit(printf("DANGER - strs_remove - index out of range"));
+	new_strs = malloc(sizeof(char *) * len);
+	i = -1;
+	k = 0;
+	while ((*strs)[++i])
+		if (i != index)
+			new_strs[k++] = (*strs)[i];
+		else
+			free((*strs)[i]);
+	new_strs[k] = NULL;
+	free(*strs);
+	*strs = new_strs;
+	return (new_strs);
+}
+
 int	isinset(char c, const char *set)
 {
 	while (*set)

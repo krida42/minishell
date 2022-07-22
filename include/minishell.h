@@ -62,6 +62,7 @@ int		strs_len(char **strs);
 char	**strs_insert(char ***strs, const char *s);
 void	free_strs(char	**strs);
 int		isinset(char c, const char *set);
+char	**strs_remove(char ***strs, int index);
 
 char	*skip_spaces(char *s);
 int		skip_spaces_i(char *s);
@@ -105,6 +106,8 @@ void	free_info(t_info *info);
 void	treat_allcmd(t_info *info);
 
 void	var_expand(t_env *env, char **s);
+
+
 
 //  - - - - - - - - - - - - EXEC - - - - - - - - - - - - - - - - - -
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
