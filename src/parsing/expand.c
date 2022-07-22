@@ -89,7 +89,7 @@ static void	treat_allparam(t_env *env, t_cmd *cmd)
 	char	**ag;
 
 	ag = cmd->ag;
-	while (*ag)
+	while (ag && *ag)
 	{
 		*ag = manipulate_param(env, *ag);
 		ag++;
@@ -107,7 +107,7 @@ void	treat_allcmd(t_info *info)
 	cmd = info->cmd;
 	while (cmd)
 	{
-		//init_allvar(cmd);
+		init_allvar(cmd);
 		treat_allparam(info->env ,cmd);
 		cmd = cmd->next;
 	}

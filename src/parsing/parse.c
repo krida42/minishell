@@ -171,7 +171,7 @@ int	parse(char *input, char **envp)
 	info = init_info(cmd, envp);
 	treat_allcmd(info);
 	desc_info(info);
-	execute(info);
+	//execute(info);
 	free_info(info);
 	return (0);
 }
