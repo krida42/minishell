@@ -16,7 +16,8 @@ EXEC_SRC :=  	execute.c		\
 				command_path.c	\
 				ft_split_pipex.c\
 				builtin_exec.c	\
-				builtins.c	\
+				builtins.c		\
+				builtins2.c		\
 				open.c			\
 				close.c			\
 				free.c

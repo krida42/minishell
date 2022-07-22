@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 11:59:35 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/18 22:00:10 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/22 16:49:31 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static void	ft_av_cmd_error_msg_check(char **ag, t_info *info) // a voir s il es
 	close_files(info->cmd);
 	exit(EXIT_FAILURE);
 }
-
 
 // void	ft_path(char **env, t_info *info)
 // {

@@ -6,13 +6,11 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/22 15:17:52 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/22 18:26:37 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-
 
 static void	child(t_cmd *cmd, t_info *info)
 {

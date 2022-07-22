@@ -48,7 +48,7 @@ void	desc_info(t_info *info)
 //	while (env[++i])
 //		printf("%s\n", env[i]);
 	printf("\n\ninfo->size : %d\n", info->size);
-	printf("PATH : %s\n", env_get_ptr(info->env, "PATH")->val);
+	// printf("PATH : %s\n", env_get_ptr(info->env, "PATH")->val);
 	printf(CYAN"\n*********************************************"WHITE"\n");
 	//free_strs(env);
 
