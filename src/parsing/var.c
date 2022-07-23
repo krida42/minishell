@@ -28,34 +28,35 @@ static	int	are_allvarinit(char **ag)
 	return (1);
 }
 
-void	init_allvar(t_cmd *cmd)
+int	init_allvar(t_cmd *cmd)
 {
 	char	**ag;
 	int		i;
 
 	ag = cmd->ag;
-	i = 0;
+	i = -1;
 	//Les cas ou l'initialiasaiotn ' de variable est annule
 	if (!are_allvarinit(ag) || cmd->next || cmd->prev)
 	{
-		printf("ag[0]: %s\n", ag[0]);
-		while (ag && ag[i])
+		while (ag && ag[++i])
 		{
 			printf("i: %d\n", i);
 			if (is_varinit(ag[i]))
 			{
-				printf("INIT\n");
 				strs_remove(&ag, i);
-				i = 0;
-				continue;
+				i = -1;
 			}
-			i++;
+			else
+				break;
 		}
 	}
+	else
+		return (0);
 	if (!ag[0])
 	{
 		free_strs(ag);
 		ag = NULL;
 	}
 	cmd->ag = ag;
+	return (1);
 }
