@@ -108,8 +108,10 @@ int		treat_allcmd(t_info *info)
 	cmd = info->cmd;
 	while (cmd)
 	{
-		ret = init_allvar(cmd);
-		treat_allparam(info->env ,cmd);
+		ret = clearify_allvar(cmd);
+		treat_allparam(info->env, cmd);
+		if (!ret)
+			init_allvar(&info->env, cmd);
 		cmd = cmd->next;
 	}
 	return (ret);
