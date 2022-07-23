@@ -100,16 +100,18 @@ static void	treat_allparam(t_env *env, t_cmd *cmd)
 	cmd->heredoc = manipulate_param(env, cmd->heredoc);
 }
 
-void	treat_allcmd(t_info *info)
+int		treat_allcmd(t_info *info)
 {
 	t_cmd	*cmd;
+	int		ret;
 
 	cmd = info->cmd;
 	while (cmd)
 	{
-		init_allvar(cmd);
+		ret = init_allvar(cmd);
 		treat_allparam(info->env ,cmd);
 		cmd = cmd->next;
 	}
+	return (ret);
 }
 
