@@ -20,12 +20,13 @@ int	m_prompt(const char *prompt, char **envp)
 	info = init_info(envp);
 	while (1)
 	{
+		reset_info(info);
 		input = readline(prompt);
 		if (!input || ft_strstr(input, "exit") == input)
 		{
 			rl_clear_history();
 			printf("exit\n");
-			reset_info(info);
+			free_info(info);
 			return (free(input), 0);
 		}
 		//else if (ft_strstr(input, "clear") == input)
