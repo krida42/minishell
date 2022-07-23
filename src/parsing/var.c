@@ -40,7 +40,6 @@ int	init_allvar(t_cmd *cmd)
 	{
 		while (ag && ag[++i])
 		{
-			printf("i: %d\n", i);
 			if (is_varinit(ag[i]))
 			{
 				strs_remove(&ag, i);
