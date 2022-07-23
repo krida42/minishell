@@ -170,11 +170,11 @@ int	parse(char *input, char **envp)
 	free(tmp);
 	info = init_info(cmd, envp);
 	if(treat_allcmd(info)){
-		//desc_info(info);
+		desc_info(info);
 		execute(info);
 	}
 	else
-		//desc_info(info);
+		desc_info(info);
 	free_info(info);
 	return (0);
 }

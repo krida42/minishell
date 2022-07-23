@@ -28,7 +28,7 @@ static	int	are_allvarinit(char **ag)
 	return (1);
 }
 
-int	init_allvar(t_cmd *cmd)
+int	clearify_allvar(t_cmd *cmd)
 {
 	char	**ag;
 	int		i;
@@ -37,20 +37,15 @@ int	init_allvar(t_cmd *cmd)
 	i = -1;
 	//Les cas ou l'initialiasaiotn ' de variable est annule
 	if (!are_allvarinit(ag) || cmd->next || cmd->prev)
-	{
-		while (ag && ag[++i])
+		while (ag[++i])
 		{
-			if (is_varinit(ag[i]))
-			{
-				strs_remove(&ag, i);
-				i = -1;
-			}
-			else
+			if (!is_varinit(ag[i]))
 				break;
+			strs_remove(&ag, i);
+			i = -1;
 		}
-	}
 	else
-		return (0);
+		return (0); //que des variable
 	if (!ag[0])
 	{
 		free_strs(ag);
@@ -58,4 +53,21 @@ int	init_allvar(t_cmd *cmd)
 	}
 	cmd->ag = ag;
 	return (1);
+}
+
+void	init_allvar(t_env **env, t_cmd *cmd)
+{
+	char	*name;
+	char	*val;
+	char	**ag;
+
+	ag = cmd->ag;
+	while (*ag)
+	{
+		name = ft_strndup(*ag, ft_strchri(*ag, '='));
+		val = ft_strchr((*ag) + 1, '=');
+		env_add(env, name, val, 0);
+		free(name);
+		ag++;
+	}
 }
