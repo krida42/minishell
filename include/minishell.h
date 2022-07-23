@@ -67,7 +67,7 @@ int		skip_spaces_i(char *s);
 
 void	init_signals(void);
 
-int		parse(char *input, char **envp);
+int		parse(char *input, t_info *info);
 //
 void	set_quote_state(char c, int *squote, int *dquote);
 int		check_unclosed(char *input);
@@ -97,7 +97,9 @@ char	**env_env_tostrs(t_env *env);
 void	free_env(t_env *env);
 void	free_allenv(t_env *env);
 
-t_info	*init_info(t_cmd *cmd, char **envp);
+t_info	*init_info(char **envp);
+void	set_cmd(t_info *info, t_cmd *cmd);
+void	reset_info(t_info *info);
 void	free_info(t_info *info);
 
 

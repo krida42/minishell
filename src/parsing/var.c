@@ -65,8 +65,11 @@ void	init_allvar(t_env **env, t_cmd *cmd)
 	while (*ag)
 	{
 		name = ft_strndup(*ag, ft_strchri(*ag, '='));
-		val = ft_strchr((*ag) + 1, '=');
-		env_add(env, name, val, 0);
+		val = ft_strchr(*ag, '=') + 1;
+		if (!env_get_ptr(*env, name))
+			env_add(env, name, val, 0);
+		else
+			env_set_val(*env, name, val);
 		free(name);
 		ag++;
 	}
