@@ -151,12 +151,11 @@ static int	set_token(t_cmd **cmd, char *cursor)
 	return (0);
 }
 
-int	parse(char *input, char **envp)
+int	parse(char *input, t_info *info)
 {
 	char	*cursor;
 	char	*tmp;
 	t_cmd	*cmd;
-	t_info	*info;
 
 	cmd = NULL;
 	//cursor = input;
@@ -168,14 +167,15 @@ int	parse(char *input, char **envp)
 		cursor = next_token(cursor);
 	}
 	free(tmp);
-	info = init_info(cmd, envp);
+	//info = init_info(cmd, envp);
+	set_cmd(info, cmd);
 	if(treat_allcmd(info)){
 		desc_info(info);
 		execute(info);
 	}
 	else
 		desc_info(info);
-	free_info(info);
+	//free_info(info);
 	return (0);
 }
 
