@@ -1,3 +1,4 @@
+#include "libft.h"
 #include <minishell.h>
 /*
 char	*skip_spaces(char *s)
@@ -31,4 +32,15 @@ int	skip_spaces_i(char *s)
 
 	ns = skip_spaces(s);
 	return (ns - s);
+}
+
+void	ft_puterr(char *s, char *var)
+{
+	if (!var)
+		ft_putstr_fd(s, 2);
+	else
+	{
+		ft_putstr_fd(s, 2);
+		ft_putstr_fd(var, 2);
+	}
 }

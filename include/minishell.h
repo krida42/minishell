@@ -66,6 +66,7 @@ char	**strs_remove(char ***strs, int index);
 
 char	*skip_spaces(char *s);
 int		skip_spaces_i(char *s);
+void	ft_puterr(char *s, char *var); //no tested
 
 void	init_signals(void);
 
@@ -110,8 +111,10 @@ int		treat_allcmd(t_info *info);
 void	var_expand(t_env *env, char **s);
 int		clearify_allvar(t_cmd *cmd);
 void	init_allvar(t_env **env, t_cmd *cmd);
+int		is_varinit(char *s);
+int		is_validid(char *s);// no tested
 
-
+int		b_export(t_info *info, char **args);
 
 //  - - - - - - - - - - - - EXEC - - - - - - - - - - - - - - - - - -
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

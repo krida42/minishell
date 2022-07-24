@@ -171,7 +171,10 @@ int	parse(char *input, t_info *info)
 	set_cmd(info, cmd);
 	if(treat_allcmd(info)){
 		desc_info(info);
-		execute(info);
+		if (!ft_strncmp(info->cmd->ag[0], "export", 6))
+			b_export(info, info->cmd->ag + 1);
+		else
+			execute(info);
 	}
 	else
 		desc_info(info);

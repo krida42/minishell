@@ -2,7 +2,18 @@
 #include "minishell.h"
 #include <stdio.h>
 
-static int	is_varinit(char *s)
+int	is_validid(char *s)
+{
+	while (*s)
+	{
+		if (!(ft_isalnum(*s) || *s == '_'))
+			return (0);
+		s++;
+	}
+	return (1);
+}
+
+int	is_varinit(char *s)
 {
 	if (*s == '=')
 		return (0);
