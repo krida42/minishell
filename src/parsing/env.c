@@ -8,7 +8,9 @@ static t_env	*new_env(char *name, char *val, int is_export)
 
 	env = malloc(sizeof(t_env));
 	env->name = ft_strdup(name);
-	env->val = ft_strdup(val);
+	env->val = NULL;
+	if (val)
+		env->val = ft_strdup(val);
 	env->is_export = is_export;
 	env->prev = NULL;
 	env->next = NULL;
