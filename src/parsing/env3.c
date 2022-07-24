@@ -9,7 +9,7 @@ char	**env_env_tostrs(t_env *env)
 	strs = NULL;
 	while (env)
 	{
-		if (env->is_export)
+		if (env->is_export && env->val)
 		{
 			name_j = ft_strjoin(env->name, "=");
 			str_new = ft_strjoin(name_j, env->val);
