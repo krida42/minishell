@@ -114,10 +114,12 @@ void	execute(t_info *info);
 int		save_stdinout(int n);
 int		dup_filefds(t_cmd *cmd, t_info *info);
 int		dup_pipefds(t_cmd *cmd, t_info *info);
-char	*command_path(char **ag, t_info *info);
+// char	*command_path(char **ag, t_info *info);
+char	*command_path(char **ag, t_env *env);
 void	ft_path(char **env, t_info *info);
-char	**path_tab(t_info *info);
+// char	**path_tab(t_info *info);
 char	**ft_split_pipex(char const *s, char c);
+int		is_heredoc(char *heredoc, t_cmd *cmd, t_info *info);
 int		is_builtin(t_cmd *cmd);
 int		exec_builtin(t_cmd  *cmd, t_info *info);
 int		ft_builtin_cd(char **ag, t_env *env);
@@ -131,6 +133,7 @@ int		open_pipes(t_cmd *cmd, t_info *info);
 void	close_pipes(t_cmd *cmd);
 void	close_files(t_cmd *cmd);
 void	close_std(void);
+void	close_pipes_files(t_cmd *cmd);
 void	ft_free(t_info *info); // a REVOIR Supprimer ?
 void	ft_free_tab(char **tab); // a revoir
 

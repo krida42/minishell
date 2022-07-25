@@ -18,6 +18,7 @@ EXEC_SRC :=  	execute.c		\
 				builtin_exec.c	\
 				builtins.c		\
 				builtins2.c		\
+				is_heredoc.c	\
 				open.c			\
 				close.c			\
 				free.c

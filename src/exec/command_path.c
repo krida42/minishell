@@ -6,13 +6,14 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 11:59:35 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/22 16:49:31 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/25 22:22:07 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	ft_av_cmd_error_msg_check(char **ag, t_info *info) // a voir s il est possble faire differement
+// static void	ft_av_cmd_error_msg_check(char **ag, t_info *info) 
+static void	ft_av_cmd_error_msg_check(char **ag) // a voir s il est possble faire differement
 {
 	if (ft_strchr(ag[0], '/') != NULL)
 		perror(ag[0]);
@@ -21,8 +22,8 @@ static void	ft_av_cmd_error_msg_check(char **ag, t_info *info) // a voir s il es
 		ft_putstr_fd(ag[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 	}
-	close_pipes(info->cmd);
-	close_files(info->cmd);
+	// close_pipes(info->cmd);
+	// close_files(info->cmd);
 	exit(EXIT_FAILURE);
 }
 
@@ -40,7 +41,8 @@ static void	ft_av_cmd_error_msg_check(char **ag, t_info *info) // a voir s il es
 // 	}
 // }
 
-char	**path_tab(t_info *info)
+// static char	**path_tab(t_info *info)
+static char	**path_tab(t_env *env)
 {
 	char	*path_tmp;
 	char	**pathtab;
@@ -49,7 +51,7 @@ char	**path_tab(t_info *info)
 	// ft_path(info->env, info);
 	pathtab = NULL;
 	// path_tmp = info->path;
-	path_tmp = env_get_val(info->env, "PATH");
+	path_tmp = env_get_val(env, "PATH");
 	if (path_tmp != NULL)
 	{
 		pathtab = ft_split_pipex((char const *)path_tmp, ':');
@@ -70,13 +72,14 @@ char	**path_tab(t_info *info)
 	return (pathtab);
 }
 
-char	*command_path(char **ag, t_info *info)
+// char	*command_path(char **ag, t_info *info)
+char	*command_path(char **ag, t_env *env)
 {
 	char	*cmd_path;
 	char	**pathtab; // to do dans info?
 	int		i;
 
-	pathtab = path_tab(info);
+	pathtab = path_tab(env);
 	if (pathtab != NULL)
 	{
 		i = 0;
@@ -93,6 +96,6 @@ char	*command_path(char **ag, t_info *info)
 		&& ft_strchr(ag[0], '/') != NULL)
 		return (ag[0]);
 	ft_free_tab(pathtab);
-	ft_av_cmd_error_msg_check(ag, info); // a voir s il est possible differement
+	ft_av_cmd_error_msg_check(ag); // a voir s il est possible differement
 	return (NULL);
 }

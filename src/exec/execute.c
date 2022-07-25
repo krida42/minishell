@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/22 18:26:37 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/25 22:25:34 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ static void	child(t_cmd *cmd, t_info *info)
 	char	**env_child;
 
 	env_child = env_env_tostrs(info->env);
-	dup_pipefds(cmd, info);
-	close_pipes(info->cmd);
-	dup_filefds(cmd, info);
-	close_files(info->cmd);
+	// if (cmd->heredoc != NULL)
+	dup_pipefds(cmd, info);	// 
+	dup_filefds(cmd, info);	// close_files(info->cmd);
+	close_pipes_files(info->cmd);
 	if (cmd->ag[0] == NULL)
 		exit (EXIT_SUCCESS);
 	else if (is_builtin(cmd) == 1)
@@ -30,9 +30,8 @@ static void	child(t_cmd *cmd, t_info *info)
 	}
 	else
 	{
-		cmd->cmd_path = command_path(cmd->ag, info);
-		// if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
-		if (execve(cmd->cmd_path, cmd->ag, env_child) == -1)
+		cmd->cmd_path = command_path(cmd->ag, info->env);
+		execve(cmd->cmd_path, cmd->ag, env_child); // if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
 		perror("exec failed ");
 		exit (EXIT_FAILURE);
 	}
@@ -65,21 +64,21 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 		if (cmd->pid == -1)
 		{
 			perror("fork failed ");
-			close_pipes(info->cmd);
-			close_files(info->cmd);
+			close_pipes_files(info->cmd);
 			return ;
 		}
 		else if (cmd->pid == 0)
 		{
 			{
-				//signal(SIGQUIT, ft_handle_sig); //Interruption forte (ctrl-\)//Terminaison + core dump
+				//signal(SIGQUIT, ft_handle_sig); //Interruption forte (ctrl-\)//Terminaison + core dum
+				// if (cmd->heredoc != NULL)
+				// 	is_heredoc(cmd->heredoc, cmd, info);
 				child(cmd, info);
 			}
 		}
 		cmd = cmd->next;
 	}
-	close_pipes(info->cmd);
-	close_files(info->cmd);
+	close_pipes_files(info->cmd);
 	ft_waitpid(info);
 	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
 	return ;

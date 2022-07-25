@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/01 19:10:26 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/18 19:38:00 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/25 19:04:20 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ void	close_files(t_cmd *cmd) //20220717 ok
 			close(cmd->fdout);
 		cmd = cmd->next;
 	}
+}
+
+void	close_pipes_files(t_cmd *cmd)
+{
+	close_pipes(cmd);
+	close_files(cmd);
 }
 
 void	close_std(void) //20220717 ok
