@@ -95,6 +95,7 @@ void	env_set_val(t_env *env, char *name, char *val);
 void	env_set_export(t_env *env, char *name, int is_export);
 t_env	*env_strs_toenv(char **strs_envp);
 char	**env_env_tostrs(t_env *env);
+t_env	*env_dup(t_env *env);//no tested
 void	free_env(t_env *env);
 void	free_allenv(t_env *env);
 
@@ -110,9 +111,11 @@ void	var_expand(t_env *env, char **s);
 int		clearify_allvar(t_cmd *cmd);
 void	init_allvar(t_env **env, t_cmd *cmd);
 int		is_varinit(char *s);
+int		are_allvarinit(char **ag);
 int		is_validid(char *s);// no tested
 
 int		b_export(t_info *info, char **args);
+int		b_env(t_info *info, char **args);
 
 //  - - - - - - - - - - - - EXEC - - - - - - - - - - - - - - - - - -
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

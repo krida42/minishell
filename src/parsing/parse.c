@@ -173,6 +173,8 @@ int	parse(char *input, t_info *info)
 		desc_info(info);
 		if (!ft_strncmp(info->cmd->ag[0], "export", 6))
 			b_export(info, info->cmd->ag + 1);
+		else if (!ft_strncmp(info->cmd->ag[0], "env", 3))
+			b_env(info, info->cmd->ag + 1);
 		else
 			execute(info);
 	}
