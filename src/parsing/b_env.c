@@ -1,5 +1,6 @@
 #include "minishell.h"
 #include <stdio.h>
+#include <unistd.h>
 
 
 static void	eve_display(t_env *env)
@@ -29,6 +30,26 @@ static void	eve_addvarinit(t_env **env, char *s)
 	free(name);
 }
 
+static int	eve_exec(t_info *info, t_env *env, char **args, int is_exec)
+{
+	char	*path;
+	char	**envp;
+	char	*cmd_path;
+
+	if (!is_exec)
+		eve_display(env);
+	else
+	{
+		path = env_get_val(env, "PATH");
+		cmd_path = command_path(args, info);
+		envp = env_env_tostrs(env);
+		execve(path, args, envp);
+		free(path);
+		free_strs(envp);
+	}
+	return (0);
+}
+
 int	b_env(t_info *info, char **args)
 {
 	t_env	*new_env;
@@ -48,8 +69,7 @@ int	b_env(t_info *info, char **args)
 		eve_addvarinit(&new_env, *args);
 		args++;
 	}
-	if (!is_exec)
-		eve_display(new_env);
+	eve_exec(info, new_env, args, is_exec);
 	free_allenv(new_env);
 	return (0);
 }
