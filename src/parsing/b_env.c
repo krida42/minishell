@@ -30,7 +30,7 @@ static void	eve_addvarinit(t_env **env, char *s)
 	free(name);
 }
 
-static int	eve_exec(t_info *info, t_env *env, char **args, int is_exec)
+static int	eve_exec(t_env *env, char **args, int is_exec)
 {
 	char	*path;
 	char	**envp;
@@ -41,9 +41,10 @@ static int	eve_exec(t_info *info, t_env *env, char **args, int is_exec)
 	else
 	{
 		path = env_get_val(env, "PATH");
-		cmd_path = command_path(args, info);
+		cmd_path = command_path(args, env);
 		envp = env_env_tostrs(env);
-		execve(path, args, envp);
+		if (fork() == 0)
+			execve(cmd_path, args, envp);
 		free(path);
 		free_strs(envp);
 	}
@@ -69,7 +70,7 @@ int	b_env(t_info *info, char **args)
 		eve_addvarinit(&new_env, *args);
 		args++;
 	}
-	eve_exec(info, new_env, args, is_exec);
+	eve_exec(new_env, args, is_exec);
 	free_allenv(new_env);
 	return (0);
 }
