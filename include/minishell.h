@@ -116,6 +116,7 @@ int		is_validid(char *s);// no tested
 
 int		b_export(t_info *info, char **args);
 int		b_env(t_info *info, char **args);
+int		b_unset(t_info *info, char **args);
 
 //  - - - - - - - - - - - - EXEC - - - - - - - - - - - - - - - - - -
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
