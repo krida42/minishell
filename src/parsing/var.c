@@ -28,7 +28,7 @@ int	is_varinit(char *s)
 	return (0);
 }
 
-static	int	are_allvarinit(char **ag)
+int	are_allvarinit(char **ag)
 {
 	while (*ag)
 	{

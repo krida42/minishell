@@ -32,10 +32,23 @@ t_env	*env_strs_toenv(char **strs_envp)
 	while (*strs_envp)
 	{
 		name = ft_strndup(*strs_envp, ft_strchri(*strs_envp, '='));
-		val = strchr(*strs_envp, '=') + 1;
+		val = ft_strchr(*strs_envp, '=') + 1;
 		env_add(&env, name, val, 1);
 		free(name);
 		strs_envp++;
 	}
 	return (env);
+}
+
+t_env	*env_dup(t_env *env)
+{
+	t_env	*dup;
+
+	dup = NULL;
+	while (env)
+	{
+		env_add(&dup, env->name, env->val, env->is_export);
+		env = env->next;
+	}
+	return (dup);
 }
