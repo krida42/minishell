@@ -1,5 +1,6 @@
 #include "minishell.h"
 #include <stdio.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 
@@ -45,6 +46,7 @@ static int	eve_exec(t_env *env, char **args, int is_exec)
 		envp = env_env_tostrs(env);
 		if (fork() == 0)
 			execve(cmd_path, args, envp);
+		wait(NULL);
 		free(path);
 		free_strs(envp);
 	}
