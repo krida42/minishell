@@ -66,7 +66,7 @@ char	**strs_remove(char ***strs, int index);
 
 char	*skip_spaces(char *s);
 int		skip_spaces_i(char *s);
-void	ft_puterr(char *s, char *var); //no tested
+void	ft_puterr(char *s, char *s1, char *s2); //no tested
 
 void	init_signals(void);
 

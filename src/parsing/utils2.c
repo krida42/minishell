@@ -34,13 +34,12 @@ int	skip_spaces_i(char *s)
 	return (ns - s);
 }
 
-void	ft_puterr(char *s, char *var)
+void	ft_puterr(char *s, char *s1, char *s2)
 {
-	if (!var)
+	if (s)
 		ft_putstr_fd(s, 2);
-	else
-	{
-		ft_putstr_fd(s, 2);
-		ft_putstr_fd(var, 2);
-	}
+	if (s1)
+		ft_putstr_fd(s1, 2);
+	if (s2)
+		ft_putstr_fd(s2, 2);
 }
