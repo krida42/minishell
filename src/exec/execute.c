@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/25 22:25:34 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/26 19:45:26 by kisikaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	child(t_cmd *cmd, t_info *info)
 	dup_pipefds(cmd, info);	// 
 	dup_filefds(cmd, info);	// close_files(info->cmd);
 	close_pipes_files(info->cmd);
-	if (cmd->ag[0] == NULL)
+	if (cmd->ag[0] == NULL || (cmd->ag[0] && !cmd->ag[0][0]))
 		exit (EXIT_SUCCESS);
 	else if (is_builtin(cmd) == 1)
 	{
