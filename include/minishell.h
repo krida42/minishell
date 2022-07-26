@@ -148,6 +148,7 @@ void	close_pipes(t_cmd *cmd);
 void	close_files(t_cmd *cmd);
 void	close_std(void);
 void	close_pipes_files(t_cmd *cmd);
+int		msg_perror_return(char *str, int i);
 void	ft_free(t_info *info); // a REVOIR Supprimer ?
 void	ft_free_tab(char **tab); // a revoir
 
