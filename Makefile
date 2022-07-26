@@ -22,6 +22,7 @@ EXEC_SRC :=  	execute.c		\
 				is_heredoc.c	\
 				open.c			\
 				close.c			\
+				msg.c			\
 				free.c
 
 SRC := $(addprefix parsing/,$(PARSING_SRC))

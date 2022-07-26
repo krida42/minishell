@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/26 19:45:26 by kisikaya         ###   ########.fr       */
+/*   Updated: 2022/07/27 10:30:58 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	child(t_cmd *cmd, t_info *info)
 	else if (is_builtin(cmd) == 1)
 	{
 		if (exec_builtin(cmd, info) == 1)
-			exit (EXIT_FAILURE);
+			exit (EXIT_FAILURE); // free info de child?
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 22:09:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/22 15:04:43 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/26 17:39:34 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,28 +74,31 @@ int	ft_builtin_cd(char **ag, t_env *env)
 {
 	char	*tmp_pwd;
 	
-	if (ag[2] != NULL)
+	if (ag[1] != NULL && ag[2] != NULL)
 	{
 			ft_putstr_fd("cd: too many arguments\n", 2);
 			return (1);
 	}
-	if (ag[1] == NULL || ag[1][0] == '~')
+	if (ag[1] == NULL)
 	{
-		if (chdir (env_get_val(env, "HOME")) == -1)
+		tmp_pwd = env_get_val(env, "HOME");
+		if (chdir (tmp_pwd) == -1)
 		{
-			perror("cd failed ");
-			return (1);
+			free (tmp_pwd);
+			return (msg_perror_return("cd failed ", 1));
 		}
+		free (tmp_pwd);
 	}
 	else if (chdir (ag[1]) == -1)
 	{
-		perror("cd failed ");
-		return (1);
+		ft_putstr_fd("cd: ", 2);
+		return (msg_perror_return(ag[1], 1));
 	}
 	tmp_pwd = getenv("PWD");
 	env_set_val(env, "PWD", tmp_pwd);
 	return (0);
 }
+
 // int	ft_builtin_echo(t_cmd *cmd)
 // {
 // 	int	i;
