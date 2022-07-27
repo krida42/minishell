@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 21:31:02 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/26 19:27:50 by kisikaya         ###   ########.fr       */
+/*   Updated: 2022/07/27 15:44:56 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	exec_builtin(t_cmd *cmd, t_info *info) //20220717 ok
 	else if (ft_strcmp(cmd->ag[0], "env") == 0)
 		return (b_env(info, cmd->ag + 1));
 	else if (ft_strcmp(cmd->ag[0], "exit") == 0)
-		ft_builtin_exit(cmd->ag, cmd);
+		// ft_builtin_exit(cmd->ag, cmd);
+		ft_builtin_exit(cmd->ag, info);
 	return(1);
 }
 

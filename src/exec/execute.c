@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/27 14:29:32 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/27 17:22:30 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ static void	child(t_cmd *cmd, t_info *info)
 	dup_filefds(cmd, info);	// close_files(info->cmd);
 	close_pipes_files(info->cmd);
 	if (cmd->ag[0] == NULL || (cmd->ag[0] && !cmd->ag[0][0]))
+	{
+		free_strs(env_child);
 		freeinfo_exit(EXIT_SUCCESS, info);
+	}
 	// {
 	// 	free_info(info);
 	// 	exit (EXIT_SUCCESS);
@@ -35,7 +38,11 @@ static void	child(t_cmd *cmd, t_info *info)
 	else if (is_builtin(cmd) == 1)
 	{
 		if (exec_builtin(cmd, info) == 1)
+		{
+			free_strs(env_child);
 			freeinfo_exit(EXIT_FAILURE, info);
+		}
+		free_strs(env_child);
 		// {
 		// 	free_info(info);
 		// 	exit (EXIT_FAILURE);
@@ -46,10 +53,13 @@ static void	child(t_cmd *cmd, t_info *info)
 		cmd->cmd_path = command_path(cmd->ag, info->env);
 		execve(cmd->cmd_path, cmd->ag, env_child); // if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
 		perror("exec failed ");
+		free_strs(env_child);
 		freeinfo_exit(EXIT_FAILURE, info);
 		// free_info(info);
 		// exit (EXIT_FAILURE);
 	}
+	free_info(info);
+	save_stdinout(2);
 	exit (EXIT_SUCCESS);
 }
 
@@ -60,12 +70,12 @@ static void	ft_waitpid(t_info *info)
 	tmp = info->cmd;
 	while (tmp != NULL)
 	{
-		waitpid (tmp->pid, NULL, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
-		// waitpid (tmp->pid, &cmd->status, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
-		//if (WIFEXITED(cmd->status))
-		//	//info->error_n = WEXITSTATUS(cmd->status) // returns the exit status of the child. exit etc
-		//else if (WIFSIGNALED(cmd->status))
-		//	//info->error_n = WTERMSIG(status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
+		// waitpid (tmp->pid, NULL, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
+		waitpid (tmp->pid, &tmp->status, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
+		if (WIFEXITED(tmp->status))
+			info->error_n = WEXITSTATUS(tmp->status); // returns the exit status of the child. exit etc
+		else if (WIFSIGNALED(tmp->status))
+			info->error_n = WTERMSIG(tmp->status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
 		tmp = tmp->next;
 	}
 	return ;
@@ -84,12 +94,8 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 		}
 		else if (cmd->pid == 0)
 		{
-			{
-				//signal(SIGQUIT, ft_handle_sig); //Interruption forte (ctrl-\)//Terminaison + core dum
-				// if (cmd->heredoc != NULL)
-				// 	is_heredoc(cmd->heredoc, cmd, info);
-				child(cmd, info);
-			}
+			//signal(SIGQUIT, ft_handle_sig); //Interruption forte (ctrl-\)//Terminaison + core dum
+			child(cmd, info);
 		}
 		cmd = cmd->next;
 	}

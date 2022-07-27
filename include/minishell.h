@@ -29,7 +29,6 @@ typedef struct s_cmd {
 	int		fdin; // execution: pour entrée
 	int		fdout; // execution: pour sortie
 	int		status;
-	int		error_n;
 	pid_t	pid; // execution: pour fork
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
@@ -47,6 +46,7 @@ typedef struct s_env {
 typedef struct s_info {
 	t_cmd	*cmd;
 	int		size;
+	int		error_n;
 	t_env	*env;
 }	t_info;
 
@@ -133,13 +133,14 @@ char	*command_path(char **ag, t_env *env);
 void	ft_path(char **env, t_info *info);
 // char	**path_tab(t_info *info);
 char	**ft_split_pipex(char const *s, char c);
-int		is_heredoc(char *heredoc, t_cmd *cmd, t_info *info); // to be deleted ?
+int		is_heredoc(char *heredoc, t_cmd *cmd, t_info *info);
 int		is_builtin(t_cmd *cmd);
 int		exec_builtin(t_cmd  *cmd, t_info *info);
 int		ft_builtin_cd(char **ag, t_env *env);
 int		ft_builtin_pwd(void);
 int		ft_builtin_echo(t_cmd *cmd);
-void	ft_builtin_exit(char **ag, t_cmd *cmd);
+// void	ft_builtin_exit(char **ag, t_cmd *cmd);
+void	ft_builtin_exit(char **ag, t_info *info);
 void	msg_close_free_exit(char *str, t_info *info); // p.e to be deleted
 void	msg_close_return(char *str, t_info *info);
 void	open_files(t_cmd *cmd);

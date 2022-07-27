@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 17:27:30 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/23 22:31:35 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/27 15:49:08 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	is_num(char *str)
 	return (1);
 }
 
-void	ft_builtin_exit(char **ag, t_cmd *cmd)
+void	ft_builtin_exit(char **ag, t_info *info)
 {
 	if (ag[1] != NULL && is_num(ag[1]) == 0)
 	{
@@ -43,7 +43,7 @@ void	ft_builtin_exit(char **ag, t_cmd *cmd)
 	else if (ag[1] != NULL)
 	{
 		// ft_putstr_fd("exit\n", 1);
-		cmd->error_n = ft_atoi(ag[1]) % 256;
+		info->error_n = ft_atoi(ag[1]) % 256;
 	}
 	// else if (cmd->out == NULL)
 	// 	ft_putstr_fd("exit\n", 1);
