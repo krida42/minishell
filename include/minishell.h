@@ -66,7 +66,8 @@ char	**strs_remove(char ***strs, int index);
 
 char	*skip_spaces(char *s);
 int		skip_spaces_i(char *s);
-void	ft_puterr(char *s, char *s1, char *s2); //no tested
+void	ft_puterr(char *s, char *s1, char *s2);
+char	*ft_strpush(char **s, char c); //faire gaffe
 
 void	init_signals(void);
 
@@ -119,6 +120,9 @@ int		is_validid(char *s);// no tested
 int		b_export(t_info *info, char **args);
 int		b_env(t_info *info, char **args);
 int		b_unset(t_info *info, char **args);
+
+
+char	*heredoc_start(char *eof);
 
 //  - - - - - - - - - - - - EXEC - - - - - - - - - - - - - - - - - -
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
