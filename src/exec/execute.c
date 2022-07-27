@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/27 17:31:03 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/27 19:30:07 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,11 @@ static void	child(t_cmd *cmd, t_info *info)
 	}
 	else
 	{
-		cmd->cmd_path = command_path(cmd->ag, info->env);
-		execve(cmd->cmd_path, cmd->ag, env_child); // if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
+		cmd->cmd_path = command_path(cmd->ag, info->env, info);
+		if (cmd->cmd_path != NULL)
+			execve(cmd->cmd_path, cmd->ag, env_child); // if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
 		perror("exec failed ");
+		save_stdinout(2);
 		free_env_info_exit(EXIT_FAILURE, env_child, info);
 	}
 	free_info(info);

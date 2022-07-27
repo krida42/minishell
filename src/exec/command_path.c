@@ -6,14 +6,14 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 11:59:35 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/25 22:22:07 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/27 19:18:40 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // static void	ft_av_cmd_error_msg_check(char **ag, t_info *info) 
-static void	ft_av_cmd_error_msg_check(char **ag) // a voir s il est possble faire differement
+static void	ft_av_cmd_error_msg_check(char **ag, t_info *info) // a voir s il est possble faire differement
 {
 	if (ft_strchr(ag[0], '/') != NULL)
 		perror(ag[0]);
@@ -22,9 +22,10 @@ static void	ft_av_cmd_error_msg_check(char **ag) // a voir s il est possble fair
 		ft_putstr_fd(ag[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 	}
+	(void)info;
 	// close_pipes(info->cmd);
 	// close_files(info->cmd);
-	exit(EXIT_FAILURE);
+	// return (127);
 }
 
 // void	ft_path(char **env, t_info *info)
@@ -73,7 +74,7 @@ static char	**path_tab(t_env *env)
 }
 
 // char	*command_path(char **ag, t_info *info)
-char	*command_path(char **ag, t_env *env)
+char	*command_path(char **ag, t_env *env, t_info *info)
 {
 	char	*cmd_path;
 	char	**pathtab; // to do dans info?
@@ -96,6 +97,6 @@ char	*command_path(char **ag, t_env *env)
 		&& ft_strchr(ag[0], '/') != NULL)
 		return (ag[0]);
 	ft_free_tab(pathtab);
-	ft_av_cmd_error_msg_check(ag); // a voir s il est possible differement
+	ft_av_cmd_error_msg_check(ag, info); // a voir s il est possible differement
 	return (NULL);
 }
