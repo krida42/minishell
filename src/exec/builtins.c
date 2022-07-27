@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 22:09:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/27 10:46:26 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/27 18:53:37 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ int	ft_builtin_pwd(void) //20220717 ok
 		ft_putstr_fd("\n", 1);
 	}
 	else
+	{
 		perror("pwd failed ");
+		return (errno);
+	}
 	return (0);
 }
 
