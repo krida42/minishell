@@ -6,11 +6,17 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/27 14:01:43 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/27 14:29:32 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	freeinfo_exit(int exit_nb, t_info *info)
+{
+	free_info(info);
+	exit (exit_nb);
+}
 
 static void	child(t_cmd *cmd, t_info *info)
 {
@@ -21,26 +27,28 @@ static void	child(t_cmd *cmd, t_info *info)
 	dup_filefds(cmd, info);	// close_files(info->cmd);
 	close_pipes_files(info->cmd);
 	if (cmd->ag[0] == NULL || (cmd->ag[0] && !cmd->ag[0][0]))
-	{
-		free_info(info);
-		exit (EXIT_SUCCESS);
-	}
+		freeinfo_exit(EXIT_SUCCESS, info);
+	// {
+	// 	free_info(info);
+	// 	exit (EXIT_SUCCESS);
+	// }
 	else if (is_builtin(cmd) == 1)
 	{
 		if (exec_builtin(cmd, info) == 1)
-		{
-			free_info(info);
-			exit (EXIT_FAILURE);
-		}
-		save_stdinout(2);
+			freeinfo_exit(EXIT_FAILURE, info);
+		// {
+		// 	free_info(info);
+		// 	exit (EXIT_FAILURE);
+		// }
 	}
 	else
 	{
 		cmd->cmd_path = command_path(cmd->ag, info->env);
 		execve(cmd->cmd_path, cmd->ag, env_child); // if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
 		perror("exec failed ");
-		free_info(info);
-		exit (EXIT_FAILURE);
+		freeinfo_exit(EXIT_FAILURE, info);
+		// free_info(info);
+		// exit (EXIT_FAILURE);
 	}
 	exit (EXIT_SUCCESS);
 }
@@ -87,7 +95,7 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 	}
 	close_pipes_files(info->cmd);
 	ft_waitpid(info);
-	// save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
+	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
 	return ;
 }
 
