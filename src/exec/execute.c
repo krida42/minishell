@@ -6,14 +6,15 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/27 17:22:30 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/27 17:31:03 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	freeinfo_exit(int exit_nb, t_info *info)
+static void	free_env_info_exit(int exit_nb, char **env_child, t_info *info)
 {
+	free_strs(env_child);
 	free_info(info);
 	exit (exit_nb);
 }
@@ -27,39 +28,23 @@ static void	child(t_cmd *cmd, t_info *info)
 	dup_filefds(cmd, info);	// close_files(info->cmd);
 	close_pipes_files(info->cmd);
 	if (cmd->ag[0] == NULL || (cmd->ag[0] && !cmd->ag[0][0]))
-	{
-		free_strs(env_child);
-		freeinfo_exit(EXIT_SUCCESS, info);
-	}
-	// {
-	// 	free_info(info);
-	// 	exit (EXIT_SUCCESS);
-	// }
+		free_env_info_exit(EXIT_SUCCESS, env_child, info);
 	else if (is_builtin(cmd) == 1)
 	{
 		if (exec_builtin(cmd, info) == 1)
-		{
-			free_strs(env_child);
-			freeinfo_exit(EXIT_FAILURE, info);
-		}
+			free_env_info_exit(EXIT_FAILURE, env_child, info);
 		free_strs(env_child);
-		// {
-		// 	free_info(info);
-		// 	exit (EXIT_FAILURE);
-		// }
 	}
 	else
 	{
 		cmd->cmd_path = command_path(cmd->ag, info->env);
 		execve(cmd->cmd_path, cmd->ag, env_child); // if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
 		perror("exec failed ");
-		free_strs(env_child);
-		freeinfo_exit(EXIT_FAILURE, info);
-		// free_info(info);
-		// exit (EXIT_FAILURE);
+		free_env_info_exit(EXIT_FAILURE, env_child, info);
 	}
 	free_info(info);
 	save_stdinout(2);
+	close_std();
 	exit (EXIT_SUCCESS);
 }
 
