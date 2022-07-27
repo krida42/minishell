@@ -133,7 +133,7 @@ char	*command_path(char **ag, t_env *env);
 void	ft_path(char **env, t_info *info);
 // char	**path_tab(t_info *info);
 char	**ft_split_pipex(char const *s, char c);
-int		is_heredoc(char *heredoc, t_cmd *cmd, t_info *info);
+int		is_heredoc(char *heredoc, t_cmd *cmd, t_info *info); // to be deleted ?
 int		is_builtin(t_cmd *cmd);
 int		exec_builtin(t_cmd  *cmd, t_info *info);
 int		ft_builtin_cd(char **ag, t_env *env);

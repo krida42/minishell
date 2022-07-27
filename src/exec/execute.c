@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/26 19:45:26 by kisikaya         ###   ########.fr       */
+/*   Updated: 2022/07/27 11:18:28 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static void	child(t_cmd *cmd, t_info *info)
 	char	**env_child;
 
 	env_child = env_env_tostrs(info->env);
-	// if (cmd->heredoc != NULL)
 	dup_pipefds(cmd, info);	// 
 	dup_filefds(cmd, info);	// close_files(info->cmd);
 	close_pipes_files(info->cmd);

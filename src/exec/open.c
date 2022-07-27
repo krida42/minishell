@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/25 21:22:11 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/27 11:14:43 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ void	open_files(t_cmd *cmd) //20220717 ok
 				perror(cmd->in);
 			// fprintf(stderr,"in fdin %d\n", cmd->fdin);
 		}
-		// else if (cmd->heredoc != NULL)
-		// {
-		// 	cmd->fdin = open(cmd->append, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		// }
+		else if (cmd->heredoc != NULL)
+		{
+			cmd->fdin = open(cmd->heredoc, O_RDONLY);
+		}
 		if (cmd->out != NULL)
 		{
 			cmd->fdout = open(cmd->out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
