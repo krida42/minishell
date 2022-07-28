@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 12:28:46 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 13:09:47 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,58 @@
 // 	exit (exit_nb);
 // }
 
+// static int	child(t_cmd *cmd, t_info *info)
+// {
+// 	char	**env_child;
+
+// 	if (cmd->fdin == -1 || cmd->fdout == -1) // appel syst errno sera defini auto
+// 	{
+// 		close_pipes(info->cmd);
+// 		free_info(info);
+// 		save_stdinout(2);
+// 		exit (errno);
+// 	}
+// 	if (dup_pipefds(cmd, info) == 1 || dup_filefds(cmd, info) == 1) // appel syst errno sera defini auto
+// 	{
+// 		close_files(info->cmd);
+// 		close_pipes(info->cmd);
+// 		free_info(info);
+// 		save_stdinout(2);
+// 		exit (errno);
+// 	}
+// 	close_pipes(info->cmd);
+// 	close_files(info->cmd);
+// 	if (is_builtin(cmd) == 1)
+// 	{
+// 		if (exec_builtin(cmd, info) == 1)
+// 		{
+// 			close_pipes(info->cmd);
+// 			close_files(info->cmd);
+// 			free_info(info);
+// 			save_stdinout(2);
+// 			exit (1);
+// 		}
+// 	}
+// 	else if (cmd->ag[0] != NULL && (cmd->ag[0] && cmd->ag[0][0]))
+// 	{
+// 		env_child = env_env_tostrs(info->env);
+// 		cmd->cmd_path = command_path(cmd->ag, info->env);
+// 		if (cmd->cmd_path != NULL)
+// 		{
+// 			execve(cmd->cmd_path, cmd->ag, env_child); 
+// 				perror("exec failed ");
+// 		}
+// 		free_strs(env_child);
+// 		free_info(info);
+// 		save_stdinout(2);
+// 		exit (errno);
+// 	}
+// 	free_info(info);
+// 	save_stdinout(2);
+// 	exit (EXIT_SUCCESS);
+// }
+
+/*child 2 reserve 20220728*/
 static int	child(t_cmd *cmd, t_info *info)
 {
 	char	**env_child;
@@ -55,17 +107,21 @@ static int	child(t_cmd *cmd, t_info *info)
 		env_child = env_env_tostrs(info->env);
 		cmd->cmd_path = command_path(cmd->ag, info->env);
 		if (cmd->cmd_path != NULL)
+		{
 			execve(cmd->cmd_path, cmd->ag, env_child); 
-		perror("exec failed ");
+				perror("exec failed ");
+		}
 		free_strs(env_child);
 		free_info(info);
 		save_stdinout(2);
 		exit (errno);
 	}
+
 	free_info(info);
 	save_stdinout(2);
 	exit (EXIT_SUCCESS);
 }
+
 
 // static int	child(t_cmd *cmd, t_info *info)
 // {
@@ -162,17 +218,18 @@ static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 
 int	execute(t_info *info) //20220717 ok
 {
+	if (save_stdinout(1) == 1)
+		return (errno);
 	info->error_n = open_files(info->cmd);
-	save_stdinout(1);
 	if (info->size == 1 && is_builtin(info->cmd) == 1)
 	{
 		if (info->error_n == 1)
 			return (errno);
 		// save_stdinout(1);
 		info->error_n = dup_filefds(info->cmd, info);
-		close_files(info->cmd);
 		if (info->error_n == 1)
 			return (errno);
+		close_files(info->cmd);
 		if (exec_builtin(info->cmd, info) == 1)
 			return (1);
 		close_files(info->cmd);
