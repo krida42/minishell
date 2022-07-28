@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/01 19:10:26 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 08:45:54 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 11:47:18 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,19 @@ void	close_files(t_cmd *cmd) //20220717 ok
 	}
 }
 
-void	close_cmd_files(t_cmd *cmd) //20220717 ok
-{
-	if (cmd->in || cmd->heredoc)
-		close(cmd->fdin);
-	if (cmd->out || cmd->append)
-		close(cmd->fdout);
-}
+// void	close_cmd_files(t_cmd *cmd) //20220717 ok
+// {
+// 	if (cmd->in || cmd->heredoc)
+// 		close(cmd->fdin);
+// 	if (cmd->out || cmd->append)
+// 		close(cmd->fdout);
+// }
 
-void	close_pipescmd_files(t_cmd *cmd)
-{
-	close_pipes(cmd);
-	close_cmd_files(cmd);
-}
+// void	close_pipescmd_files(t_cmd *cmd)
+// {
+// 	close_pipes(cmd);
+// 	close_cmd_files(cmd);
+// }
 
 void	close_pipes_files(t_cmd *cmd)
 {
