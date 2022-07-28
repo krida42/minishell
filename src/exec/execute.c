@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 11:29:24 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 11:41:27 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static int	child(t_cmd *cmd, t_info *info)
 	{
 		close_pipes(info->cmd);
 		free_info(info);
+		save_stdinout(2);
 		exit (errno);
 	}
 	if (dup_pipefds(cmd, info) == 1 || dup_filefds(cmd, info) == 1) // appel syst errno sera defini auto
@@ -33,6 +34,7 @@ static int	child(t_cmd *cmd, t_info *info)
 		close_cmd_files(cmd);
 		close_pipes(info->cmd);
 		free_info(info);
+		save_stdinout(2);
 		exit (errno);
 	}
 	// dup_pipefds(cmd, info);
@@ -47,6 +49,7 @@ static int	child(t_cmd *cmd, t_info *info)
 			close_pipes(info->cmd);
 			close_cmd_files(cmd);
 			free_info(info);
+			save_stdinout(2);
 			exit (1);
 		}
 	}
@@ -57,8 +60,9 @@ static int	child(t_cmd *cmd, t_info *info)
 		if (cmd->cmd_path != NULL)
 			execve(cmd->cmd_path, cmd->ag, env_child); 
 		perror("exec failed ");
+		free_strs(env_child);
 		free_info(info);
-		close_std();
+		save_stdinout(2);
 		exit (errno);
 	}
 	// env_child = env_env_tostrs(info->env);
@@ -92,7 +96,7 @@ static int	child(t_cmd *cmd, t_info *info)
 	// free_info(info);
 	// exit (EXIT_SUCCESS);
 	free_info(info);
-	save_stdinout(2); 
+	save_stdinout(2);
 	exit (EXIT_SUCCESS);
 }
 

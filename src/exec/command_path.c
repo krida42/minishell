@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 11:59:35 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/25 22:22:07 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 11:42:50 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static void	ft_av_cmd_error_msg_check(char **ag) // a voir s il est possble fair
 	}
 	// close_pipes(info->cmd);
 	// close_files(info->cmd);
-	exit(EXIT_FAILURE);
+	// exit(EXIT_FAILURE);
+	return ;
 }
 
 // void	ft_path(char **env, t_info *info)
