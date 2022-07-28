@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 12:20:49 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 12:28:46 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,12 +123,12 @@ static void	ft_waitpid(t_info *info)
 	tmp = info->cmd;
 	while (tmp != NULL)
 	{
-		waitpid (tmp->pid, NULL, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
-		// waitpid (tmp->pid, &cmd->status, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
-		//if (WIFEXITED(cmd->status))
-		//	//info->error_n = WEXITSTATUS(cmd->status) // returns the exit status of the child. exit etc
-		//else if (WIFSIGNALED(cmd->status))
-		//	//info->error_n = WTERMSIG(status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
+		// waitpid (tmp->pid, NULL, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
+		waitpid (tmp->pid, &tmp->status, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
+		if (WIFEXITED(tmp->status))
+			info->error_n = WEXITSTATUS(tmp->status); // returns the exit status of the child. exit etc
+		else if (WIFSIGNALED(tmp->status))
+			info->error_n = WTERMSIG(tmp->status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
 		tmp = tmp->next;
 	}
 	return ;
@@ -157,7 +157,7 @@ static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 	close_pipes(info->cmd);
 	ft_waitpid(info);
 	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
-	return (0);
+	return (info->error_n);
 }
 
 int	execute(t_info *info) //20220717 ok
@@ -179,13 +179,9 @@ int	execute(t_info *info) //20220717 ok
 		save_stdinout(2);
 		return (0);
 	}
-	// else
-	// {
-		if (open_pipes(info->cmd, info) == 1)
-			return (errno);
-		return(pipex(info->cmd, info));
-	// }
-	// return (0);
+	if (open_pipes(info->cmd, info) == 1)
+		return (errno);
+	return(pipex(info->cmd, info));
 }
 
 // int	execute(t_info *info) //20220717 ok
