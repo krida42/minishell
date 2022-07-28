@@ -6,60 +6,93 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 09:52:42 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 11:20:34 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	freeinfo_exit(int exit_nb, t_info *info)
-{
-	free_info(info);
-	exit (exit_nb);
-}
+// static void	freeinfo_exit(int exit_nb, t_info *info)
+// {
+// 	free_info(info);
+// 	exit (exit_nb);
+// }
 
 static int	child(t_cmd *cmd, t_info *info)
 {
 	char	**env_child;
 
-	if (open_cmd_files(info->cmd, info) == 1)
+	if (cmd->fdin == -1 || cmd->fdout == -1) // appel syst errno sera defini auto
 	{
 		close_pipes(info->cmd);
 		free_info(info);
 		exit (errno);
 	}
-	env_child = env_env_tostrs(info->env);
-	dup_pipefds(cmd, info);	// 
-	dup_filefds(cmd, info);	// close_files(info->cmd);
-	close_pipes_files(info->cmd);
-	if (cmd->ag[0] == NULL || (cmd->ag[0] && !cmd->ag[0][0]))
-		freeinfo_exit(EXIT_SUCCESS, info);
-	// {
-	// 	free_info(info);
-	// 	exit (EXIT_SUCCESS);
-	// }
-	else if (is_builtin(cmd) == 1)
+	if (dup_pipefds(cmd, info) == 1 || dup_filefds(cmd, info) == 1) // appel syst errno sera defini auto
+	{
+		close_cmd_files(cmd);
+		close_pipes(info->cmd);
+		free_info(info);
+		exit (errno);
+	}
+	// dup_pipefds(cmd, info);
+	// dup_filefds(cmd, info);
+	// fprintf(stderr,"after dup cmd %s: fdin %d, fdout %d\n", cmd->ag[0], cmd->fdin, cmd->fdout);
+	close_pipes(info->cmd);
+	close_cmd_files(cmd);
+	if (is_builtin(cmd) == 1)
 	{
 		if (exec_builtin(cmd, info) == 1)
-			freeinfo_exit(EXIT_FAILURE, info);
-		// {
-		// 	free_info(info);
-		// 	exit (EXIT_FAILURE);
-		// }
+		{
+			close_pipes(info->cmd);
+			close_cmd_files(cmd);
+			free_info(info);
+			exit (1);
+		}
 	}
-	else
+	else if (cmd->ag[0] != NULL && (cmd->ag[0] && cmd->ag[0][0]))
 	{
+		env_child = env_env_tostrs(info->env);
 		cmd->cmd_path = command_path(cmd->ag, info->env);
-		execve(cmd->cmd_path, cmd->ag, env_child); // if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
+		if (cmd->cmd_path != NULL)
+			execve(cmd->cmd_path, cmd->ag, env_child); 
 		perror("exec failed ");
-		freeinfo_exit(EXIT_FAILURE, info);
-		// free_info(info);
-		// exit (EXIT_FAILURE);
+		free_info(info);
+		close_std();
+		exit (errno);
 	}
-	free_info(info);
-	exit (EXIT_SUCCESS);
+	// env_child = env_env_tostrs(info->env);
+	// dup_pipefds(cmd, info);	// 
+	// dup_filefds(cmd, info);	// close_files(info->cmd);
+	// close_pipes_files(info->cmd);
+	// if (cmd->ag[0] == NULL || (cmd->ag[0] && !cmd->ag[0][0]))
+	// 	freeinfo_exit(EXIT_SUCCESS, info);
+	// // {
+	// // 	free_info(info);
+	// // 	exit (EXIT_SUCCESS);
+	// // }
+	// else if (is_builtin(cmd) == 1)
+	// {
+	// 	if (exec_builtin(cmd, info) == 1)
+	// 		freeinfo_exit(EXIT_FAILURE, info);
+	// 	// {
+	// 	// 	free_info(info);
+	// 	// 	exit (EXIT_FAILURE);
+	// 	// }
+	// }
+	// else
+	// {
+	// 	cmd->cmd_path = command_path(cmd->ag, info->env);
+	// 	execve(cmd->cmd_path, cmd->ag, env_child); // if (execve(cmd->cmd_path, cmd->ag, info->env) == -1)
+	// 	perror("exec failed ");
+	// 	freeinfo_exit(EXIT_FAILURE, info);
+	// 	// free_info(info);
+	// 	// exit (EXIT_FAILURE);
+	// }
 	// free_info(info);
 	// exit (EXIT_SUCCESS);
+	free_info(info);
+	exit (EXIT_SUCCESS);
 }
 
 static void	ft_waitpid(t_info *info)
@@ -102,29 +135,29 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 	}
 	close_pipes(info->cmd);
 	ft_waitpid(info);
-	// save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
+	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
 	return ;
 }
 
 int	execute(t_info *info) //20220717 ok
 {
-	// open_files(info->cmd);
+	open_files(info->cmd);
 	if (info->size == 1 && is_builtin(info->cmd) == 1)
 	{
-		if (open_cmd_files(info->cmd, info) == 1)
+		if (info->cmd->fdin < 0 || info->cmd->fdout < 0)
 			return (errno);
 		save_stdinout(1);
 		if (dup_filefds(info->cmd, info) == 1)
 		{
-			close_cmd_files(info->cmd);
+			close_files(info->cmd);
 			return (errno);
 		}
 		if (exec_builtin(info->cmd, info) == 1)
 		{
-			close_cmd_files(info->cmd);
-			return (errno);
+			close_files(info->cmd);
+			return (1);
 		}
-		close_cmd_files(info->cmd);
+		close_files(info->cmd);
 		save_stdinout(2);
 	}
 	else

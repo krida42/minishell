@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 17:27:30 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/23 22:31:35 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 10:09:48 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,17 @@ static int	is_num(char *str)
 	return (1);
 }
 
-void	ft_builtin_exit(char **ag, t_cmd *cmd)
+int	ft_builtin_exit(char **ag, t_cmd *cmd)
 {
 	if (ag[1] != NULL && is_num(ag[1]) == 0)
 	{
 		printf("%s: %s: numeric argument required\n", ag[0], ag[1]);
-		return ;
+		return (1);
 	}
 	else if (ag[1] != NULL && ag[2] != NULL)
 	{
 		printf("%s: too many arguments\n", ag[0]);
-		return ;
+		return (1);
 	}
 	else if (ag[1] != NULL)
 	{
@@ -47,5 +47,5 @@ void	ft_builtin_exit(char **ag, t_cmd *cmd)
 	}
 	// else if (cmd->out == NULL)
 	// 	ft_putstr_fd("exit\n", 1);
-	return ;
+	return (0);
 }
