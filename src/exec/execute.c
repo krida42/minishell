@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 14:46:59 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 16:50:03 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,7 @@ static int	child(t_cmd *cmd, t_info *info)
 
 	if (cmd->fdin != -1 && cmd->fdout != -1 && dup_pipefds(cmd, info) != 1 && dup_filefds(cmd, info) != 1)
 	{
-		close_pipes(info->cmd);
-		close_files(info->cmd);
+		close_pipes_files(info->cmd);
 		if (is_builtin(cmd) == 1)
 			info->error_n = exec_builtin(cmd, info);
 		else if (cmd->ag[0] != NULL && (cmd->ag[0] && cmd->ag[0][0]))
@@ -79,8 +78,7 @@ static int	child(t_cmd *cmd, t_info *info)
 			free_strs(env_child);
 		}
 	}
-	close_files(info->cmd);
-	close_pipes(info->cmd);
+	close_pipes_files(info->cmd);
 	free_info(info);
 	save_stdinout(2);
 	close_std();
