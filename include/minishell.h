@@ -122,7 +122,7 @@ int		b_env(t_info *info, char **args);
 int		b_unset(t_info *info, char **args);
 
 
-char	*heredoc_start(char *eof);
+char	*heredoc_start(char *eof, t_info *info);
 
 //  - - - - - - - - - - - - EXEC - - - - - - - - - - - - - - - - - -
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

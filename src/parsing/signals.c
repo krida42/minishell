@@ -22,5 +22,5 @@ void	init_signals(void)
 	ft_bzero(&sa, sizeof(sa));
 	sa.sa_handler = handle_sig;
 	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	signal(SIGQUIT, SIG_IGN);
 }

@@ -1,5 +1,9 @@
 #include "minishell.h"
-
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 static char	*join_name_nb(char *name, int nb)
 {
@@ -28,24 +32,20 @@ static char	*get_available_pathname(void)
 	return (pathname);
 }
 
-static char	*write_intmp(char *content)
+static void	write_file(char *file, char *content)
 {
-	char	*file;
 	int		fd;
 
-	file = get_available_pathname();
 	fd = open(file, O_WRONLY | O_CREAT,  0644);
 	write(fd, content, strlen(content));
 	close(fd);
-	return (file);
 }
 
-static char	*heredoc_child(char *eof)
+static void	heredoc_child(char *file, char *eof)
 {
 	char	*input;
 	char	*content;
 	char	*tmp;
-	char	*file;
 
 	content = strdup("");
 	while (1)
@@ -53,10 +53,11 @@ static char	*heredoc_child(char *eof)
 		input = readline("heredoc > ");
 		if (!input || strcmp(input, eof) == 0)
 		{
-			file = write_intmp(content);
+			write_file(file, content);
 			free(input);
 			free(content);
-			return (file);
+			//return (file);
+			return ;
 		}
 		input = ft_strpush(&input, '\n');
 		tmp = content;
@@ -67,7 +68,46 @@ static char	*heredoc_child(char *eof)
 
 }
 
-char	*heredoc_start(char *eof)
+static void	heredoc_handler(int sig)
 {
-	return(heredoc_child(eof));
+	(void)sig;
+
+	if (sig == SIGINT)
+	{
+		write(1, "\n", 2);
+		exit(130);
+	}
+
+}
+static void	heredoc_sig(void)
+{
+	struct sigaction	sigint;
+
+	sigint.sa_handler= heredoc_handler;
+	sigaction(SIGINT, &sigint, NULL);
+}
+
+char	*heredoc_start(char *eof, t_info *info)
+{
+	char	*file;
+	pid_t	pid;
+	int	status;
+
+	file = get_available_pathname();
+	heredoc_sig();
+	pid = fork();
+	if (pid == 0)
+	{
+
+		heredoc_child(file, eof);
+		free(file);
+		free_info(info);
+		exit(0);
+	}
+	init_signals();
+	waitpid(pid, &status, 0);
+	if (access(file, F_OK) == 0)
+		return (file);
+	free(file);
+	return (NULL);
 }
