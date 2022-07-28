@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 13:09:47 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 13:27:21 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	child(t_cmd *cmd, t_info *info)
 	{
 		close_pipes(info->cmd);
 		free_info(info);
-		save_stdinout(2);
+		// save_stdinout(2);
 		exit (errno);
 	}
 	if (dup_pipefds(cmd, info) == 1 || dup_filefds(cmd, info) == 1) // appel syst errno sera defini auto
@@ -86,7 +86,7 @@ static int	child(t_cmd *cmd, t_info *info)
 		close_files(info->cmd);
 		close_pipes(info->cmd);
 		free_info(info);
-		save_stdinout(2);
+		// save_stdinout(2);
 		exit (errno);
 	}
 	close_pipes(info->cmd);
@@ -98,7 +98,7 @@ static int	child(t_cmd *cmd, t_info *info)
 			close_pipes(info->cmd);
 			close_files(info->cmd);
 			free_info(info);
-			save_stdinout(2);
+			// save_stdinout(2);
 			exit (1);
 		}
 	}
@@ -113,12 +113,12 @@ static int	child(t_cmd *cmd, t_info *info)
 		}
 		free_strs(env_child);
 		free_info(info);
-		save_stdinout(2);
+		// save_stdinout(2);
 		exit (errno);
 	}
 
 	free_info(info);
-	save_stdinout(2);
+	// save_stdinout(2);
 	exit (EXIT_SUCCESS);
 }
 
@@ -211,18 +211,21 @@ static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 		cmd = cmd->next;
 	}
 	close_pipes(info->cmd);
+	close_files(info->cmd);
 	ft_waitpid(info);
-	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
+	// save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
 	return (info->error_n);
 }
 
 int	execute(t_info *info) //20220717 ok
 {
-	if (save_stdinout(1) == 1)
-		return (errno);
+	// if (save_stdinout(1) == 1)
+	// 	return (errno);
 	info->error_n = open_files(info->cmd);
 	if (info->size == 1 && is_builtin(info->cmd) == 1)
 	{
+		if (save_stdinout(1) == 1)
+		return (errno);
 		if (info->error_n == 1)
 			return (errno);
 		// save_stdinout(1);
