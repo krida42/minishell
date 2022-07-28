@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 17:02:38 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/29 00:09:20 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 		{
 			{
 				//signal(SIGQUIT, ft_handle_sig); //Interruption forte (ctrl-\)//Terminaison + core dum
+				// save_stdinout(2);
 				child(cmd, info);
 			}
 		}
@@ -137,18 +138,17 @@ int	execute(t_info *info) //20220717 ok
 	info->error_n = open_files(info->cmd, info);
 	if (info->size == 1 && is_builtin(info->cmd) == 1)
 	{
-		// if (save_stdinout(1) == 1)
-		// return (errno);
-		if (info->error_n == 1)
+		if (info->error_n == 1 || dup_filefds(info->cmd, info) == 1)
+		{
+			save_stdinout(2);
 			return (errno);
-		// save_stdinout(1);
-		info->error_n = dup_filefds(info->cmd, info);
-		if (info->error_n == 1)
-			return (errno);
+		}
 		close_files(info->cmd);
 		if (exec_builtin(info->cmd, info) == 1)
+		{
+			save_stdinout(2);
 			return (1);
-		close_files(info->cmd);
+		}
 		save_stdinout(2);
 		return (0);
 	}
