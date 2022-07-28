@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 11:20:34 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 11:25:01 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ static int	child(t_cmd *cmd, t_info *info)
 	// free_info(info);
 	// exit (EXIT_SUCCESS);
 	free_info(info);
+	save_stdinout(2); 
 	exit (EXIT_SUCCESS);
 }
 
@@ -135,18 +136,19 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 	}
 	close_pipes(info->cmd);
 	ft_waitpid(info);
-	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
+	// save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
 	return ;
 }
 
 int	execute(t_info *info) //20220717 ok
 {
 	open_files(info->cmd);
+	save_stdinout(1);
 	if (info->size == 1 && is_builtin(info->cmd) == 1)
 	{
 		if (info->cmd->fdin < 0 || info->cmd->fdout < 0)
 			return (errno);
-		save_stdinout(1);
+		// save_stdinout(1);
 		if (dup_filefds(info->cmd, info) == 1)
 		{
 			close_files(info->cmd);
