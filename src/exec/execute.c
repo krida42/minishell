@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/27 14:29:32 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 08:33:55 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,16 +95,16 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 	}
 	close_pipes_files(info->cmd);
 	ft_waitpid(info);
-	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
+	// save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
 	return ;
 }
 
 void	execute(t_info *info) //20220717 ok
 {
-	save_stdinout(1);
 	open_files(info->cmd);
 	if (info->size == 1 && is_builtin(info->cmd) == 1)
 	{
+		save_stdinout(1);
 		if (dup_filefds(info->cmd, info) == 1)
 		{
 			close_files(info->cmd);
