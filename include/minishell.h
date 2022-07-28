@@ -127,7 +127,7 @@ int		b_unset(t_info *info, char **args);
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-void	execute(t_info *info);
+int		execute(t_info *info);
 int		save_stdinout(int n);
 int		dup_filefds(t_cmd *cmd, t_info *info);
 int		dup_pipefds(t_cmd *cmd, t_info *info);

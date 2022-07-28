@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 09:18:54 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 09:49:09 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,16 @@ static void	freeinfo_exit(int exit_nb, t_info *info)
 	exit (exit_nb);
 }
 
-static void	child(t_cmd *cmd, t_info *info)
+static int	child(t_cmd *cmd, t_info *info)
 {
 	char	**env_child;
 
+	if (open_cmd_files(info->cmd, info) == 1)
+	{
+		close_pipes(info->cmd);
+		free_info(info);
+		exit (errno);
+	}
 	env_child = env_env_tostrs(info->env);
 	dup_pipefds(cmd, info);	// 
 	dup_filefds(cmd, info);	// close_files(info->cmd);
@@ -50,7 +56,10 @@ static void	child(t_cmd *cmd, t_info *info)
 		// free_info(info);
 		// exit (EXIT_FAILURE);
 	}
+	free_info(info);
 	exit (EXIT_SUCCESS);
+	// free_info(info);
+	// exit (EXIT_SUCCESS);
 }
 
 static void	ft_waitpid(t_info *info)
@@ -97,24 +106,23 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 	return ;
 }
 
-void	execute(t_info *info) //20220717 ok
+int	execute(t_info *info) //20220717 ok
 {
 	// open_files(info->cmd);
 	if (info->size == 1 && is_builtin(info->cmd) == 1)
 	{
 		if (open_cmd_files(info->cmd, info) == 1)
-			return ;
+			return (errno);
 		save_stdinout(1);
 		if (dup_filefds(info->cmd, info) == 1)
 		{
-			perror("dup_filesfd failed ");
 			close_cmd_files(info->cmd);
-			return ;
+			return (errno);
 		}
 		if (exec_builtin(info->cmd, info) == 1)
 		{
 			close_cmd_files(info->cmd);
-			return ;
+			return (errno);
 		}
 		close_cmd_files(info->cmd);
 		save_stdinout(2);
@@ -122,10 +130,10 @@ void	execute(t_info *info) //20220717 ok
 	else
 	{
 		if (open_pipes(info->cmd, info) == 1)
-			return ;
+			return (errno);
 		pipex(info->cmd, info);
 	}
-	return ;
+	return (0);
 }
 
 /* rien ne va pas... 20220717*/

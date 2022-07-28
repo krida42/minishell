@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 14:27:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/22 14:58:24 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 09:25:55 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	save_stdinout(int n) //20220717 ok
 		close(tmpin);
 		if (dup2(tmpout, STDOUT_FILENO) == -1)
 		{
-			perror("dup2 failed save_stdinout  2 temp in");
+			perror("dup2 failed save_stdinout 2 temp out");
 			return (1);
 		}
 		close(tmpout);
