@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 13:27:21 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 13:35:03 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ static int	child(t_cmd *cmd, t_info *info)
 
 	if (cmd->fdin == -1 || cmd->fdout == -1) // appel syst errno sera defini auto
 	{
+		close_files(info->cmd);
 		close_pipes(info->cmd);
 		free_info(info);
 		// save_stdinout(2);
