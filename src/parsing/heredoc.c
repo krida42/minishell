@@ -41,7 +41,7 @@ static void	write_file(char *file, char *content)
 	close(fd);
 }
 
-static void	heredoc_child(char *file, char *eof)
+static void	heredoc_child(t_env *env, char *file, char *eof)
 {
 	char	*input;
 	char	*content;
@@ -53,6 +53,7 @@ static void	heredoc_child(char *file, char *eof)
 		input = readline("heredoc > ");
 		if (!input || strcmp(input, eof) == 0)
 		{
+			var_expand(env, &content);
 			write_file(file, content);
 			free(input);
 			free(content);
@@ -87,7 +88,7 @@ static void	heredoc_sig(void)
 	sigaction(SIGINT, &sigint, NULL);
 }
 
-char	*heredoc_start(char *eof, t_info *info)
+char	*heredoc_start(t_info *info, char *eof)
 {
 	char	*file;
 	pid_t	pid;
@@ -99,7 +100,7 @@ char	*heredoc_start(char *eof, t_info *info)
 	if (pid == 0)
 	{
 
-		heredoc_child(file, eof);
+		heredoc_child(info->env, file, eof);
 		free(file);
 		free_info(info);
 		exit(0);

@@ -101,7 +101,7 @@ static void	treat_allparam(t_env *env, t_cmd *cmd, t_info *info)
 	cmd->heredoc = manipulate_param(env, cmd->heredoc);
 	if (cmd->heredoc)
 	{
-		heredoc_path = heredoc_start(cmd->heredoc, info);
+		heredoc_path = heredoc_start(info, cmd->heredoc);
 		if (heredoc_path)
 		{
 			free(cmd->heredoc);
