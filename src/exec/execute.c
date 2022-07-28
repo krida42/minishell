@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 08:33:55 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 09:18:54 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,21 +79,19 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 		if (cmd->pid == -1)
 		{
 			perror("fork failed ");
-			close_pipes_files(info->cmd);
+			close_pipes(info->cmd);
 			return ;
 		}
 		else if (cmd->pid == 0)
 		{
 			{
 				//signal(SIGQUIT, ft_handle_sig); //Interruption forte (ctrl-\)//Terminaison + core dum
-				// if (cmd->heredoc != NULL)
-				// 	is_heredoc(cmd->heredoc, cmd, info);
 				child(cmd, info);
 			}
 		}
 		cmd = cmd->next;
 	}
-	close_pipes_files(info->cmd);
+	close_pipes(info->cmd);
 	ft_waitpid(info);
 	// save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
 	return ;
@@ -101,26 +99,30 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 
 void	execute(t_info *info) //20220717 ok
 {
-	open_files(info->cmd);
+	// open_files(info->cmd);
 	if (info->size == 1 && is_builtin(info->cmd) == 1)
 	{
+		if (open_cmd_files(info->cmd, info) == 1)
+			return ;
 		save_stdinout(1);
 		if (dup_filefds(info->cmd, info) == 1)
 		{
-			close_files(info->cmd);
-			return (perror("dup_filesfd failed "));
+			perror("dup_filesfd failed ");
+			close_cmd_files(info->cmd);
+			return ;
 		}
 		if (exec_builtin(info->cmd, info) == 1)
 		{
-			close_files(info->cmd);
+			close_cmd_files(info->cmd);
 			return ;
 		}
+		close_cmd_files(info->cmd);
 		save_stdinout(2);
 	}
 	else
 	{
 		if (open_pipes(info->cmd, info) == 1)
-			return;
+			return ;
 		pipex(info->cmd, info);
 	}
 	return ;
