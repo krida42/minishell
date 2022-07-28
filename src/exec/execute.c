@@ -6,16 +6,16 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 13:35:03 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 13:45:19 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// static void	freeinfo_exit(int exit_nb, t_info *info)
+// static int	freeinfo_exit(int exit_n, t_info *info)
 // {
 // 	free_info(info);
-// 	exit (exit_nb);
+// 	exit (exit_n);
 // }
 
 // static int	child(t_cmd *cmd, t_info *info)
@@ -24,30 +24,21 @@
 
 // 	if (cmd->fdin == -1 || cmd->fdout == -1) // appel syst errno sera defini auto
 // 	{
-// 		close_pipes(info->cmd);
-// 		free_info(info);
-// 		save_stdinout(2);
-// 		exit (errno);
+// 		close_pipes_files(info->cmd);
+// 		freeinfo_exit(errno, info);
 // 	}
 // 	if (dup_pipefds(cmd, info) == 1 || dup_filefds(cmd, info) == 1) // appel syst errno sera defini auto
 // 	{
-// 		close_files(info->cmd);
-// 		close_pipes(info->cmd);
-// 		free_info(info);
-// 		save_stdinout(2);
-// 		exit (errno);
+// 		close_pipes_files(info->cmd);
+// 		freeinfo_exit(errno, info);
 // 	}
-// 	close_pipes(info->cmd);
-// 	close_files(info->cmd);
+// 	close_pipes_files(info->cmd);
 // 	if (is_builtin(cmd) == 1)
 // 	{
 // 		if (exec_builtin(cmd, info) == 1)
 // 		{
-// 			close_pipes(info->cmd);
-// 			close_files(info->cmd);
-// 			free_info(info);
-// 			save_stdinout(2);
-// 			exit (1);
+// 			close_pipes_files(info->cmd);
+// 			freeinfo_exit(EXIT_FAILURE, info);
 // 		}
 // 	}
 // 	else if (cmd->ag[0] != NULL && (cmd->ag[0] && cmd->ag[0][0]))
@@ -60,13 +51,9 @@
 // 				perror("exec failed ");
 // 		}
 // 		free_strs(env_child);
-// 		free_info(info);
-// 		save_stdinout(2);
-// 		exit (errno);
+// 		freeinfo_exit(errno, info);
 // 	}
-// 	free_info(info);
-// 	save_stdinout(2);
-// 	exit (EXIT_SUCCESS);
+// 	return(freeinfo_exit(EXIT_SUCCESS, info));
 // }
 
 /*child 2 reserve 20220728*/
@@ -119,59 +106,10 @@ static int	child(t_cmd *cmd, t_info *info)
 	}
 
 	free_info(info);
+	close_std();
 	// save_stdinout(2);
 	exit (EXIT_SUCCESS);
 }
-
-
-// static int	child(t_cmd *cmd, t_info *info)
-// {
-// 	char	**env_child;
-
-// 	if (cmd->fdin == -1 || cmd->fdout == -1) // appel syst errno sera defini auto
-// 	{
-// 		close_pipes(info->cmd);
-// 		free_info(info);
-// 		save_stdinout(2);
-// 		exit (errno);
-// 	}
-// 	if (dup_pipefds(cmd, info) == 1 || dup_filefds(cmd, info) == 1) // appel syst errno sera defini auto
-// 	{
-// 		close_files(info->cmd);
-// 		close_pipes(info->cmd);
-// 		free_info(info);
-// 		save_stdinout(2);
-// 		exit (errno);
-// 	}
-// 	close_pipes(info->cmd);
-// 	close_cmd_files(cmd);
-// 	if (is_builtin(cmd) == 1)
-// 	{
-// 		if (exec_builtin(cmd, info) == 1)
-// 		{
-// 			close_pipes(info->cmd);
-// 			close_files(info->cmd);
-// 			free_info(info);
-// 			save_stdinout(2);
-// 			exit (1);
-// 		}
-// 	}
-// 	else if (cmd->ag[0] != NULL && (cmd->ag[0] && cmd->ag[0][0]))
-// 	{
-// 		env_child = env_env_tostrs(info->env);
-// 		cmd->cmd_path = command_path(cmd->ag, info->env);
-// 		if (cmd->cmd_path != NULL)
-// 			execve(cmd->cmd_path, cmd->ag, env_child); 
-// 		perror("exec failed ");
-// 		free_strs(env_child);
-// 		free_info(info);
-// 		save_stdinout(2);
-// 		exit (errno);
-// 	}
-// 	free_info(info);
-// 	save_stdinout(2);
-// 	exit (EXIT_SUCCESS);
-// }
 
 static void	ft_waitpid(t_info *info)
 {
