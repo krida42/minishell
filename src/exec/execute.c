@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/29 21:12:37 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/29 21:31:55 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 {
 	while (cmd != NULL)
 	{
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		cmd->pid = fork();
 		if (cmd->pid == -1)
 		{
@@ -117,16 +119,13 @@ static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 		}
 		else if (cmd->pid == 0)
 		{
-			{
-				//signal(SIGQUIT, ft_handle_sig); //Interruption forte (ctrl-\)//Terminaison + core dum
-				// save_stdinout(2);
-				child(cmd, info);
-			}
+			save_stdinout(2);
+			child(cmd, info);
 		}
 		cmd = cmd->next;
 	}
-	close_pipes(info->cmd);
-	close_files(info->cmd);
+	close_pipes_files(info->cmd);
+	init_signals();
 	ft_waitpid(info);
 	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
 	return (info->error_n);
