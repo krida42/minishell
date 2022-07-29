@@ -22,7 +22,7 @@ int	m_prompt(const char *prompt, char **envp)
 	{
 		reset_info(info);
 		input = readline(prompt);
-		if (!input || ft_strstr(input, "exit") == input)
+		if (!input)//|| ft_strstr(input, "exit") == input)
 		{
 			rl_clear_history();
 			printf("exit\n");

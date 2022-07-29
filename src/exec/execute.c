@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/29 21:31:55 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/29 21:57:22 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,13 @@ static void	ft_waitpid(t_info *info)
 			info->error_n = WEXITSTATUS(tmp->status); // returns the exit status of the child. exit etc
 		else if (WIFSIGNALED(tmp->status))
 			info->error_n = WTERMSIG(tmp->status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
+		if (WTERMSIG(tmp->status) == SIGSEGV)
+			ft_puterr("Segmentation fault\n", NULL, NULL);
 		tmp = tmp->next;
 	}
 	return ;
 }
+
 
 static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 {
