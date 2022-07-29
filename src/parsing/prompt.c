@@ -25,6 +25,7 @@ int	m_prompt(const char *prompt, char **envp)
 		if (!input)//|| ft_strstr(input, "exit") == input)
 		{
 			rl_clear_history();
+			close_std();
 			printf("exit\n");
 			free_info(info);
 			return (free(input), 0);
