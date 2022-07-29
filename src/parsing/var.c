@@ -46,6 +46,8 @@ int	clearify_allvar(t_cmd *cmd)
 
 	ag = cmd->ag;
 	i = -1;
+	if (!ag)
+		return (1);
 	//Les cas ou l'initialiasaiotn ' de variable est annule
 	if (!are_allvarinit(ag) || cmd->next || cmd->prev)
 		while (ag[++i])

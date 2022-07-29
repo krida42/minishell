@@ -1,9 +1,6 @@
-.PHONY : all clean fclean re
-	
 CC := gcc
 CFLAGS := -Wall -Wextra -Werror
-SANI2 = -g -fsanitize=address -fsanitize=leak
-SANI = -g
+SANI := -g
 INC_PATH := include/
 SHELL = /bin/bash
 
@@ -86,4 +83,13 @@ test : all
 	@echo 
 	@./minishell
 
+grind : all
+	@echo
+	@valgrind --leak-check=full --track-fds=yes --show-leak-kinds=all --suppressions=.ignore_readline -s ./minishell
 
+fsan_def :
+	$(eval SANI := -g -fsanitize=address -fsanitize=leak)
+
+san : fsan_def test
+
+.PHONY : all clean fclean re test fsan_def san grind
