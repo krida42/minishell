@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/29 21:57:22 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/29 22:40:17 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ static void	ft_waitpid(t_info *info)
 	tmp = info->cmd;
 	while (tmp != NULL)
 	{
-		// waitpid (tmp->pid, NULL, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
 		waitpid (tmp->pid, &tmp->status, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
 		if (WIFEXITED(tmp->status))
 			info->error_n = WEXITSTATUS(tmp->status); // returns the exit status of the child. exit etc
@@ -122,7 +121,7 @@ static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 		}
 		else if (cmd->pid == 0)
 		{
-			save_stdinout(2);
+			// save_stdinout(2);
 			child(cmd, info);
 		}
 		cmd = cmd->next;
