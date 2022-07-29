@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 11:59:35 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 11:42:50 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/29 13:59:19 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	ft_av_cmd_error_msg_check(char **ag) // a voir s il est possble fair
 {
 	if (ft_strchr(ag[0], '/') != NULL)
 		perror(ag[0]);
-	else
+	else 
 	{
 		ft_putstr_fd(ag[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
@@ -79,6 +79,7 @@ char	*command_path(char **ag, t_env *env)
 	char	*cmd_path;
 	char	**pathtab; // to do dans info?
 	int		i;
+	int		fd;
 
 	pathtab = path_tab(env);
 	if (pathtab != NULL)
@@ -88,14 +89,33 @@ char	*command_path(char **ag, t_env *env)
 		{
 			cmd_path = ft_strjoin(pathtab[i], ag[0]);
 			if (access(cmd_path, F_OK) == 0 && ft_strchr(cmd_path, '/') != NULL)
+			{
+				fd = open(cmd_path, O_DIRECTORY);
+				if (fd != -1)
+				{
+					ft_putstr_fd(ag[0], 2);
+					ft_putstr_fd(": Is a directory\n", 2);
+					return (NULL);
+				}
+				close (fd);
 				return (cmd_path);
+			}
 			free(cmd_path);
 			i++;
 		}
 	}
-	if (access(ag[0], X_OK) == 0
-		&& ft_strchr(ag[0], '/') != NULL)
-		return (ag[0]);
+	if (access(ag[0], X_OK) == 0 && ft_strchr(ag[0], '/') != NULL)
+	{
+		fd = open(cmd_path, O_DIRECTORY);
+		if (fd != -1)
+			{
+				ft_putstr_fd(ag[0], 2);
+				ft_putstr_fd(": Is a directory\n", 2);
+				return (NULL);
+			}
+			close (fd);
+			return (ag[0]);
+	}
 	ft_free_tab(pathtab);
 	ft_av_cmd_error_msg_check(ag); // a voir s il est possible differement
 	return (NULL);
