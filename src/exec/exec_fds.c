@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 14:27:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/22 14:58:24 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/28 12:47:11 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,12 @@ int	save_stdinout(int n) //20220717 ok
 	}
 	if (n == 2)
 	{
-		if (dup2(tmpin, STDIN_FILENO) == -1)
+		// if (dup2(tmpin, STDIN_FILENO) == -1)|| dup2(tmpout, STDOUT_FILENO) == -1))
+		// {
+		// 	perror("dup2 failed save_stdinout 2");
+		// 	return (1);
+		// }
+		if (dup2(tmpin, STDIN_FILENO) == -1) 
 		{
 			perror("dup2 failed save_stdinout 2 temp in");
 			return (1);
@@ -32,7 +37,7 @@ int	save_stdinout(int n) //20220717 ok
 		close(tmpin);
 		if (dup2(tmpout, STDOUT_FILENO) == -1)
 		{
-			perror("dup2 failed save_stdinout  2 temp in");
+			perror("dup2 failed save_stdinout 2 temp out");
 			return (1);
 		}
 		close(tmpout);
@@ -42,13 +47,15 @@ int	save_stdinout(int n) //20220717 ok
 
 int	dup_filefds(t_cmd *cmd, t_info *info) //20220717 ok
 {
+	(void)info;
 	if (cmd->in != NULL || cmd->heredoc != NULL)
 	{
 		if (dup2(cmd->fdin, STDIN_FILENO) == -1)
 		{
 			perror("dup2 failed dup_filefds in ");
-			close_files(info->cmd);
-			exit (EXIT_FAILURE);
+			// close_cmd_files(cmd);
+			return (1);
+			// exit (EXIT_FAILURE);
 		}
 	}
 	if (cmd->out != NULL || cmd->append != NULL)
@@ -56,8 +63,9 @@ int	dup_filefds(t_cmd *cmd, t_info *info) //20220717 ok
 		if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
 		{
 			perror("dup2 failed dup_filefds out ");
-			close_files(info->cmd);
-			exit (EXIT_FAILURE);
+			// close_cmd_files(cmd);
+			return (1);
+			// exit (EXIT_FAILURE);
 		}
 	}
 	return (0);
@@ -65,13 +73,15 @@ int	dup_filefds(t_cmd *cmd, t_info *info) //20220717 ok
 
 int	dup_pipefds(t_cmd *cmd, t_info *info)
 {
+	(void)info;
 	if (cmd->prev != NULL && cmd->in == NULL && cmd->heredoc == NULL) // && cmd->prev->out == NULL && cmd->prev->append == NULL
 	{
 		if (dup2(cmd->prev->pipefd[0], STDIN_FILENO) == -1)
 		{
 			perror("dup2 failed dup_pipefds in ");
-			close_pipes(info->cmd);
-			exit (EXIT_FAILURE);
+			// close_pipes(info->cmd);
+			return (1);
+			// exit (EXIT_FAILURE);
 		}
 	}
 	if (cmd->next != NULL && cmd->out == NULL && cmd->append == NULL) //&& cmd->next->in == NULL && cmd->next->heredoc == NULL
@@ -79,8 +89,9 @@ int	dup_pipefds(t_cmd *cmd, t_info *info)
 		if (dup2(cmd->pipefd[1], STDOUT_FILENO) == -1)
 		{
 			perror("dup2 failed dup_pipefds in ");
-			close_pipes(info->cmd);
-			exit (EXIT_FAILURE);
+			// close_pipes(info->cmd);
+			return (1);
+			// exit (EXIT_FAILURE);
 		}
 	}
 	return (0);

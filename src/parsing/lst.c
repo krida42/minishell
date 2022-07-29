@@ -11,8 +11,8 @@ static t_cmd	*new_cmd(char **ag)
 	cmd->append = NULL;
 	cmd->heredoc = NULL;
 	cmd->cmd_path = NULL;
-	// cmd->pipefd[0] = -1;
-	// cmd->pipefd[1] = -1;
+	cmd->pipefd[0] = 0;
+	cmd->pipefd[1] = 1;
 	// cmd->fdin = -1;
 	// cmd->fdout = -1;
 	cmd->pipefd[0] = STDIN_FILENO;

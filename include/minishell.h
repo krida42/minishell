@@ -10,6 +10,8 @@
 # include <signal.h>
 # include <unistd.h>
 
+# include <errno.h>
+
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -47,6 +49,7 @@ typedef struct s_env {
 typedef struct s_info {
 	t_cmd	*cmd;
 	int		size;
+	int		error_n;
 	t_env	*env;
 }	t_info;
 
@@ -124,7 +127,7 @@ int		b_unset(t_info *info, char **args);
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-void	execute(t_info *info);
+int		execute(t_info *info);
 int		save_stdinout(int n);
 int		dup_filefds(t_cmd *cmd, t_info *info);
 int		dup_pipefds(t_cmd *cmd, t_info *info);
@@ -139,15 +142,18 @@ int		exec_builtin(t_cmd  *cmd, t_info *info);
 int		ft_builtin_cd(char **ag, t_env *env);
 int		ft_builtin_pwd(void);
 int		ft_builtin_echo(t_cmd *cmd);
-void	ft_builtin_exit(char **ag, t_cmd *cmd);
+int		ft_builtin_exit(char **ag, t_cmd *cmd);
 void	msg_close_free_exit(char *str, t_info *info); // p.e to be deleted
 void	msg_close_return(char *str, t_info *info);
-void	open_files(t_cmd *cmd);
+void	open_files(t_cmd *cmd, t_info *info);
+// int		open_cmd_files(t_cmd *cmd, t_info *info);
 int		open_pipes(t_cmd *cmd, t_info *info);
 void	close_pipes(t_cmd *cmd);
-void	close_files(t_cmd *cmd);
+void	close_files(t_cmd *cmd); //p.e to be deleted
+void	close_cmd_files(t_cmd *cmd);
 void	close_std(void);
-void	close_pipes_files(t_cmd *cmd);
+void	close_pipes_files(t_cmd *cmd);//p.e to be deleted
+void	close_pipes_cmdfiles(t_cmd *cmd);
 int		msg_perror_return(char *str, int i);
 void	ft_free(t_info *info); // a REVOIR Supprimer ?
 void	ft_free_tab(char **tab); // a revoir
