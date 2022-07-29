@@ -52,7 +52,7 @@ char	*dup_part(char *s)
 	return (ft_strndup(s, i));
 }
 
-static char	*concatenate(t_env *env, char *s)
+static char	*concatenate(t_env *env, char *s, int err)
 {
 	char	*joined;
 	char	*part;
@@ -64,7 +64,7 @@ static char	*concatenate(t_env *env, char *s)
 		tmp = joined;
 		part = dup_part(s);
 		if (*s != '\'')
-			var_expand(env, &part);
+			var_expand(env, &part, err);
 		joined = ft_strjoin(joined, part);
 		free(tmp);
 		free(part);
@@ -73,13 +73,13 @@ static char	*concatenate(t_env *env, char *s)
 	return (joined);
 }
 
-static char	*manipulate_param(t_env *env, char *s)
+static char	*manipulate_param(t_env *env, char *s, int err)
 {
 	char	*concatened;
 
 	if (!s)
 		return (NULL);
-	concatened = concatenate(env, s);
+	concatened = concatenate(env, s, err);
 	free(s);
 	return (concatened);
 }
@@ -92,13 +92,13 @@ static void	treat_allparam(t_env *env, t_cmd *cmd, t_info *info)
 	ag = cmd->ag;
 	while (ag && *ag)
 	{
-		*ag = manipulate_param(env, *ag);
+		*ag = manipulate_param(env, *ag, info->error_n);
 		ag++;
 	}
-	cmd->in = manipulate_param(env, cmd->in);
-	cmd->out = manipulate_param(env, cmd->out);
-	cmd->append = manipulate_param(env, cmd->append);
-	cmd->heredoc = manipulate_param(env, cmd->heredoc);
+	cmd->in = manipulate_param(env, cmd->in, info->error_n);
+	cmd->out = manipulate_param(env, cmd->out, info->error_n);
+	cmd->append = manipulate_param(env, cmd->append, info->error_n);
+	cmd->heredoc = manipulate_param(env, cmd->heredoc, info->error_n);
 	if (cmd->heredoc)
 	{
 		heredoc_path = heredoc_start(info, cmd->heredoc);

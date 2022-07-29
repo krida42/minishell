@@ -20,6 +20,7 @@ t_info	*init_info(char **envp)
 	info->env = env_strs_toenv(envp);
 	info->cmd = NULL;
 	info->size = cmd_size(info->cmd);
+	info->error_n = 0;
 	return (info);
 }
 
