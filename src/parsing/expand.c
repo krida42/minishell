@@ -115,6 +115,7 @@ int		treat_allcmd(t_info *info)
 	t_cmd	*cmd;
 	int		ret;
 
+	ret = 0;
 	cmd = info->cmd;
 	while (cmd)
 	{

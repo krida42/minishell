@@ -80,6 +80,8 @@ void	set_quote_state(char c, int *squote, int *dquote);
 int		check_unclosed(char *input);
 int		check_special(char *input);
 
+int	is_cmd_err(t_info *info);
+
 t_cmd	*get_first(t_cmd *cmd); // no tested
 t_cmd	*get_last(t_cmd *cmd); // no tested
 void	add_back(t_cmd **cmd, char **ag);

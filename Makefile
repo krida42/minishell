@@ -1,5 +1,6 @@
 CC := gcc
 CFLAGS := -Wall -Wextra -Werror
+SANI2 := -g -fsanitize=address -fsanitize=leak
 SANI := -g
 INC_PATH := include/
 SHELL = /bin/bash
@@ -7,7 +8,7 @@ SHELL = /bin/bash
 PARSING_SRC := main.c prompt.c mini_utils.c signals.c \
 			   parse.c check.c lst.c lst2.c utils.c utils2.c desc.c \
 			   env.c env2.c env3.c info.c expand.c expand2.c var.c \
-			   b_export.c b_env.c b_unset.c heredoc.c
+			   b_export.c b_env.c b_unset.c heredoc.c check2.c
 
 EXEC_SRC :=  	execute.c		\
 				exec_fds.c		\
