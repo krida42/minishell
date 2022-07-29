@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 17:02:59 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/29 19:38:18 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@
 // 	return (0);
 // }
 
-int	open_files(t_cmd *cmd, t_info *info) //20220717 ok
+void	open_files(t_cmd *cmd, t_info *info) //20220717 ok
 {
-	(void)info;
+	// (void)info;
+	info->error_n = 0;
 	while(cmd)
 	{
 		if (cmd->in != NULL)
@@ -48,7 +49,7 @@ int	open_files(t_cmd *cmd, t_info *info) //20220717 ok
 		if (cmd->fdin == -1)
 		{
 			perror(cmd->in);
-			return (1);
+			info->error_n = 1;
 		}
 		if (cmd->out != NULL)
 			cmd->fdout = open(cmd->out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -57,11 +58,10 @@ int	open_files(t_cmd *cmd, t_info *info) //20220717 ok
 		if (cmd->fdout == -1)
 		{
 			perror(cmd->out);
-			return (1);
+			info->error_n = 1;
 		}
 		cmd = cmd->next;
 	}
-	return (0);
 }
 
 int	open_pipes(t_cmd *cmd, t_info *info) //20220717 ok // voir pour free info

@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 11:59:35 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/29 13:59:19 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/29 20:00:16 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,58 @@ static char	**path_tab(t_env *env)
 	return (pathtab);
 }
 
+// static int check_access(char *path, char *ag)
+// {
+// 	int	fd;
+
+// 	if (access(path, F_OK) == 0 && ft_strchr(path, '/') != NULL)
+// 	{
+// 		fd = open(path, O_DIRECTORY);
+// 		if (fd != -1)
+// 		{
+// 			ft_putstr_fd(ag, 2);
+// 			ft_putstr_fd(": Is a directory\n", 2);
+// 			return (1);
+// 		}
+// 		close (fd);
+// 	}
+// 	return (0);
+// }
+
+static int	is_dir(char *ag)
+{
+	int	fd;
+	
+	fd = open(ag, O_DIRECTORY | O_CLOEXEC);
+	if (fd != -1)
+	{
+		close (fd);
+		ft_putstr_fd(ag, 2);
+		ft_putstr_fd(": Is a directory\n", 2);
+		return (1);
+	}
+	return (0);
+}
+
+static int	check_access(char *pathname, char **pathtab, int mode)
+{
+	if (access(pathname, mode) == 0 && ft_strchr(pathname, '/') != NULL)
+	{
+		ft_free_tab(pathtab);
+		return (1);
+	}
+	return (0);
+}
+
 // char	*command_path(char **ag, t_info *info)
 char	*command_path(char **ag, t_env *env)
 {
 	char	*cmd_path;
 	char	**pathtab; // to do dans info?
 	int		i;
-	int		fd;
 
+	if (is_dir(ag[0]) == 1)
+		return (NULL);
 	pathtab = path_tab(env);
 	if (pathtab != NULL)
 	{
@@ -88,35 +132,142 @@ char	*command_path(char **ag, t_env *env)
 		while (pathtab[i])
 		{
 			cmd_path = ft_strjoin(pathtab[i], ag[0]);
-			if (access(cmd_path, F_OK) == 0 && ft_strchr(cmd_path, '/') != NULL)
-			{
-				fd = open(cmd_path, O_DIRECTORY);
-				if (fd != -1)
-				{
-					ft_putstr_fd(ag[0], 2);
-					ft_putstr_fd(": Is a directory\n", 2);
-					return (NULL);
-				}
-				close (fd);
+			if (check_access(cmd_path, pathtab, F_OK) == 1)
 				return (cmd_path);
-			}
 			free(cmd_path);
 			i++;
 		}
 	}
-	if (access(ag[0], X_OK) == 0 && ft_strchr(ag[0], '/') != NULL)
-	{
-		fd = open(cmd_path, O_DIRECTORY);
-		if (fd != -1)
-			{
-				ft_putstr_fd(ag[0], 2);
-				ft_putstr_fd(": Is a directory\n", 2);
-				return (NULL);
-			}
-			close (fd);
-			return (ag[0]);
-	}
+	if (check_access(ag[0], pathtab, X_OK) == 1)
+		return (ag[0]);
 	ft_free_tab(pathtab);
 	ft_av_cmd_error_msg_check(ag); // a voir s il est possible differement
 	return (NULL);
 }
+
+/*reserve 0729_01*/
+// char	*command_path(char **ag, t_env *env)
+// {
+// 	char	*cmd_path;
+// 	char	**pathtab; // to do dans info?
+// 	int		i;
+// 	// int		fd;
+
+// 	if (is_dir(ag[0]) == 1)
+// 		return (NULL);
+// 	pathtab = path_tab(env);
+// 	if (pathtab != NULL)
+// 	{
+// 		i = 0;
+// 		while (pathtab[i])
+// 		{
+// 			cmd_path = ft_strjoin(pathtab[i], ag[0]);
+// 			if (check_access(cmd_path, pathtab, F_OK) == 1)
+// 				return (cmd_path);
+// 			// if (access(cmd_path, F_OK) == 0 && ft_strchr(cmd_path, '/') != NULL)
+// 			// {
+// 			// 	ft_free_tab(pathtab);
+// 			// 	return (cmd_path);
+// 			// }
+// 			free(cmd_path);
+// 			i++;
+// 		}
+// 	}
+// 	if (check_access(ag[0], pathtab, X_OK) == 1)
+// 		return (ag[0]);
+// 	// if (access(ag[0], X_OK) == 0 && ft_strchr(ag[0], '/') != NULL)
+// 	// {
+// 	// 	ft_free_tab(pathtab);
+// 	// 	return (ag[0]);
+// 	// }
+// 	ft_free_tab(pathtab);
+// 	ft_av_cmd_error_msg_check(ag); // a voir s il est possible differement
+// 	return (NULL);
+// }
+
+/*reserve 07_29*/
+// char	*command_path(char **ag, t_info *info)
+// char	*command_path(char **ag, t_env *env)
+// {
+// 	char	*cmd_path;
+// 	char	**pathtab; // to do dans info?
+// 	int		i;
+// 	// int		fd;
+
+// 	if (is_dir(ag[0]) == 1)
+// 		return (NULL);
+// 	pathtab = path_tab(env);
+// 	if (pathtab != NULL)
+// 	{
+// 		i = 0;
+// 		while (pathtab[i])
+// 		{
+// 			cmd_path = ft_strjoin(pathtab[i], ag[0]);
+// 			// if (check_access(cmd_path, ag[0]) == 1)
+// 			// 	return (cmd_path);
+// 			if (access(cmd_path, F_OK) == 0 && ft_strchr(cmd_path, '/') != NULL)
+// 			{
+// 				// fd = open(cmd_path, O_DIRECTORY);
+// 				// if (fd != -1)
+// 				// {
+// 				// 	close (fd);
+// 				// ft_free_tab(pathtab);
+// 				// 	ft_putstr_fd(ag[0], 2);
+// 				// 	ft_putstr_fd(": Is a directory\n", 2);
+// 				// 	return (NULL);
+// 				// }
+// 				ft_free_tab(pathtab);
+// 				return (cmd_path);
+// 			}
+// 			free(cmd_path);
+// 			i++;
+// 		}
+// 	}
+// 	// if (check_access(ag[0], ag[0], pathtab) == 1)
+// 	// 	return (ag[0]);
+// 	if (access(ag[0], X_OK) == 0 && ft_strchr(ag[0], '/') != NULL)
+// 	{
+// 		// fd = open(ag[0], O_DIRECTORY);
+// 		// if (fd != -1)
+// 		// {
+// 		// 	close (fd);
+// 		// 	ft_free_tab(pathtab);
+// 		// 	ft_putstr_fd(ag[0], 2);
+// 		// 	ft_putstr_fd(": Is a directory\n", 2);
+// 		// 	return (NULL);
+// 		ft_free_tab(pathtab);
+// 		return (ag[0]);
+// 	}
+// 	ft_free_tab(pathtab);
+// 	ft_av_cmd_error_msg_check(ag); // a voir s il est possible differement
+// 	return (NULL);
+// }
+
+/*reserve 07_29 - 00*/
+// char	*command_path(char **ag, t_info *info)
+// char	*command_path(char **ag, t_env *env)
+// {
+// 	char	*cmd_path;
+// 	char	**pathtab; // to do dans info?
+// 	int		i;
+
+// 	pathtab = path_tab(env);
+// 	if (pathtab != NULL)
+// 	{
+// 		i = 0;
+// 		while (pathtab[i])
+// 		{
+// 			cmd_path = ft_strjoin(pathtab[i], ag[0]);
+// 			if (access(cmd_path, F_OK) == 0 && ft_strchr(cmd_path, '/') != NULL)
+// 				return (cmd_path);
+// 			free(cmd_path);
+// 			i++;
+// 		}
+// 	}
+// 	if (access(ag[0], X_OK) == 0
+// 		&& ft_strchr(ag[0], '/') != NULL)
+// 		return (ag[0]);
+// 	ft_free_tab(pathtab);
+// 	ft_av_cmd_error_msg_check(ag); // a voir s il est possible differement
+// 	return (NULL);
+// }
