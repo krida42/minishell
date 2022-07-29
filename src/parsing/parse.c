@@ -177,7 +177,7 @@ int	parse(char *input, t_info *info)
 		//else if (!ft_strncmp(info->cmd->ag[0], "unset", 5))
 		//	b_unset(info, info->cmd->ag + 1);
 		//else
-		execute(info);
+		//execute(info);
 	}
 	else
 		desc_info(info);

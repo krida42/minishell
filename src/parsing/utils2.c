@@ -43,3 +43,26 @@ void	ft_puterr(char *s, char *s1, char *s2)
 	if (s2)
 		ft_putstr_fd(s2, 2);
 }
+
+char	*ft_strpush(char **s, char c)
+{
+	int		i;
+	int		len;
+	char	*joined;
+
+	if (*s)
+		len = ft_strlen(*s);
+	else
+		len = 0;
+	joined = ft_calloc(len + 2, sizeof(char));
+	i = 0;
+	while (*s && (*s)[i])
+	{
+		joined[i] = (*s)[i];
+		i++;
+	}
+	joined[i] = c;
+	free(*s);
+	*s = joined;
+	return (joined);
+}

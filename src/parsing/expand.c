@@ -84,9 +84,10 @@ static char	*manipulate_param(t_env *env, char *s)
 	return (concatened);
 }
 
-static void	treat_allparam(t_env *env, t_cmd *cmd)
+static void	treat_allparam(t_env *env, t_cmd *cmd, t_info *info)
 {
 	char	**ag;
+	char	*heredoc_path;
 
 	ag = cmd->ag;
 	while (ag && *ag)
@@ -98,6 +99,15 @@ static void	treat_allparam(t_env *env, t_cmd *cmd)
 	cmd->out = manipulate_param(env, cmd->out);
 	cmd->append = manipulate_param(env, cmd->append);
 	cmd->heredoc = manipulate_param(env, cmd->heredoc);
+	if (cmd->heredoc)
+	{
+		heredoc_path = heredoc_start(info, cmd->heredoc);
+		if (heredoc_path)
+		{
+			free(cmd->heredoc);
+			cmd->heredoc = heredoc_path;
+		}
+	}
 }
 
 int		treat_allcmd(t_info *info)
@@ -109,7 +119,7 @@ int		treat_allcmd(t_info *info)
 	while (cmd)
 	{
 		ret = clearify_allvar(cmd);
-		treat_allparam(info->env, cmd);
+		treat_allparam(info->env, cmd, info);
 		if (!ret)
 			init_allvar(&info->env, cmd);
 		cmd = cmd->next;
