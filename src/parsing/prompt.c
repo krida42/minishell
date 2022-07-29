@@ -1,4 +1,4 @@
-#include "minishell.h"
+	#include "minishell.h"
 #include <readline/readline.h>
 
 static void	treat_input(char *input, t_info *info)

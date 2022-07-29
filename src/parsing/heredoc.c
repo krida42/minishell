@@ -82,10 +82,11 @@ static void	heredoc_handler(int sig)
 }
 static void	heredoc_sig(void)
 {
-	struct sigaction	sigint;
+	struct sigaction	sa;
 
-	sigint.sa_handler= heredoc_handler;
-	sigaction(SIGINT, &sigint, NULL);
+	ft_bzero(&sa, sizeof(sa));
+	sa.sa_handler= heredoc_handler;
+	sigaction(SIGINT, &sa, NULL);
 }
 
 char	*heredoc_start(t_info *info, char *eof)
