@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/29 22:40:17 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/29 23:03:00 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ static void	ft_waitpid(t_info *info)
 	}
 	return ;
 }
-
 
 static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 {

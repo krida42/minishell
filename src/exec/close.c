@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/01 19:10:26 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 13:13:08 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/29 22:44:45 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@ void	close_files(t_cmd *cmd) //20220717 ok
 	{
 		if (cmd->fdin >= 0)
 		{
+			if (cmd->heredoc)
+				unlink(cmd->heredoc);
 			if (cmd->in || cmd->heredoc)
 				close(cmd->fdin);
+
 		}
 		if (cmd->fdout >= 0)
 		{
