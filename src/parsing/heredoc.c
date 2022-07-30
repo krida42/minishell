@@ -104,6 +104,7 @@ char	*heredoc_start(t_info *info, char *eof)
 		heredoc_child(info->env, file, eof, info->error_n);
 		free(file);
 		free_info(info);
+		close_std();
 		exit(0);
 	}
 	signal(SIGINT, SIG_IGN);
