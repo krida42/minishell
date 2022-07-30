@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/30 20:00:36 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/30 20:17:08 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,14 +130,14 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 			child(cmd, info);
 		cmd = cmd->next;
 	}
-	fprintf(stderr,"execute: pipex: PARENT start L134\tg_err %d, errno is\t%d\n\n", g_err, errno);
+	fprintf(stderr,"g_err = %d\terrno = %d\texecute: pipex: PARENT start L134\n\n", g_err, errno);
 	close_pipes_files(info->cmd);
-	fprintf(stderr,"execute: pipex: PARENT end L136\tg_err %d, errno is\t%d\n\n", g_err, errno);
+	fprintf(stderr,"g_err = %d\terrno = %d\texecute: pipex: PARENT end L136\n\n", g_err, errno);
 	ignore_signals();
 	ft_waitpid(info);
 	init_signals();
 	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
-	fprintf(stderr,"execute: pipex: PARENT end L141\tterrno is\tg_err %d, errno is\t%d\n\n", g_err, errno);
+	fprintf(stderr,"g_err = %d\terrno = %d\texecute: pipex: PARENT end L141\n\n", g_err, errno);
 	return;
 }
 
