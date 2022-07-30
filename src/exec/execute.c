@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/30 16:53:01 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/30 18:01:10 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,24 @@
 // 	return(freeinfo_exit(EXIT_SUCCESS, info));
 // }
 
+static int	end_child(t_info *info)
+{
+	free_info(info);
+	save_stdinout(2);
+	close_std();
+	return (g_err);
+}
+
 static int	child(t_cmd *cmd, t_info *info)
 {
 	char	**env_child;
-	fprintf(stderr,"execute: pipex: CHILD L63\tinfo->error_n is %d\t\t\terrno is\t%d\n", info->error_n, errno);
+	// fprintf(stderr,"execute: pipex: CHILD L63\tinfo->error_n is %d\t\t\terrno is\t%d\n", info->error_n, errno);
 	if (cmd->ag && cmd->fdin != -1 && cmd->fdout != -1
 		&& dup_pipefds(cmd, info) != 1 && dup_filefds(cmd, info) != 1)
 	{
 		close_pipes_files(info->cmd);
 		if (cmd->ag[0] && is_builtin(cmd) == 1)
-			info->error_n = exec_builtin(cmd, info);
+			g_err = exec_builtin(cmd, info);
 		else if (cmd->ag[0] && (cmd->ag[0] && cmd->ag[0][0]))
 		{
 			env_child = env_env_tostrs(info->env);
@@ -77,12 +85,15 @@ static int	child(t_cmd *cmd, t_info *info)
 			}
 			free_strs(env_child);
 		}
+		exit(end_child(info));
 	}
 	close_pipes_files(info->cmd);
-	free_info(info);
-	save_stdinout(2);
-	close_std();
-	exit (errno);
+	exit (end_child(info));
+	// close_pipes_files(info->cmd);
+	// free_info(info);
+	// save_stdinout(2);
+	// close_std();
+	// exit (errno);
 }
 
 static void	ft_waitpid(t_info *info)
@@ -94,9 +105,9 @@ static void	ft_waitpid(t_info *info)
 	{
 		waitpid (tmp->pid, &tmp->status, 0); // revoir NULL sur status WEXITSTATUS, WIFSIGNALED
 		if (WIFEXITED(tmp->status))
-			info->error_n = WEXITSTATUS(tmp->status); // returns the exit status of the child. exit etc
+			g_err = WEXITSTATUS(tmp->status); // returns the exit status of the child. exit etc
 		else if (WIFSIGNALED(tmp->status))
-			info->error_n = 128 + WTERMSIG(tmp->status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
+			g_err = 128 + WTERMSIG(tmp->status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
 		if (WTERMSIG(tmp->status) == SIGSEGV)
 			ft_puterr("Segmentation fault\n", NULL, NULL);
 		tmp = tmp->next;
@@ -133,31 +144,70 @@ static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 
 int	execute(t_info *info) //20220717 ok
 {
+	fprintf(stderr,"g_err = %d\terrno = %d\texecute L147\n",g_err, errno);
 	if (save_stdinout(1) == 1)
 		return (g_err);
+	fprintf(stderr,"g_err = %d\terrno = %d\texecute L150 after savestdinout\n",g_err, errno);
 	open_files(info->cmd, info);
+	fprintf(stderr,"g_err = %d\terrno = %d\texecute L152 after open_files\n",g_err, errno);
 	if (info->size == 1 && info->cmd->ag && is_builtin(info->cmd) == 1)
 	{
-		if (g_err != 0 || dup_filefds(info->cmd, info) == 1)
+		if (g_err == 0 && dup_filefds(info->cmd, info) == 0)
 		{
-			save_stdinout(2);
-			return (g_err);
-		}
-		close_files(info->cmd);
-		if (exec_builtin(info->cmd, info) == 1)
-		{
-			save_stdinout(2);
-			return (1);
+			close_files(info->cmd);
+			exec_builtin(info->cmd, info);
 		}
 		save_stdinout(2);
-		g_err = 0;
-		return (0);
+		return (g_err);
 	}
 	if (open_pipes(info->cmd, info) == 1)
-		return (errno);
-	pipex(info->cmd, info);
-	return(pipex(info->cmd, info));
+		return (errno); // to do
+	fprintf(stderr,"g_err = %d\terrno = %d\texecute L170 after opn_pipes\n",g_err, errno);
+	return (pipex(info->cmd, info));
 }
+
+
+/* execute reserve 20220730*/
+int	execute(t_info *info) //20220717 ok
+// {
+// 	fprintf(stderr,"g_err = %d\terrno = %d\texecute L147\n",g_err, errno);
+// 	if (save_stdinout(1) == 1)
+// 		return (g_err);
+// 	fprintf(stderr,"g_err = %d\terrno = %d\texecute L150 after savestdinout\n",g_err, errno);
+// 	open_files(info->cmd, info);
+// 	fprintf(stderr,"g_err = %d\terrno = %d\texecute L152 after open_files\n",g_err, errno);
+// 	if (info->size == 1 && info->cmd->ag && is_builtin(info->cmd) == 1)
+// 	{
+// 		if (g_err == 0 && dup_filefds(info->cmd, info) == 0)
+// 		{
+// 			close_files(info->cmd);
+// 			exec_builtin(info->cmd, info);
+// 		}
+// 		save_stdinout(2);
+// 		return (g_err);
+// 		// if (dup_filefds(info->cmd, info) == 1) //g_err != 0 || 
+// 		// {
+// 		// 	save_stdinout(2);
+// 		// 	return (g_err);
+// 		// }
+// 		// fprintf(stderr,"g_err = %d\terrno = %d\texecute L160 after builtin dupfdfiles\n",g_err, errno);
+// 		// close_files(info->cmd);
+// 		// fprintf(stderr,"g_err = %d\terrno = %d\texecute L162 after close_files\n",g_err, errno);
+// 		// if (exec_builtin(info->cmd, info) == 1)
+// 		// {
+// 		// 	save_stdinout(2);
+// 		// 	return (g_err);
+// 		// }
+// 		// fprintf(stderr,"g_err = %d\terrno = %d\texecute L168 after execbuiltin\n",g_err, errno);
+// 		// save_stdinout(2);
+// 		// fprintf(stderr,"g_err = %d\terrno = %d\texecute L170 asavestdinout 2\n",g_err, errno);
+// 		// return (g_err);
+// 	}
+// 	if (open_pipes(info->cmd, info) == 1)
+// 		return (errno); // to do
+// 	fprintf(stderr,"g_err = %d\terrno = %d\texecute L170 after opn_pipes\n",g_err, errno);
+// 	return (pipex(info->cmd, info));
+// }
 
 /*child 2 reserve 20220728*/
 // static int	child(t_cmd *cmd, t_info *info)

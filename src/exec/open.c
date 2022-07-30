@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/30 16:58:03 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/30 18:02:22 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	open_files(t_cmd *cmd, t_info *info) //20220717 ok
 		if (cmd->fdin == -1)
 			msg_open_files(cmd->in);
 		else if (cmd->heredoc != NULL)
-			unlink(cmd->in);
+			unlink(cmd->heredoc);
 		// {
 		// 	perror(cmd->in);
 		// 	g_err = errno;
@@ -57,6 +57,7 @@ int	open_pipes(t_cmd *cmd, t_info *info) //20220717 ok // voir pour free info
 		if (pipe(cmd->pipefd) == -1)
 		{
 			perror("pipe failed");
+			g_err = errno;
 			return (1);
 		}
 		cmd = cmd->next;
