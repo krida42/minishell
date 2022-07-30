@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/29 23:03:00 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/30 12:04:41 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	child(t_cmd *cmd, t_info *info)
 		&& dup_filefds(cmd, info) != 1)
 	{
 		close_pipes_files(info->cmd);
-		if (is_builtin(cmd) == 1)
+		if (cmd->ag[0] != NULL && is_builtin(cmd) == 1)
 			info->error_n = exec_builtin(cmd, info);
 		else if (cmd->ag[0] != NULL && (cmd->ag[0] && cmd->ag[0][0]))
 		{
