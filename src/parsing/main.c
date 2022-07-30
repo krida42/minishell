@@ -1,6 +1,8 @@
 #include "color.h"
 #include "minishell.h"
 
+int	g_err = 0;
+
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;

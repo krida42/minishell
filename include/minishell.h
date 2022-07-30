@@ -20,6 +20,8 @@
 #  define PATH_MAX 4096
 # endif
 
+extern int	g_err;
+
 typedef struct s_cmd {
 	char	**ag;
 	char	*in;
