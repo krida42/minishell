@@ -156,6 +156,7 @@ int	parse(char *input, t_info *info)
 	char	*cursor;
 	char	*tmp;
 	t_cmd	*cmd;
+	int		ret;
 
 	cmd = NULL;
 	//cursor = input;
@@ -169,13 +170,16 @@ int	parse(char *input, t_info *info)
 	free(tmp);
 	set_cmd(info, cmd);
 	if (is_cmd_err(info))
-		return (1);
-	if(treat_allcmd(info)){
+		return (-2);
+	ret = treat_allcmd(info);
+	//if (ret == -1)
+	//	return -1;
+	if (ret == 1){
 		desc_info(info);
 		execute(info);
 	}
-	else
+	else if (ret == 0)
 		desc_info(info);
-	return (0);
+	return (ret);
 }
 
