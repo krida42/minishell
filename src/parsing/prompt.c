@@ -1,15 +1,22 @@
-	#include "minishell.h"
+#include "libft.h"
+#include "minishell.h"
 #include <readline/readline.h>
 
 static void	treat_input(char *input, t_info *info)
 {
-	if (check_unclosed(input))
-		printf(RED"Unclosed quote\n"WHITE);
-	else if (check_special(input))
-		printf(RED"Special character not authorized\n"WHITE);
-	//else
-	//	printf("\nYou havre wrote : %s\n\n", input);
-	parse(input, info);
+	int	err;
+
+	err = 0;
+	if (check_unclosed(input) && ++err)
+		ft_putstr_fd(RED"minishell: syntax error: unclosed quotes"
+				" forbidden !\n\n"WHITE, 2);
+	else if (check_special(input) && ++err)
+		ft_putstr_fd(RED"minishell: syntax error: special character"
+				" forbidden !\n\n"WHITE, 2);
+	else
+		parse(input, info);
+	if (err)
+		info->error_n = 2;
 }
 
 int	m_prompt(const char *prompt, char **envp)

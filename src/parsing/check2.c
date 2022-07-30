@@ -18,7 +18,9 @@ int	is_cmd_err(t_info *info)
 {
 	if (are_void_cmd(info->cmd))
 	{
-		ft_putstr_fd(RED"minishell: syntax error unexpected token\n\n"WHITE, 2);
+		info->error_n = 2;
+		ft_putstr_fd(RED"minishell: syntax error near unexpected token `|'\n\n"
+				WHITE, 2);
 		return (1);
 	}
 	return (0);
