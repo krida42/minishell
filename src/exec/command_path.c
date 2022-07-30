@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 11:59:35 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/29 20:00:16 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/30 19:43:43 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static void	ft_av_cmd_error_msg_check(char **ag) // a voir s il est possble fair
 	{
 		ft_putstr_fd(ag[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
+		g_err = 127;
 	}
 	// close_pipes(info->cmd);
 	// close_files(info->cmd);
@@ -101,6 +102,7 @@ static int	is_dir(char *ag)
 		close (fd);
 		ft_putstr_fd(ag, 2);
 		ft_putstr_fd(": Is a directory\n", 2);
+		g_err = 126;
 		return (1);
 	}
 	return (0);

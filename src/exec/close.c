@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/01 19:10:26 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/30 17:58:34 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/30 19:53:22 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,20 @@
 
 void	close_pipes(t_cmd *cmd) //20220717 ok
 {
-	fprintf(stderr,"close_pipes START\t\t\t\t\t\terrno is\t%d\n", errno);
+	// fprintf(stderr,"g_err = %d\terrno = %d\tclose_pipes START\t\t\t\t\t\t\n", g_err, errno);
 	while(cmd->next != NULL)
 	{
-		fprintf(stderr,"\tclose pipe middle before close\tcmd->pipefd[0] =%d\terrno is\t%d\n", cmd->pipefd[0], errno);
+		// fprintf(stderr,"g_err = %d\terrno = %d\tcmd->pipefd[0] =%d\ti = %d close pipe middle before close\n", g_err, errno, cmd->pipefd[0], i);
 		if (close(cmd->pipefd[0]) == -1)
 			g_err = errno;
-		fprintf(stderr,"\tclose pipe middle after close\tcmd->pipefd[0] =%d\terrno is\t%d\n", cmd->pipefd[0], errno);
-		fprintf(stderr,"\tclose pipe middle before close\tcmd->pipefd[1] =%d\terrno is\t%d\n", cmd->pipefd[1], errno);
+		// fprintf(stderr,"g_err = %d\terrno = %d\tcmd->pipefd[0] =%d\ti = %d close pipe middle after close\t\n", g_err, errno, cmd->pipefd[0], i);
+		// fprintf(stderr,"g_err = %d\terrno = %d\tcmd->pipefd[1] =%d\ti = %d close pipe middle before close\t\n", g_err, errno, cmd->pipefd[1], i);
 		if (close(cmd->pipefd[1]) == -1)
 			g_err = errno;
-		fprintf(stderr,"\tclose pipe middle after close\tcmd->pipefd[1] =%d\terrno is\t%d\n", cmd->pipefd[1], errno);
+		// fprintf(stderr,"g_err = %d\terrno = %d\tcmd->pipefd[1] =%d\t\ti = %d close pipe middle after close\t\n", g_err, errno, cmd->pipefd[1], i);
 		cmd = cmd->next;
 	}
-	fprintf(stderr,"close pipe END\t\t\t\t\t\terrno is\t%d\n\n", errno);
+	// fprintf(stderr,"g_err = %d\terrno = %d\tclose pipe END\t\t\t\t\t\t\n\n", g_err, errno);
 }
 
 void	close_files(t_cmd *cmd) //20220717 ok

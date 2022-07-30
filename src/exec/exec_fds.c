@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 14:27:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/30 17:51:47 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/30 18:39:30 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ int	save_stdinout(int n) //20220717 ok
 int	dup_filefds(t_cmd *cmd, t_info *info)
 {
 	(void)info;
-	if (cmd->in != NULL || cmd->heredoc != NULL)
+	if (cmd->fdin >= 0 && (cmd->in != NULL || cmd->heredoc != NULL))
 	{
 		if (dup2(cmd->fdin, STDIN_FILENO) == -1)
 			return(ft_return_dup("dup_filefds: fdin: dup2 failed"));
 	}
-	if (cmd->out != NULL || cmd->append != NULL)
+	if (cmd->fdout >=0 && (cmd->out != NULL || cmd->append != NULL))
 	{
 		if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
 			return(ft_return_dup("dup_filefds: fdout: dup2 failed"));

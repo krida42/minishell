@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/30 18:01:10 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/30 20:00:36 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ static int	child(t_cmd *cmd, t_info *info)
 	}
 	close_pipes_files(info->cmd);
 	exit (end_child(info));
-	// close_pipes_files(info->cmd);
 	// free_info(info);
 	// save_stdinout(2);
 	// close_std();
@@ -115,7 +114,7 @@ static void	ft_waitpid(t_info *info)
 	return ;
 }
 
-static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
+static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 {
 	while (cmd != NULL)
 	{
@@ -124,35 +123,35 @@ static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 		if (cmd->pid == -1)
 		{
 			perror("fork failed ");
-			close_pipes(info->cmd);
-			return (errno);
+			close_pipes_files(info->cmd);
+			return ;
 		}
 		else if (cmd->pid == 0)
 			child(cmd, info);
 		cmd = cmd->next;
 	}
-	fprintf(stderr,"execute: pipex: PARENT start L124\t\t\t\terrno is\t%d\n\n", errno);
+	fprintf(stderr,"execute: pipex: PARENT start L134\tg_err %d, errno is\t%d\n\n", g_err, errno);
 	close_pipes_files(info->cmd);
-	fprintf(stderr,"execute: pipex: PARENT end L126\t\t\t\terrno is\t%d\n\n", errno);
+	fprintf(stderr,"execute: pipex: PARENT end L136\tg_err %d, errno is\t%d\n\n", g_err, errno);
 	ignore_signals();
 	ft_waitpid(info);
 	init_signals();
 	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
-	fprintf(stderr,"execute: pipex: PARENT end L126\t\t\t\terrno is\t%d\ninfo->error_n is %d\n", errno, info->error_n);
-	return (info->error_n);
+	fprintf(stderr,"execute: pipex: PARENT end L141\tterrno is\tg_err %d, errno is\t%d\n\n", g_err, errno);
+	return;
 }
 
 int	execute(t_info *info) //20220717 ok
 {
-	fprintf(stderr,"g_err = %d\terrno = %d\texecute L147\n",g_err, errno);
+	fprintf(stderr,"g_err = %d\terrno = %d\texecute L146\n",g_err, errno);
 	if (save_stdinout(1) == 1)
 		return (g_err);
-	fprintf(stderr,"g_err = %d\terrno = %d\texecute L150 after savestdinout\n",g_err, errno);
+	fprintf(stderr,"g_err = %d\terrno = %d\texecute L149 after savestdinout\n",g_err, errno);
 	open_files(info->cmd, info);
-	fprintf(stderr,"g_err = %d\terrno = %d\texecute L152 after open_files\n",g_err, errno);
+	fprintf(stderr,"g_err = %d\terrno = %d\texecute L151 after open_files\n",g_err, errno);
 	if (info->size == 1 && info->cmd->ag && is_builtin(info->cmd) == 1)
 	{
-		if (g_err == 0 && dup_filefds(info->cmd, info) == 0)
+		if (dup_filefds(info->cmd, info) == 0)
 		{
 			close_files(info->cmd);
 			exec_builtin(info->cmd, info);
@@ -161,14 +160,16 @@ int	execute(t_info *info) //20220717 ok
 		return (g_err);
 	}
 	if (open_pipes(info->cmd, info) == 1)
-		return (errno); // to do
-	fprintf(stderr,"g_err = %d\terrno = %d\texecute L170 after opn_pipes\n",g_err, errno);
-	return (pipex(info->cmd, info));
+		return (g_err); // to do
+	fprintf(stderr,"g_err = %d\terrno = %d\texecute L164 after open_pipes\n",g_err, errno);
+	pipex(info->cmd, info);
+	fprintf(stderr,"g_err = %d\terrno = %d\tinfo->erro_n = %d\texecute L166 after pipex\n",g_err, errno, info->error_n);
+	return (g_err);
 }
 
 
 /* execute reserve 20220730*/
-int	execute(t_info *info) //20220717 ok
+// int	execute(t_info *info) //20220717 ok
 // {
 // 	fprintf(stderr,"g_err = %d\terrno = %d\texecute L147\n",g_err, errno);
 // 	if (save_stdinout(1) == 1)
