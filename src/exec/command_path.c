@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 11:59:35 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/30 19:43:43 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/30 23:05:53 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@
 static void	ft_av_cmd_error_msg_check(char **ag) // a voir s il est possble faire differement
 {
 	if (ft_strchr(ag[0], '/') != NULL)
+	{
+		ft_putstr_fd("-minishell: ", 2);
 		perror(ag[0]);
+	}
 	else 
 	{
 		ft_putstr_fd(ag[0], 2);
@@ -100,6 +103,7 @@ static int	is_dir(char *ag)
 	if (fd != -1)
 	{
 		close (fd);
+		ft_putstr_fd("-minishell: ", 2);
 		ft_putstr_fd(ag, 2);
 		ft_putstr_fd(": Is a directory\n", 2);
 		g_err = 126;
