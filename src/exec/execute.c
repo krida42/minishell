@@ -109,8 +109,7 @@ static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 {
 	while (cmd != NULL)
 	{
-		signal(SIGQUIT, SIG_DFL);
-		signal(SIGINT, SIG_DFL);
+		redefault_signals();
 		cmd->pid = fork();
 		if (cmd->pid == -1)
 		{
@@ -126,8 +125,9 @@ static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 		cmd = cmd->next;
 	}
 	close_pipes_files(info->cmd);
-	init_signals();
+	ignore_signals();
 	ft_waitpid(info);
+	init_signals();
 	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
 	return (info->error_n);
 }

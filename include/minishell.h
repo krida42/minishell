@@ -73,6 +73,8 @@ void	ft_puterr(char *s, char *s1, char *s2);
 char	*ft_strpush(char **s, char c); //faire gaffe
 
 void	init_signals(void);
+void	ignore_signals(void);
+void	redefault_signals(void);
 
 int		parse(char *input, t_info *info);
 //

@@ -85,7 +85,7 @@ static void	heredoc_sig(void)
 	struct sigaction	sa;
 
 	ft_bzero(&sa, sizeof(sa));
-	sa.sa_handler= heredoc_handler;
+	sa.sa_handler = heredoc_handler;
 	sigaction(SIGINT, &sa, NULL);
 }
 
@@ -106,8 +106,9 @@ char	*heredoc_start(t_info *info, char *eof)
 		free_info(info);
 		exit(0);
 	}
-	init_signals();
+	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
+	init_signals();
 	if (access(file, F_OK) == 0)
 		return (file);
 	free(file);

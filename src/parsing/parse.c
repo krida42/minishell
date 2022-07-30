@@ -175,7 +175,7 @@ int	parse(char *input, t_info *info)
 	//if (ret == -1)
 	//	return -1;
 	if (ret == 1){
-		desc_info(info);
+		//desc_info(info);
 		execute(info);
 	}
 	else if (ret == 0)
