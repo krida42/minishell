@@ -133,6 +133,11 @@ static int	set_redirect(t_cmd *cmd, char *cursor)
 		exit(printf(RED"Later in return: forbidden input  > or < in last character" WHITE));
 	if (cursor[i] == ' ')
 		i += skip_spaces_i(cursor + i);
+	if (cursor[i] == '|')
+	{
+		ft_putstr_fd(RED"Later in return: minishell: syntax error near unexpected token `|'\n\n"WHITE, 2);
+		exit(9898);
+	}
 	i += set_redirect2(cmd, cursor + i, (int[]) {inout, heredoc, append});
 
 	if (isinset(cursor[i], "\"'"))
