@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/30 12:04:41 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/30 14:40:23 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@
 static int	child(t_cmd *cmd, t_info *info)
 {
 	char	**env_child;
-
-	if (cmd->fdin != -1 && cmd->fdout != -1 && dup_pipefds(cmd, info) != 1
-		&& dup_filefds(cmd, info) != 1)
+	fprintf(stderr,"execute: pipex: CHILD L63\tinfo->error_n is %d\t\t\terrno is\t%d\n", info->error_n, errno);
+	if (cmd->ag && cmd->fdin != -1 && cmd->fdout != -1
+		&& dup_pipefds(cmd, info) != 1 && dup_filefds(cmd, info) != 1)
 	{
 		close_pipes_files(info->cmd);
-		if (cmd->ag[0] != NULL && is_builtin(cmd) == 1)
+		if (cmd->ag[0] && is_builtin(cmd) == 1)
 			info->error_n = exec_builtin(cmd, info);
-		else if (cmd->ag[0] != NULL && (cmd->ag[0] && cmd->ag[0][0]))
+		else if (cmd->ag[0] && (cmd->ag[0] && cmd->ag[0][0]))
 		{
 			env_child = env_env_tostrs(info->env);
 			cmd->cmd_path = command_path(cmd->ag, info->env); // option d'optimisation
@@ -75,7 +75,6 @@ static int	child(t_cmd *cmd, t_info *info)
 				execve(cmd->cmd_path, cmd->ag, env_child); 
 					perror("exec failed ");
 			}
-			// info->error_n = errno;
 			free_strs(env_child);
 		}
 	}
@@ -97,7 +96,7 @@ static void	ft_waitpid(t_info *info)
 		if (WIFEXITED(tmp->status))
 			info->error_n = WEXITSTATUS(tmp->status); // returns the exit status of the child. exit etc
 		else if (WIFSIGNALED(tmp->status))
-			info->error_n = WTERMSIG(tmp->status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
+			info->error_n = 128 + WTERMSIG(tmp->status); //returns the number of the signal that caused the child process to terminate. This macro should only be employed if WIFSIGNALED returned true
 		if (WTERMSIG(tmp->status) == SIGSEGV)
 			ft_puterr("Segmentation fault\n", NULL, NULL);
 		tmp = tmp->next;
@@ -118,17 +117,17 @@ static int	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 			return (errno);
 		}
 		else if (cmd->pid == 0)
-		{
-			// save_stdinout(2);
 			child(cmd, info);
-		}
 		cmd = cmd->next;
 	}
+	fprintf(stderr,"execute: pipex: PARENT start L124\t\t\t\terrno is\t%d\n\n", errno);
 	close_pipes_files(info->cmd);
+	fprintf(stderr,"execute: pipex: PARENT end L126\t\t\t\terrno is\t%d\n\n", errno);
 	ignore_signals();
 	ft_waitpid(info);
 	init_signals();
 	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
+	fprintf(stderr,"execute: pipex: PARENT end L126\t\t\t\terrno is\t%d\ninfo->error_n is %d\n", errno, info->error_n);
 	return (info->error_n);
 }
 
@@ -137,7 +136,7 @@ int	execute(t_info *info) //20220717 ok
 	if (save_stdinout(1) == 1)
 		return (errno);
 	open_files(info->cmd, info);
-	if (info->size == 1 && is_builtin(info->cmd) == 1)
+	if (info->size == 1 && info->cmd->ag && is_builtin(info->cmd) == 1)
 	{
 		if (info->error_n == 1 || dup_filefds(info->cmd, info) == 1)
 		{

@@ -15,8 +15,8 @@ static t_cmd	*new_cmd(char **ag)
 	cmd->pipefd[1] = 1;
 	// cmd->fdin = -1;
 	// cmd->fdout = -1;
-	cmd->pipefd[0] = STDIN_FILENO;
-	cmd->pipefd[1] = STDOUT_FILENO;
+	// cmd->pipefd[0] = STDIN_FILENO;
+	// cmd->pipefd[1] = STDOUT_FILENO;
 	cmd->fdin = STDIN_FILENO;
 	cmd->fdout = STDOUT_FILENO;
 	cmd->status = 0;
