@@ -156,13 +156,18 @@ static int	set_redirect(t_cmd *cmd, char *cursor)
 
 static int	set_token(t_cmd **cmd, char *cursor)
 {
+	int	ret;
 
 	if (!*cmd || *cursor == '|')
 		add_back(cmd, NULL);
 	if  (!isinset(*cursor, "<>|"))
 		set_ag(get_last(*cmd), cursor);
 	else if (isinset(*cursor, "<>"))
-		return (set_redirect(get_last(*cmd), cursor));
+	{
+		ret = set_redirect(get_last(*cmd), cursor);
+		g_err = 2;
+		return (ret);
+	}
 	return (0);
 }
 

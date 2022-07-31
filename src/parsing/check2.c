@@ -21,6 +21,7 @@ int	is_cmd_err(t_info *info)
 		info->error_n = 2;
 		ft_putstr_fd(RED"minishell: syntax error near unexpected token `|'\n\n"
 				WHITE, 2);
+		g_err = 2;
 		return (1);
 	}
 	return (0);
