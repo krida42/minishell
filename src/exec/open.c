@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/30 18:32:49 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/31 19:19:37 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ static void	msg_open(char *str)
 	g_err = 1;
 }
 
-void	open_files(t_cmd *cmd, t_info *info) //20220717 ok
+void	open_files(t_cmd *cmd, t_info *info)
 {
 	(void)info;
-	while(cmd)
+	while (cmd)
 	{
 		if (cmd->in != NULL)
 			cmd->fdin = open(cmd->in, O_RDONLY);
@@ -34,25 +34,17 @@ void	open_files(t_cmd *cmd, t_info *info) //20220717 ok
 			if (unlink(cmd->heredoc) == -1)
 				msg_open(cmd->heredoc);
 		}
-		// {
-		// 	perror(cmd->in);
-		// 	g_err = errno;
-		// }
 		if (cmd->out != NULL)
 			cmd->fdout = open(cmd->out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else if (cmd->append != NULL)
 			cmd->fdout = open(cmd->append, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (cmd->fdout == -1)
 			msg_open(cmd->out);
-		// {
-		// 	perror(cmd->out);
-		// 	g_err = errno;
-		// }
 		cmd = cmd->next;
 	}
 }
 
-int	open_pipes(t_cmd *cmd, t_info *info) //20220717 ok // voir pour free info
+int	open_pipes(t_cmd *cmd, t_info *info)
 {
 	(void)info;
 	while (cmd->next != NULL)

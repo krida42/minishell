@@ -6,17 +6,17 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 22:09:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/28 10:31:55 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/31 20:01:27 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_builtin_pwd(void) //20220717 ok
+int	ft_builtin_pwd(void)
 {
 	char	cwd[PATH_MAX + 1];
 
-	if (getcwd(cwd, sizeof(cwd)) != NULL) // return a null-terminated string containing an absolute pathname that is the current working directory of the calling process.
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
 		ft_putstr_fd(cwd, 1);
 		ft_putstr_fd("\n", 1);
@@ -29,12 +29,12 @@ int	ft_builtin_pwd(void) //20220717 ok
 	return (0);
 }
 
-static int ft_check_n(char *str) //20220717 ok
+static int	ft_check_n(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	if (str[i] == '-') //ft_strcmp(cmd->ag[i],"-n") == 0
+	if (str[i] == '-')
 	{
 		i++;
 		while (str[i])
@@ -49,11 +49,11 @@ static int ft_check_n(char *str) //20220717 ok
 		return (1);
 }
 
-int	ft_builtin_echo(t_cmd *cmd) //20220717 ok
+int	ft_builtin_echo(t_cmd *cmd)
 {
 	int	i;
 	int	j;
-	
+
 	i = 1;
 	j = 0;
 	while (cmd->ag[i] && ft_check_n(cmd->ag[i]) == 0)
@@ -76,11 +76,11 @@ int	ft_builtin_echo(t_cmd *cmd) //20220717 ok
 int	ft_builtin_cd(char **ag, t_env *env)
 {
 	char	*tmp_pwd;
-	
+
 	if (ag[1] != NULL && ag[2] != NULL)
 	{
-			ft_putstr_fd("cd: too many arguments\n", 2);
-			return (1);
+		ft_putstr_fd("cd: too many arguments\n", 2);
+		return (1);
 	}
 	if (ag[1] == NULL)
 	{
@@ -88,7 +88,7 @@ int	ft_builtin_cd(char **ag, t_env *env)
 		if (chdir (tmp_pwd) == -1)
 		{
 			free (tmp_pwd);
-			return (msg_perror_return("cd failed ", 1));
+			return (msg_perror_return("cd: failed ", 1));
 		}
 		free (tmp_pwd);
 	}
@@ -101,37 +101,3 @@ int	ft_builtin_cd(char **ag, t_env *env)
 	env_set_val(env, "PWD", tmp_pwd);
 	return (0);
 }
-// int	ft_builtin_echo(t_cmd *cmd)
-// {
-// 	int	i;
-// 	int	j;
-// 	int	fd;
-	
-// 	i = 1;
-// 	j = 0;
-// 	while (ft_strcmp(cmd->ag[i],"-n") == 0) // revoit le parsing pour -nnnnnnnn
-// 	{
-// 		j = 1;
-// 		i++;
-// 	}
-// 	fd = 1;
-// 	while (cmd->ag[i])
-// 	{
-		
-// 		ft_putstr_fd(cmd->ag[i], fd);
-// 		if (cmd->ag[i + 1] != NULL)
-// 			ft_putstr_fd(" ", fd);
-// 		i++;
-// 	}
-// 	if (j == 0)
-// 		ft_putstr_fd("\n", fd);
-// 	return (0);
-// }
-
-// int	ft_builtin_cd(char *path)
-// {
-// 	if (chdir(path) != 0)
-// 		perror("chdir() :");
-// 	fprintf(stderr, "in cd paht is %s\n", path);
-// 	return (0);
-// }

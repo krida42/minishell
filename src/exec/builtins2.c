@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins2.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/31 19:26:26 by esmirnov          #+#    #+#             */
+/*   Updated: 2022/07/31 20:03:22 by esmirnov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
 long long int	ft_atoi_llong_int(const char *str)
 {
-	int			i;
+	int				i;
 	long long int	sign;
 	long long int	result;
 
@@ -12,7 +23,7 @@ long long int	ft_atoi_llong_int(const char *str)
 	result = 0;
 	if (str[0] == '\0')
 	{
-		perror("empty argument not valid");
+		perror("empty argument not valid: ");
 		g_err = 1;
 		exit(g_err);
 	}
@@ -54,8 +65,8 @@ static int	check_long_int(char *str)
 
 static int	is_num(char *str)
 {
-	int			i;
-	int			j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
@@ -66,7 +77,7 @@ static int	is_num(char *str)
 	}
 	while (str[i])
 	{
-		if (str[i] <'0' || str[i] > '9')
+		if (str[i] < '0' || str[i] > '9')
 			return (0);
 		i++;
 	}
@@ -74,14 +85,11 @@ static int	is_num(char *str)
 		return (0);
 	else if (i - j == 19 && check_long_int(str) == 0)
 		return (0);
-	// fprintf(stderr,"atoi is %ld\n",(ft_atoi_long_int(str)));
 	return (1);
 }
 
 int	ft_builtin_exit(char **ag, t_info *info)
 {
-	// long long int	n;
-	
 	printf("exit\n");
 	if (ag[1] != NULL && is_num(ag[1]) == 0)
 	{
@@ -96,17 +104,11 @@ int	ft_builtin_exit(char **ag, t_info *info)
 		return (1);
 	}
 	else if (ag[1] != NULL)
-	{
 		g_err = (int)ft_atoi_llong_int(ag[1]) % 256;
-		fprintf(stderr,CYAN"g_err after g_err %d; atoi %lld\n"WHITE, g_err, ft_atoi_llong_int(ag[1]));
-	}
 	else
 		g_err = 0;
-	fprintf(stderr,"builtin EXIT g_err after free before exit is %d\n", g_err);
 	free_info(info);
 	save_stdinout(2);
 	close_std();
 	exit (g_err);
-	// else if (cmd->out == NULL)
-	// 	ft_putstr_fd("exit\n", 1);
 }
