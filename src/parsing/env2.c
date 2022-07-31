@@ -20,7 +20,7 @@ void	env_rm(t_env **env, char *name)
 		}
 		cur = cur->next;
 	}
-	exit(printf(RED"Later in return : Trying to remove a variable that doesnt exist !\n"WHITE));
+	exit(printf(RED"DANGER - : Trying to remove a variable that doesnt exist !\n"WHITE));
 }
 
 void	env_set_val(t_env *env, char *name, char *val)

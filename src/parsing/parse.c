@@ -110,16 +110,22 @@ static int	set_redirect(t_cmd *cmd, char *cursor)
 	heredoc = 0;
 	i = 0;
 	if (!isinset(cursor[i], "<>"))
-		exit(printf(RED"DANGER - - set_redirect - - cursor is not on <> character"WHITE));
+		exit(printf(RED"DANGER - - set_redirect - - cursor is not on <> character\n"WHITE));
 	inout = cursor[i] == '>';
 	while (cursor[++i])
 	{
 		if (isinset(cursor[i], "<>") && (append || heredoc))
-			exit(printf(RED"Later in return: forbidden input too much >>> <<<"WHITE));
+		{
+			ft_putstr_fd(RED"minishell: syntax error near unexpected token `<' or `>'\n\n" WHITE, 2);
+			return (-1);
+		}
 		if (isinset(cursor[i], "<>"))
 		{
 			if ((cursor[i] == '<' && cursor[i - 1] != '<') || (cursor[i] == '>' && cursor[i - 1] != '>'))
-				exit(printf(RED"Later in return: forbidden input <>" WHITE));
+			{
+				ft_putstr_fd(RED"minishell: syntax error near unexpected token `<' or `>'\n\n" WHITE, 2);
+				return (-1);
+			}
 			else if (cursor[i] == '<')
 				heredoc = 1;
 			else if (cursor[i] == '>')
@@ -130,13 +136,16 @@ static int	set_redirect(t_cmd *cmd, char *cursor)
 
 	}
 	if (!cursor[i])
-		exit(printf(RED"Later in return: forbidden input  > or < in last character" WHITE));
+	{
+		ft_putstr_fd(RED"minishell: syntax error near unexpected token `<' or `>'\n\n" WHITE, 2);
+		return (-1);
+	}
 	if (cursor[i] == ' ')
 		i += skip_spaces_i(cursor + i);
 	if (cursor[i] == '|')
 	{
-		ft_putstr_fd(RED"Later in return: minishell: syntax error near unexpected token `|'\n\n"WHITE, 2);
-		exit(9898);
+		ft_putstr_fd(RED"minishell: syntax error near unexpected token `|'\n\n"WHITE, 2);
+		return (-1);
 	}
 	i += set_redirect2(cmd, cursor + i, (int[]) {inout, heredoc, append});
 
@@ -170,7 +179,10 @@ int	parse(char *input, t_info *info)
 	tmp = cursor;
 	while (cursor && *cursor)
 	{
-		cursor = cursor + set_token(&cmd, cursor);
+		ret = set_token(&cmd, cursor);
+		if (ret == -1)
+			return (-1);
+		cursor = cursor + ret;
 		cursor = next_token(cursor);
 	}
 	free(tmp);

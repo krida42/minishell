@@ -21,7 +21,7 @@ static char	*get_available_pathname(void)
 	char	*pathname;
 	int		i;
 
-	pathname = strdup("/tmp/heredocm");
+	pathname = ft_strdup("/tmp/heredocm");
 	i = 0;
 	while (access(pathname, F_OK) == 0)
 	{
@@ -47,11 +47,11 @@ static void	heredoc_child(t_env *env, char *file, char *eof)
 	char	*content;
 	char	*tmp;
 
-	content = strdup("");
+	content = ft_strdup("");
 	while (1)
 	{
 		input = readline("heredoc > ");
-		if (!input || strcmp(input, eof) == 0)
+		if (!input || ft_strcmp(input, eof) == 0)
 		{
 			var_expand(env, &content);
 			write_file(file, content);
