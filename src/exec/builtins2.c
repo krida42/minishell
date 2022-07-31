@@ -1,18 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtins2.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/22 17:27:30 by esmirnov          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/07/31 18:05:53 by esmirnov         ###   ########.fr       */
-=======
-/*   Updated: 2022/07/30 22:59:43 by esmirnov         ###   ########.fr       */
->>>>>>> word minishell added to error msg/Is a directory & No such file or directory; atoi modified to int long=>ft_atoi_long_int as static in builtin2
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -112,14 +97,8 @@ int	ft_builtin_exit(char **ag, t_info *info)
 	}
 	else if (ag[1] != NULL)
 	{
-<<<<<<< HEAD
 		g_err = (int)ft_atoi_llong_int(ag[1]) % 256;
 		fprintf(stderr,CYAN"g_err after g_err %d; atoi %lld\n"WHITE, g_err, ft_atoi_llong_int(ag[1]));
-=======
-		// ft_putstr_fd("exit\n", 1);
-		g_err = ft_atoi_long_int(ag[1]) % 256;
-		fprintf(stderr,"g_err after ft_atoi is %d\n", g_err);
->>>>>>> word minishell added to error msg/Is a directory & No such file or directory; atoi modified to int long=>ft_atoi_long_int as static in builtin2
 	}
 	else
 		g_err = 0;
