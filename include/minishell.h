@@ -119,7 +119,7 @@ void	free_info(t_info *info);
 
 int		treat_allcmd(t_info *info);
 
-void	var_expand(t_env *env, char **s, int err);
+void	var_expand(t_env *env, char **s);
 int		clearify_allvar(t_cmd *cmd);
 void	init_allvar(t_env **env, t_cmd *cmd);
 int		is_varinit(char *s);

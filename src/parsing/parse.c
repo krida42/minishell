@@ -182,7 +182,7 @@ int	parse(char *input, t_info *info)
 	//	return -1;
 	if (ret == 1){
 		desc_info(info);
-		execute(info);
+		g_err = execute(info);
 	}
 	else if (ret == 0)
 		desc_info(info);

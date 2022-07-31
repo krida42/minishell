@@ -17,14 +17,14 @@ static int	end_var_i(char *cursor)
 	return (i - 1);
 }
 
-static char	*dup_var_substi(t_env *env, char *cursor, int len, int err)
+static char	*dup_var_substi(t_env *env, char *cursor, int len)
 {
 	char	*name;
 	char	*val;
 
 	name = ft_strndup(cursor + 1, len - 1);
 	if (*name == '?')
-		val = ft_itoa(err);
+		val = ft_itoa(g_err);
 	else
 		val = env_get_val(env, name);
 	if (!val)
@@ -33,14 +33,14 @@ static char	*dup_var_substi(t_env *env, char *cursor, int len, int err)
 	return (val);
 }
 
-static char	*next_part(t_env *env, char *str, char **part, int err)
+static char	*next_part(t_env *env, char *str, char **part)
 {
 	int	end_i;
 
 	if (*str == '$')
 	{
 		end_i = end_var_i(str);
-		*part = dup_var_substi(env, str, end_i + 1, err);
+		*part = dup_var_substi(env, str, end_i + 1);
 		str += end_i;
 		if (*str)
 			str++;
@@ -56,7 +56,7 @@ static char	*next_part(t_env *env, char *str, char **part, int err)
 	return (str);
 }
 
-void	var_expand(t_env *env, char **s, int err)
+void	var_expand(t_env *env, char **s)
 {
 	char	*str;
 	char	*joined;
@@ -69,7 +69,7 @@ void	var_expand(t_env *env, char **s, int err)
 	joined = ft_strdup("");
 	while (*str)
 	{
-		str = next_part(env, str, &part, err);
+		str = next_part(env, str, &part);
 		tmp = joined;
 		joined = ft_strjoin(joined, part);
 		free(part);

@@ -16,7 +16,7 @@ static void	treat_input(char *input, t_info *info)
 	else
 		parse(input, info);
 	if (err)
-		info->error_n = 2;
+		g_err = 2;
 }
 
 int	m_prompt(const char *prompt, char **envp)
