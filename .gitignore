@@ -3,6 +3,7 @@ obj/
 Session.vim
 minishell
 tags
+.vscode/
 #
 #
 # Prerequisites

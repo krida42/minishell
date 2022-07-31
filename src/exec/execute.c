@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/30 20:00:36 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/31 16:31:57 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ static void	pipex(t_cmd *cmd, t_info *info) //20220717 ok
 	init_signals();
 	save_stdinout(2); // doit être ici car il n'y a qu'1 return à la fin dans l'execute
 	fprintf(stderr,"execute: pipex: PARENT end L141\tterrno is\tg_err %d, errno is\t%d\n\n", g_err, errno);
-	return;
+	return ;
 }
 
 int	execute(t_info *info) //20220717 ok
