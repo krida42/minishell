@@ -6,13 +6,12 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 15:06:01 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/01 17:06:22 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/07/31 19:42:12 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// count nbr of words in the initial string
 static int	ft_word_count(char const *s, char c)
 {
 	int	i;
@@ -45,7 +44,6 @@ static void	*ft_tab_free(char **tab, int word_num)
 	return (NULL);
 }
 
-// memory allocation for tab
 static char	**ft_memory_allocation(char **tab, char const*s, char c, int size)
 {
 	int	i;
