@@ -192,6 +192,7 @@ int	parse(char *input, t_info *info)
 	ret = treat_allcmd(info);
 	//if (ret == -1)
 	//	return -1;
+	printf("ret : %d\n", ret);
 	if (ret == 1){
 		desc_info(info);
 		g_err = execute(info);

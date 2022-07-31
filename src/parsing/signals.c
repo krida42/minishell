@@ -8,6 +8,7 @@ static void	handle_sig(int sig)
 {
 	if (sig == SIGINT)
 	{
+		g_err = 130;
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);

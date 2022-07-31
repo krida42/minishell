@@ -18,7 +18,7 @@ static void	treat_input(char *input, t_info *info)
 		if (parse(input, info) == -1 && ++err)
 			reset_info(info);
 	}
-	if (err)
+	if (err && g_err != 130)
 		g_err = 2;
 }
 
