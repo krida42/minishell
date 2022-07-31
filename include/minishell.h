@@ -9,6 +9,7 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <unistd.h>
+# include <limits.h>
 
 # include <errno.h>
 
