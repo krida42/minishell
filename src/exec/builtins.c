@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 22:09:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/08/01 14:11:19 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/08/01 16:07:34 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_builtin_pwd(void)
 	}
 	else
 	{
-		perror("pwd failed ");
+		perror("minishell: pwd failed ");
 		return (1);
 	}
 	return (0);
@@ -79,7 +79,7 @@ int	ft_builtin_cd(char **ag, t_env *env)
 
 	if (ag[1] != NULL && ag[2] != NULL)
 	{
-		ft_putstr_fd("cd: too many arguments\n", 2);
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		return (1);
 	}
 	if (ag[1] == NULL)
@@ -88,13 +88,13 @@ int	ft_builtin_cd(char **ag, t_env *env)
 		if (chdir (tmp_pwd) == -1)
 		{
 			free (tmp_pwd);
-			return (msg_perror_return("cd: failed ", 1));
+			return (msg_perror_return("minishell: cd: failed ", 1));
 		}
 		free (tmp_pwd);
 	}
 	else if (chdir (ag[1]) == -1)
 	{
-		ft_putstr_fd("cd: ", 2);
+		ft_putstr_fd("minishell: cd: ", 2);
 		return (msg_perror_return(ag[1], 1));
 	}
 	tmp_pwd = getenv("PWD");
