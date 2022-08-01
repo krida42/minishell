@@ -103,10 +103,7 @@ static int	treat_allparam(t_env *env, t_cmd *cmd, t_info *info)
 	{
 		heredoc_path = heredoc_start(info, cmd->heredoc);
 		if (!heredoc_path)
-		{
-			g_err = 130;
 			return (-1);
-		}
 		free(cmd->heredoc);
 		cmd->heredoc = heredoc_path;
 	}
