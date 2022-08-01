@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/08/01 15:54:07 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/08/01 21:33:38 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	child(t_cmd *cmd, t_info *info)
 			if (cmd->cmd_path != NULL)
 			{
 				execve(cmd->cmd_path, cmd->ag, env_child);
-				perror("exec failed ");
+				perror(cmd->ag[0]);
 				g_err = errno;
 			}
 			free_strs(env_child);
@@ -97,7 +97,8 @@ int	execute(t_info *info)
 	if (save_stdinout(1) == 1)
 		return (g_err);
 	open_files(info->cmd);
-	if (info->size == 1 && info->cmd->ag && is_builtin(info->cmd) == 1)
+	if (info->size == 1 && g_err == 0 && info->cmd->ag
+		&& is_builtin(info->cmd) == 1)
 	{
 		if (dup_filefds(info->cmd) == 0)
 		{

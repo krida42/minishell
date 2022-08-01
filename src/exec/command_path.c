@@ -6,18 +6,25 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 11:59:35 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/08/01 16:06:38 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/08/01 21:50:04 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	ft_av_cmd_error_msg_check(char **ag)
+static void	ft_av_cmd_error_msg_check(char **ag, char **pathtab)
 {
-	if (ft_strchr(ag[0], '/') != NULL)
+	if (pathtab == NULL)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		perror(ag[0]);
+		g_err = 127;
+	}	
+	else if (ft_strchr(ag[0], '/') != NULL)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		perror(ag[0]);
+		g_err = 127;
 	}
 	else
 	{
@@ -105,7 +112,9 @@ char	*command_path(char **ag, t_env *env)
 	}
 	if (check_access(ag[0], pathtab, X_OK) == 1)
 		return (ag[0]);
+	// ft_free_tab(pathtab);
+	// ft_av_cmd_error_msg_check(ag);
+	ft_av_cmd_error_msg_check(ag, pathtab);
 	ft_free_tab(pathtab);
-	ft_av_cmd_error_msg_check(ag);
 	return (NULL);
 }
