@@ -53,7 +53,7 @@ int	b_export(t_info *info, char **args)
 		else if (is_validid(*args))
 			export_identifier(&info->env, *args);
 		else
-			ft_puterr(RED"export: ", *args, ": not a valid identifier\n"WHITE);
+			ft_puterr(RED"minishell: export: `", *args, "': not a valid identifier\n"WHITE);
 		args++;
 	}
 	return (0);
