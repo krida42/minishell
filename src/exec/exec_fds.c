@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 14:27:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/31 19:58:58 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/08/01 14:26:58 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,8 @@ int	save_stdinout(int n)
 	return (0);
 }
 
-int	dup_filefds(t_cmd *cmd, t_info *info)
+int	dup_filefds(t_cmd *cmd)
 {
-	(void)info;
 	if (cmd->fdin >= 0 && (cmd->in != NULL || cmd->heredoc != NULL))
 	{
 		if (dup2(cmd->fdin, STDIN_FILENO) == -1)
@@ -63,9 +62,8 @@ int	dup_filefds(t_cmd *cmd, t_info *info)
 	return (0);
 }
 
-int	dup_pipefds(t_cmd *cmd, t_info *info)
+int	dup_pipefds(t_cmd *cmd)
 {
-	(void)info;
 	if (cmd->prev != NULL && cmd->in == NULL && cmd->heredoc == NULL)
 	{
 		if (dup2(cmd->prev->pipefd[0], STDIN_FILENO) == -1)
