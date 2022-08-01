@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 11:59:35 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/08/01 16:06:38 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/08/01 23:03:47 by kisikaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ static char	**path_tab(t_env *env)
 
 	pathtab = NULL;
 	path_tmp = env_get_val(env, "PATH");
+	if (!path_tmp)
+		path_tmp = env_get_val(env, "PWD");
 	if (path_tmp != NULL)
 	{
 		pathtab = ft_split_pipex((char const *)path_tmp, ':');
