@@ -6,11 +6,12 @@
 /*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 20:36:35 by kisikaya          #+#    #+#             */
-/*   Updated: 2022/08/01 20:37:23 by kisikaya         ###   ########.fr       */
+/*   Updated: 2022/08/01 20:58:08 by kisikaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 
 int	parse_iter(char *cursor, char *tmp, t_cmd **cmd)
 {
@@ -51,6 +52,10 @@ int	parse(char *input, t_info *info)
 		return (-2);
 	ret = treat_allcmd(info);
 	if (ret == 1)
+	{
 		g_err = execute(info);
+		if (g_err == 130)
+			printf("\n");
+	}
 	return (ret);
 }
