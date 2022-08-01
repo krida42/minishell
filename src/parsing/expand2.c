@@ -12,6 +12,8 @@ static int	end_var_i(char *cursor)
 	i = 1;
 	if (cursor[i] == '?')
 		return (i);
+	else if (!(ft_isalnum(cursor[i]) || cursor[i] == '_'))
+		return (-1);
 	while(cursor[i] && (ft_isalnum(cursor[i]) || cursor[i] == '_'))
 		i++;
 	return (i - 1);
@@ -40,7 +42,10 @@ static char	*next_part(t_env *env, char *str, char **part)
 	if (*str == '$')
 	{
 		end_i = end_var_i(str);
-		*part = dup_var_substi(env, str, end_i + 1);
+		if (end_i == -1 && end_i++)
+			*part = ft_strdup("$");
+		else
+			*part = dup_var_substi(env, str, end_i + 1);
 		str += end_i;
 		if (*str)
 			str++;
