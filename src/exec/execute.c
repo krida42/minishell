@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/08/01 14:56:10 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/08/01 15:54:07 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,9 @@ static void	pipex(t_cmd *cmd, t_info *info)
 		cmd->pid = fork();
 		if (cmd->pid == -1)
 		{
-			perror("fork failed ");
+			perror("minishell: fork failed ");
 			close_pipes_files(info->cmd);
+			g_err = errno;
 			return ;
 		}
 		else if (cmd->pid == 0)
@@ -101,7 +102,7 @@ int	execute(t_info *info)
 		if (dup_filefds(info->cmd) == 0)
 		{
 			close_files(info->cmd);
-			exec_builtin(info->cmd, info);
+			g_err = exec_builtin(info->cmd, info);
 		}
 		save_stdinout(2);
 		return (g_err);

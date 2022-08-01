@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 11:59:35 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/08/01 13:25:54 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/08/01 16:06:38 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	ft_av_cmd_error_msg_check(char **ag)
 {
 	if (ft_strchr(ag[0], '/') != NULL)
 	{
-		ft_putstr_fd("-minishell: ", 2);
+		ft_putstr_fd("minishell: ", 2);
 		perror(ag[0]);
 	}
 	else

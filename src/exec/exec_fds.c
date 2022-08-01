@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 14:27:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/08/01 14:26:58 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/08/01 15:26:26 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static int	ft_return_dup(char *str)
 {
+	ft_putstr_fd("minishell: ", 2);
 	perror(str);
 	g_err = errno;
 	return (1);
