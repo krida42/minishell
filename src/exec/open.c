@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/31 19:19:37 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/08/01 14:36:18 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,8 @@ static void	msg_open(char *str)
 	g_err = 1;
 }
 
-void	open_files(t_cmd *cmd, t_info *info)
+void	open_files(t_cmd *cmd)
 {
-	(void)info;
 	while (cmd)
 	{
 		if (cmd->in != NULL)
@@ -44,9 +43,8 @@ void	open_files(t_cmd *cmd, t_info *info)
 	}
 }
 
-int	open_pipes(t_cmd *cmd, t_info *info)
+int	open_pipes(t_cmd *cmd)
 {
-	(void)info;
 	while (cmd->next != NULL)
 	{
 		if (pipe(cmd->pipefd) == -1)

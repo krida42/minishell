@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/31 19:26:26 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/31 20:03:22 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/08/01 14:47:41 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,6 @@ long long int	ft_atoi_llong_int(const char *str)
 	i = 0;
 	sign = 1;
 	result = 0;
-	if (str[0] == '\0')
-	{
-		perror("empty argument not valid: ");
-		g_err = 1;
-		exit(g_err);
-	}
 	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
 		i++;
 	if (str[i] == '-' || str [i] == '+')

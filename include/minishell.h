@@ -140,8 +140,8 @@ char	*heredoc_start(t_info *info, char *eof);
 
 int		execute(t_info *info);
 int		save_stdinout(int n);
-int		dup_filefds(t_cmd *cmd, t_info *info);
-int		dup_pipefds(t_cmd *cmd, t_info *info);
+int		dup_filefds(t_cmd *cmd);
+int		dup_pipefds(t_cmd *cmd);
 // char	*command_path(char **ag, t_info *info);
 char	*command_path(char **ag, t_env *env);
 void	ft_path(char **env, t_info *info);
@@ -156,9 +156,9 @@ int		ft_builtin_echo(t_cmd *cmd);
 int		ft_builtin_exit(char **ag, t_info *info);
 void	msg_close_free_exit(char *str, t_info *info); // p.e to be deleted
 void	msg_close_return(char *str, t_info *info);
-void	open_files(t_cmd *cmd, t_info *info);
+void	open_files(t_cmd *cmd);
 // int		open_cmd_files(t_cmd *cmd, t_info *info);
-int		open_pipes(t_cmd *cmd, t_info *info);
+int		open_pipes(t_cmd *cmd);
 void	close_pipes(t_cmd *cmd);
 void	close_files(t_cmd *cmd); //p.e to be deleted
 void	close_cmd_files(t_cmd *cmd);

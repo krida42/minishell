@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 11:59:35 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/31 20:00:34 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/08/01 13:25:54 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	is_dir(char *ag)
 {
 	int	fd;
 
-	fd = open(ag, O_DIRECTORY | O_CLOEXEC);
+	fd = open(ag, O_DIRECTORY);
 	if (fd != -1)
 	{
 		close (fd);
