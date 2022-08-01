@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 22:09:07 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/08/01 16:07:34 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/08/02 01:31:22 by kisikaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,10 @@ int	ft_builtin_echo(t_cmd *cmd)
 int	ft_builtin_cd(char **ag, t_env *env)
 {
 	char	*tmp_pwd;
+	char	buf[1024];
 
 	if (ag[1] != NULL && ag[2] != NULL)
-	{
-		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
-		return (1);
-	}
+		return (err_msg("minishell: cd: too many arguments\n") * -1);
 	if (ag[1] == NULL)
 	{
 		tmp_pwd = env_get_val(env, "HOME");
@@ -97,7 +95,7 @@ int	ft_builtin_cd(char **ag, t_env *env)
 		ft_putstr_fd("minishell: cd: ", 2);
 		return (msg_perror_return(ag[1], 1));
 	}
-	tmp_pwd = getenv("PWD");
+	tmp_pwd = getcwd(buf, sizeof(buf));
 	env_set_val(env, "PWD", tmp_pwd);
 	return (0);
 }

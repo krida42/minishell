@@ -6,7 +6,7 @@
 /*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 19:25:30 by kisikaya          #+#    #+#             */
-/*   Updated: 2022/08/01 19:25:31 by kisikaya         ###   ########.fr       */
+/*   Updated: 2022/08/02 01:45:45 by kisikaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	init_signals(void)
 	sa.sa_handler = handle_sig;
 	sigaction(SIGINT, &sa, NULL);
 	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
 }
 
 void	ignore_signals(void)

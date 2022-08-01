@@ -6,7 +6,7 @@
 /*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 20:39:46 by kisikaya          #+#    #+#             */
-/*   Updated: 2022/08/01 20:39:47 by kisikaya         ###   ########.fr       */
+/*   Updated: 2022/08/02 01:29:18 by kisikaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void	redefault_signals(void);
 
 int		end_token_i(char *input);
 int		set_redirect(t_cmd *cmd, char *cursor);
+int		err_msg(char *s);
 
 char	*next_token(char *input);
 int		set_token(t_cmd **cmd, char *cursor);

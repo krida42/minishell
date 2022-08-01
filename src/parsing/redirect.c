@@ -6,14 +6,14 @@
 /*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 19:34:43 by kisikaya          #+#    #+#             */
-/*   Updated: 2022/08/01 19:34:47 by kisikaya         ###   ########.fr       */
+/*   Updated: 2022/08/02 01:28:34 by kisikaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-static int	err_msg(char *s)
+int	err_msg(char *s)
 {
 	ft_putstr_fd(s, 2);
 	return (-1);
