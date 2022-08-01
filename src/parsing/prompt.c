@@ -4,10 +4,16 @@
 
 static void	treat_input(char *input, t_info *info)
 {
-	if (parse(input, info) < 0)
+	int	err;
+
+	err = 0;
+	if (check_unclosed(input) && ++err)
+		ft_putstr_fd(RED"minishell: syntax error: unclosed quotes"
+				" forbidden !\n\n"WHITE, 2);
+	if (err)
+		g_err = 2;
+	else if (parse(input, info) < 0)
 		reset_info(info);
-	//if (err && g_err != 130)
-	//	g_err = 2;
 }
 
 int	m_prompt(const char *prompt, char **envp)
