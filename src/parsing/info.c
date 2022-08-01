@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   info.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 20:01:41 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 20:01:42 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*t_info	*init_info(t_cmd *cmd, char **envp)
@@ -10,7 +22,6 @@
 	info->size = cmd_size(cmd);
 	return (info);
 }*/
-
 
 t_info	*init_info(char **envp)
 {
@@ -36,11 +47,9 @@ void	reset_info(t_info *info)
 	set_cmd(info, NULL);
 }
 
-
 void	free_info(t_info *info)
 {
 	free_allcmd(info->cmd);
 	free_allenv(info->env);
 	free(info);
 }
-

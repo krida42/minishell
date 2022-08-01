@@ -1,9 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   desc.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 19:26:27 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 19:26:28 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-#include <stdio.h>
+
 void	desc_token(char **strs)
 {
-	//printf("yo : %s\n", strs[0]);
-
 	if (!strs)
 		printf("no token_ag strs NULL\n");
 	while (strs && *strs)
@@ -28,7 +38,6 @@ void	desc_allcmd(t_cmd *cmd)
 		if (cmd->append)
 			printf("append : %s\n", cmd->append);
 		cmd = cmd->next;
-		//printf("- - - -\n");
 		printf("\n");
 	}
 	printf("- - - - - - - - -\n");
@@ -36,20 +45,10 @@ void	desc_allcmd(t_cmd *cmd)
 
 void	desc_info(t_info *info)
 {
-//	int	i;
-
-//	i = -1;
 	if (!info)
 		exit(printf(RED"info is NULL"WHITE));
 	printf(CYAN"INFO DESCRIBING\n***********************************\n\n"WHITE);
 	desc_allcmd(info->cmd);
-//	printf("\ninfo->env : \n");
-//	char **env = env_env_tostrs(info->env);
-//	while (env[++i])
-//		printf("%s\n", env[i]);
 	printf("\n\ninfo->size : %d\n", info->size);
-	// printf("PATH : %s\n", env_get_ptr(info->env, "PATH")->val);
 	printf(CYAN"\n*********************************************"WHITE"\n");
-	//free_strs(env);
-
 }

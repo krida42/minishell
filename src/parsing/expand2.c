@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand2.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 20:02:54 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 20:02:55 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "minishell.h"
 #include <stdio.h>
@@ -8,13 +20,14 @@ static int	end_var_i(char *cursor)
 	int		i;
 
 	if (*cursor != '$')
-		exit(printf(RED"DANGER -- dup_var_substi - trying to get val while expanding but cursor not on $\n"WHITE));
+		exit(printf(RED"DANGER -- dup_var_substi - trying to get val while "
+				"expanding but cursor not on $\n"WHITE));
 	i = 1;
 	if (cursor[i] == '?')
 		return (i);
 	else if (!(ft_isalnum(cursor[i]) || cursor[i] == '_'))
 		return (-1);
-	while(cursor[i] && (ft_isalnum(cursor[i]) || cursor[i] == '_'))
+	while (cursor[i] && (ft_isalnum(cursor[i]) || cursor[i] == '_'))
 		i++;
 	return (i - 1);
 }
@@ -50,7 +63,7 @@ static char	*next_part(t_env *env, char *str, char **part)
 		if (*str)
 			str++;
 	}
-	else 
+	else
 	{
 		end_i = 0;
 		while (str[end_i] && str[end_i] != '$')

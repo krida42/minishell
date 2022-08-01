@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   prompt.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 20:00:49 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 20:00:50 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "minishell.h"
 #include <readline/readline.h>
@@ -10,7 +22,7 @@ static void	treat_input(char *input, t_info *info)
 	err = 0;
 	if (check_unclosed(input) && ++err)
 		ft_putstr_fd(RED"minishell: syntax error: unclosed quotes"
-				" forbidden !\n\n"WHITE, 2);
+			" forbidden !\n\n"WHITE, 2);
 	if (err)
 		g_err = 2;
 	else if (parse(input, info) < 0)
@@ -28,15 +40,8 @@ int	m_prompt(const char *prompt, char **envp)
 	{
 		reset_info(info);
 		input = readline(prompt);
-		if (!input)//|| ft_strstr(input, "exit") == input)
-		{
+		if (!input)
 			input = ft_strdup("exit");
-			//rl_clear_history();
-			//close_std();
-			//printf("exit\n");
-			//free_info(info);
-			//return (free(input), 0);
-		}
 		add_history(input);
 		treat_input(input, info);
 	}

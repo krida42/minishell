@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 19:42:04 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 19:58:43 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "minishell.h"
 #include <stdio.h>
@@ -53,10 +65,12 @@ char	**strs_remove(char ***strs, int index)
 	i = -1;
 	k = 0;
 	while ((*strs)[++i])
+	{
 		if (i != index)
 			new_strs[k++] = (*strs)[i];
 		else
 			free((*strs)[i]);
+	}
 	new_strs[k] = NULL;
 	free(*strs);
 	*strs = new_strs;
@@ -71,14 +85,15 @@ int	isinset(char c, const char *set)
 	return (0);
 }
 
-void	free_strs(char	**strs)
+char	**free_strs(char	**strs)
 {
 	int	i;
 
 	i = -1;
 	if (!strs)
-		return ;
+		return (NULL);
 	while (strs[++i])
 		free(strs[i]);
 	free(strs);
+	return (NULL);
 }

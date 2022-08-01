@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   var.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 19:59:39 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 19:59:40 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "minishell.h"
 #include <stdio.h>
@@ -20,7 +32,7 @@ int	is_varinit(char *s)
 	while (*s)
 	{
 		if (!(ft_isalnum(*s) || *s == '_'))
-			break;
+			break ;
 		s++;
 	}
 	if (*s == '=')
@@ -48,22 +60,20 @@ int	clearify_allvar(t_cmd *cmd)
 	i = -1;
 	if (!ag)
 		return (1);
-	//Les cas ou l'initialiasaiotn ' de variable est annule
 	if (!are_allvarinit(ag) || cmd->next || cmd->prev)
+	{
 		while (ag[++i])
 		{
 			if (!is_varinit(ag[i]))
-				break;
+				break ;
 			strs_remove(&ag, i);
 			i = -1;
 		}
-	else
-		return (0); //que des variable
-	if (!ag[0])
-	{
-		free_strs(ag);
-		ag = NULL;
 	}
+	else
+		return (0);
+	if (!ag[0])
+		ag = free_strs(ag);
 	cmd->ag = ag;
 	return (1);
 }

@@ -1,9 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 20:04:54 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 20:07:00 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/wait.h>
-#include <unistd.h>
 
 static char	*join_name_nb(char *name, int nb)
 {
@@ -36,7 +43,7 @@ static void	write_file(char *file, char *content)
 {
 	int		fd;
 
-	fd = open(file, O_WRONLY | O_CREAT,  0644);
+	fd = open(file, O_WRONLY | O_CREAT, 0644);
 	write(fd, content, strlen(content));
 	close(fd);
 }
@@ -57,7 +64,6 @@ static void	heredoc_child(t_env *env, char *file, char *eof)
 			write_file(file, content);
 			free(input);
 			free(content);
-			//return (file);
 			return ;
 		}
 		input = ft_strpush(&input, '\n');
@@ -66,41 +72,19 @@ static void	heredoc_child(t_env *env, char *file, char *eof)
 		free(tmp);
 		free(input);
 	}
-
-}
-
-static void	heredoc_handler(int sig)
-{
-	(void)sig;
-
-	if (sig == SIGINT)
-	{
-		write(1, "\n", 2);
-		exit(130);
-	}
-
-}
-static void	heredoc_sig(void)
-{
-	struct sigaction	sa;
-
-	ft_bzero(&sa, sizeof(sa));
-	sa.sa_handler = heredoc_handler;
-	sigaction(SIGINT, &sa, NULL);
 }
 
 char	*heredoc_start(t_info *info, char *eof)
 {
 	char	*file;
 	pid_t	pid;
-	int	status;
+	int		status;
 
 	file = get_available_pathname();
 	heredoc_sig();
 	pid = fork();
 	if (pid == 0)
 	{
-
 		heredoc_child(info->env, file, eof);
 		free(file);
 		free_info(info);

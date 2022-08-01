@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lst.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 19:27:01 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 19:27:02 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static t_cmd	*new_cmd(char **ag)
@@ -13,10 +25,6 @@ static t_cmd	*new_cmd(char **ag)
 	cmd->cmd_path = NULL;
 	cmd->pipefd[0] = 0;
 	cmd->pipefd[1] = 1;
-	// cmd->fdin = -1;
-	// cmd->fdout = -1;
-	// cmd->pipefd[0] = STDIN_FILENO;
-	// cmd->pipefd[1] = STDOUT_FILENO;
 	cmd->fdin = STDIN_FILENO;
 	cmd->fdout = STDOUT_FILENO;
 	cmd->status = 0;

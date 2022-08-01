@@ -1,37 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check2.c                                           :+:      :+:    :+:   */
+/*   heredoc2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/01 19:12:36 by kisikaya          #+#    #+#             */
-/*   Updated: 2022/08/01 19:13:18 by kisikaya         ###   ########.fr       */
+/*   Created: 2022/08/01 20:07:12 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 20:07:12 by kisikaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"minishell.h"
+#include "minishell.h"
 
-static int	are_void_cmd(t_cmd *cmd)
+void	heredoc_handler(int sig)
 {
-	while (cmd)
+	(void)sig;
+	if (sig == SIGINT)
 	{
-		if (!(cmd->ag || cmd->in || cmd->out || cmd->append || cmd->heredoc))
-			return (1);
-		cmd = cmd->next;
+		write(1, "\n", 2);
+		exit(130);
 	}
-	return (0);
 }
 
-int	is_cmd_err(t_info *info)
+void	heredoc_sig(void)
 {
-	if (are_void_cmd(info->cmd))
-	{
-		info->error_n = 2;
-		ft_putstr_fd(RED"minishell: syntax error near unexpected token `|'\n\n"
-			WHITE, 2);
-		g_err = 2;
-		return (1);
-	}
-	return (0);
+	struct sigaction	sa;
+
+	ft_bzero(&sa, sizeof(sa));
+	sa.sa_handler = heredoc_handler;
+	sigaction(SIGINT, &sa, NULL);
 }

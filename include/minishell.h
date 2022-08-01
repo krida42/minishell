@@ -10,6 +10,7 @@
 # include <signal.h>
 # include <unistd.h>
 # include <limits.h>
+# include <stddef.h>
 
 # include <errno.h>
 
@@ -24,22 +25,21 @@
 extern int	g_err;
 
 typedef struct s_cmd {
-	char	**ag;
-	char	*in;
-	char	*out;
-	char	*append;
-	char	*heredoc;
-	char	*cmd_path; // execution: pour execve
-	int		pipefd[2]; // execution: pour pipe
-	int		fdin; // execution: pour entrée
-	int		fdout; // execution: pour sortie
-	int		status;
-	int		error_n;
-	pid_t	pid; // execution: pour fork
+	char			**ag;
+	char			*in;
+	char			*out;
+	char			*append;
+	char			*heredoc;
+	char			*cmd_path; // execution: pour execve
+	int				pipefd[2]; // execution: pour pipe
+	int				fdin; // execution: pour entrée
+	int				fdout; // execution: pour sortie
+	int				status;
+	int				error_n;
+	pid_t			pid; // execution: pour fork
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
-
 
 typedef struct s_env {
 	char			*name;
@@ -62,11 +62,11 @@ char	*ft_strstr(const char *big, const char *little);
 int		ft_strchri(const char *s, char c);
 int		ft_strcmp(char *s1, char *s2);
 char	*ft_strndup(const char *s, size_t n);
-int		ft_isblank(char c); 
+int		ft_isblank(char c);
 
 int		strs_len(char **strs);
 char	**strs_insert(char ***strs, const char *s);
-void	free_strs(char	**strs);
+char	**free_strs(char	**strs);
 int		isinset(char c, const char *set);
 char	**strs_remove(char ***strs, int index);
 
@@ -79,7 +79,6 @@ void	init_signals(void);
 void	ignore_signals(void);
 void	redefault_signals(void);
 
-
 int		end_token_i(char *input);
 int		set_redirect(t_cmd *cmd, char *cursor);
 
@@ -89,7 +88,7 @@ void	set_quote_state(char c, int *squote, int *dquote);
 int		check_unclosed(char *input);
 int		check_special(char *input);
 
-int	is_cmd_err(t_info *info);
+int		is_cmd_err(t_info *info);
 
 t_cmd	*get_first(t_cmd *cmd); // no tested
 t_cmd	*get_last(t_cmd *cmd); // no tested
@@ -102,7 +101,6 @@ void	free_allcmd(t_cmd *cmd);
 void	desc_token(char **strs);
 void	desc_allcmd(t_cmd *cmd);
 void	desc_info(t_info *info);
-
 
 void	env_add(t_env **env, char *name, char *val, int is_export);
 void	env_rm(t_env **env, char *name);
@@ -121,7 +119,7 @@ void	set_cmd(t_info *info, t_cmd *cmd);
 void	reset_info(t_info *info);
 void	free_info(t_info *info);
 
-
+int		treat_allparam(t_env *env, t_cmd *cmd, t_info *info);
 int		treat_allcmd(t_info *info);
 
 void	var_expand(t_env *env, char **s);
@@ -135,8 +133,9 @@ int		b_export(t_info *info, char **args);
 int		b_env(t_info *info, char **args);
 int		b_unset(t_info *info, char **args);
 
-
 char	*heredoc_start(t_info *info, char *eof);
+void	heredoc_handler(int sig);
+void	heredoc_sig(void);
 
 //  - - - - - - - - - - - - EXEC - - - - - - - - - - - - - - - - - -
 //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -153,7 +152,7 @@ void	ft_path(char **env, t_info *info);
 char	**ft_split_pipex(char const *s, char c);
 int		is_heredoc(char *heredoc, t_cmd *cmd, t_info *info); // to be deleted ?
 int		is_builtin(t_cmd *cmd);
-int		exec_builtin(t_cmd  *cmd, t_info *info);
+int		exec_builtin(t_cmd *cmd, t_info *info);
 int		ft_builtin_cd(char **ag, t_env *env);
 int		ft_builtin_pwd(void);
 int		ft_builtin_echo(t_cmd *cmd);

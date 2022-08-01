@@ -1,7 +1,4 @@
-#include "libft.h"
 #include "minishell.h"
-#include <stdio.h>
-#include <string.h>
 
 static char	*next_token(char *input)
 {
@@ -19,7 +16,7 @@ static char	*next_token(char *input)
 		else if (input[i] == '"' && !squote)
 			dquote = !dquote;
 		if (isinset(input[i], "<>| \t") && !(dquote || squote))
-			break;
+			break ;
 	}
 	if (input[i] == '|' && i == 0)
 		i++;
@@ -36,7 +33,6 @@ int	end_token_i(char *input)
 
 	dquote = 0;
 	squote = 0;
-
 	i = -1;
 	while (input[++i])
 	{
@@ -62,15 +58,13 @@ static int	set_ag(t_cmd *cmd, char *cursor)
 	return (0);
 }
 
-
-
 static int	set_token(t_cmd **cmd, char *cursor)
 {
 	int	ret;
 
 	if (!*cmd || *cursor == '|')
 		add_back(cmd, NULL);
-	if  (!isinset(*cursor, "<>|"))
+	if (!isinset(*cursor, "<>|"))
 		set_ag(get_last(*cmd), cursor);
 	else if (isinset(*cursor, "<>"))
 	{
@@ -89,7 +83,6 @@ int	parse(char *input, t_info *info)
 	int		ret;
 
 	cmd = NULL;
-	//cursor = input;
 	cursor = ft_strtrim(input, " \t");
 	tmp = cursor;
 	free(input);

@@ -1,5 +1,16 @@
-#include "libft.h"
-#include <stddef.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lib_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 20:07:42 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 20:09:09 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 int	ft_strchri(const char *s, char c)
 {
@@ -50,7 +61,7 @@ char	*ft_strndup(const char *s, size_t n)
 	return (cpy);
 }
 
-int		ft_isblank(char c)
+int	ft_isblank(char c)
 {
 	return (c == ' ' || c == '\t');
 }

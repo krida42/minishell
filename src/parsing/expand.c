@@ -1,6 +1,16 @@
-#include "libft.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 19:14:50 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 19:23:24 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-#include <stdio.h>
 
 char	*next_part(char *s)
 {
@@ -14,17 +24,16 @@ char	*next_part(char *s)
 	while (s[i])
 	{
 		if (delimiter == '\'' && s[i] == '\'')
-			break;
+			break ;
 		else if (delimiter == '"' && s[i] == '"')
-			break;
+			break ;
 		else if (!isinset(delimiter, "\"'") && isinset(s[i], "\"'"))
-			break;
+			break ;
 		i++;
 	}
 	if (isinset(delimiter, "\"'"))
 		i++;
 	return (s + i);
-
 }
 
 char	*dup_part(char *s)
@@ -41,14 +50,13 @@ char	*dup_part(char *s)
 	while (s[i])
 	{
 		if (delimiter == '\'' && s[i] == '\'')
-			break;
+			break ;
 		else if (delimiter == '"' && s[i] == '"')
-			break;
+			break ;
 		else if (!isinset(delimiter, "\"'") && isinset(s[i], "\"'"))
-			break;
+			break ;
 		i++;
 	}
-
 	return (ft_strndup(s, i));
 }
 
@@ -84,7 +92,7 @@ static char	*manipulate_param(t_env *env, char *s)
 	return (concatened);
 }
 
-static int	treat_allparam(t_env *env, t_cmd *cmd, t_info *info)
+int	treat_allparam(t_env *env, t_cmd *cmd, t_info *info)
 {
 	char	**ag;
 	char	*heredoc_path;
@@ -109,23 +117,3 @@ static int	treat_allparam(t_env *env, t_cmd *cmd, t_info *info)
 	}
 	return (0);
 }
-
-int		treat_allcmd(t_info *info)
-{
-	t_cmd	*cmd;
-	int		ret;
-
-	ret = 0;
-	cmd = info->cmd;
-	while (cmd)
-	{
-		ret = clearify_allvar(cmd);
-		if (treat_allparam(info->env, cmd, info) == -1)
-			return (-1);
-		if (!ret)
-			init_allvar(&info->env, cmd);
-		cmd = cmd->next;
-	}
-	return (ret);
-}
-

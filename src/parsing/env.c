@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 20:10:08 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 20:10:08 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,16 +31,13 @@ static t_env	*new_env(char *name, char *val, int is_export)
 
 static void	env_add_lexico(t_env **env, t_env *new)
 {
-
 	t_env	*cur;
 
 	cur = *env;
 	while (cur)
 	{
-		//voir le cas ou  == 0
 		if (ft_strcmp(cur->name, new->name) == 0)
 			exit(printf(RED"DANGER - - env_add_lexico - - adding variable that exists already\n"WHITE));
-		//
 		if (ft_strcmp(cur->name, new->name) > 0)
 		{
 			new->prev = cur->prev;

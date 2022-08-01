@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   b_export.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 20:00:07 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 20:00:08 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "minishell.h"
 #include <stdio.h>
@@ -53,7 +65,8 @@ int	b_export(t_info *info, char **args)
 		else if (is_validid(*args))
 			export_identifier(&info->env, *args);
 		else
-			ft_puterr(RED"minishell: export: `", *args, "': not a valid identifier\n"WHITE);
+			ft_puterr(RED"minishell: export: `", *args, "': not a valid "
+				"identifier\n"WHITE);
 		args++;
 	}
 	return (0);

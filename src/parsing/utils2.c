@@ -1,4 +1,15 @@
-#include "libft.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils2.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 19:31:35 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 19:31:36 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell.h>
 /*
 char	*skip_spaces(char *s)
@@ -23,7 +34,6 @@ char	*skip_spaces(char *s)
 	while (*++s && ft_isblank(*s))
 		;
 	return (s);
-
 }
 
 int	skip_spaces_i(char *s)
