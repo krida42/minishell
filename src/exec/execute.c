@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/08/01 22:01:54 by kisikaya         ###   ########.fr       */
+/*   Updated: 2022/08/01 22:40:52 by kisikaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ int	execute(t_info *info)
 	if (save_stdinout(1) == 1)
 		return (g_err);
 	open_files(info->cmd);
-	if (info->size == 1 && g_err == 0 && info->cmd->ag
-		&& is_builtin(info->cmd) == 1)
+	if (info->size == 1 && info->cmd->fdin != -1 && info->cmd->fdout != -1
+		&& info->cmd->ag && is_builtin(info->cmd) == 1)
 	{
 		if (dup_filefds(info->cmd) == 0)
 		{
