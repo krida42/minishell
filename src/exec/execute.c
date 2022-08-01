@@ -6,7 +6,7 @@
 /*   By: esmirnov <esmirnov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 19:25:52 by esmirnov          #+#    #+#             */
-/*   Updated: 2022/07/31 19:57:36 by esmirnov         ###   ########.fr       */
+/*   Updated: 2022/08/01 14:56:10 by esmirnov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	child(t_cmd *cmd, t_info *info)
 	char	**env_child;
 
 	if (cmd->ag && cmd->fdin != -1 && cmd->fdout != -1
-		&& dup_pipefds(cmd, info) != 1 && dup_filefds(cmd, info) != 1)
+		&& dup_pipefds(cmd) != 1 && dup_filefds(cmd) != 1)
 	{
 		close_pipes_files(info->cmd);
 		if (cmd->ag[0] && is_builtin(cmd) == 1)
@@ -38,6 +38,7 @@ static int	child(t_cmd *cmd, t_info *info)
 			{
 				execve(cmd->cmd_path, cmd->ag, env_child);
 				perror("exec failed ");
+				g_err = errno;
 			}
 			free_strs(env_child);
 		}
@@ -94,10 +95,10 @@ int	execute(t_info *info)
 {
 	if (save_stdinout(1) == 1)
 		return (g_err);
-	open_files(info->cmd, info);
+	open_files(info->cmd);
 	if (info->size == 1 && info->cmd->ag && is_builtin(info->cmd) == 1)
 	{
-		if (dup_filefds(info->cmd, info) == 0)
+		if (dup_filefds(info->cmd) == 0)
 		{
 			close_files(info->cmd);
 			exec_builtin(info->cmd, info);
@@ -105,7 +106,7 @@ int	execute(t_info *info)
 		save_stdinout(2);
 		return (g_err);
 	}
-	if (open_pipes(info->cmd, info) == 1)
+	if (open_pipes(info->cmd) == 1)
 		return (g_err);
 	pipex(info->cmd, info);
 	return (g_err);
