@@ -79,6 +79,10 @@ void	init_signals(void);
 void	ignore_signals(void);
 void	redefault_signals(void);
 
+
+int		end_token_i(char *input);
+int		set_redirect(t_cmd *cmd, char *cursor);
+
 int		parse(char *input, t_info *info);
 //
 void	set_quote_state(char c, int *squote, int *dquote);

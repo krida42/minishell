@@ -28,7 +28,7 @@ static char	*next_token(char *input)
 	return (input + i);
 }
 
-static int	end_token_i(char *input)
+int	end_token_i(char *input)
 {
 	int	i;
 	int	dquote;
@@ -62,97 +62,7 @@ static int	set_ag(t_cmd *cmd, char *cursor)
 	return (0);
 }
 
-static int	set_redirect2(t_cmd *cmd, char *cursor, int *dir)
-{
-	char	*token;
-	const int	inout = dir[0];
-	const int	heredoc = dir[1];
-	const int	append = dir[2];
-	const int	end = end_token_i(cursor);
 
-	token = ft_strndup(cursor, end + 1);
-
-	if (heredoc)
-	{
-		free(cmd->heredoc);
-		cmd->heredoc = token;
-	}
-	else if (append)
-	{
-		free(cmd->append);
-		cmd->append = token;
-	}
-	else
-	{
-		if (inout == 0)
-		{
-			free(cmd->in);
-			cmd->in = token;
-		}
-		else if (inout == 1)
-		{
-			free(cmd->out);
-			cmd->out = token;
-		}
-	}
-	return (end);
-
-}
-
-static int	set_redirect(t_cmd *cmd, char *cursor)
-{
-	int	i;
-	int	append;
-	int	heredoc;
-	int	inout;
-
-	append = 0;
-	heredoc = 0;
-	i = 0;
-	if (!isinset(cursor[i], "<>"))
-		exit(printf(RED"DANGER - - set_redirect - - cursor is not on <> character\n"WHITE));
-	inout = cursor[i] == '>';
-	while (cursor[++i])
-	{
-		if (isinset(cursor[i], "<>") && (append || heredoc))
-		{
-			ft_putstr_fd(RED"minishell: syntax error near unexpected token `<' or `>'\n\n" WHITE, 2);
-			return (-1);
-		}
-		if (isinset(cursor[i], "<>"))
-		{
-			if ((cursor[i] == '<' && cursor[i - 1] != '<') || (cursor[i] == '>' && cursor[i - 1] != '>'))
-			{
-				ft_putstr_fd(RED"minishell: syntax error near unexpected token `<' or `>'\n\n" WHITE, 2);
-				return (-1);
-			}
-			else if (cursor[i] == '<')
-				heredoc = 1;
-			else if (cursor[i] == '>')
-				append = 1;
-		}
-		else
-			break ;
-
-	}
-	if (!cursor[i])
-	{
-		ft_putstr_fd(RED"minishell: syntax error near unexpected token `<' or `>'\n\n" WHITE, 2);
-		return (-1);
-	}
-	if (cursor[i] == ' ')
-		i += skip_spaces_i(cursor + i);
-	if (cursor[i] == '|')
-	{
-		ft_putstr_fd(RED"minishell: syntax error near unexpected token `|'\n\n"WHITE, 2);
-		return (-1);
-	}
-	i += set_redirect2(cmd, cursor + i, (int[]) {inout, heredoc, append});
-
-	if (isinset(cursor[i], "\"'"))
-		i++;
-	return (i);
-}
 
 static int	set_token(t_cmd **cmd, char *cursor)
 {
@@ -182,11 +92,16 @@ int	parse(char *input, t_info *info)
 	//cursor = input;
 	cursor = ft_strtrim(input, " \t");
 	tmp = cursor;
+	free(input);
 	while (cursor && *cursor)
 	{
 		ret = set_token(&cmd, cursor);
 		if (ret == -1)
+		{
+			free_allcmd(cmd);
+			free(tmp);
 			return (-1);
+		}
 		cursor = cursor + ret;
 		cursor = next_token(cursor);
 	}

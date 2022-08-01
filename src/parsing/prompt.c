@@ -1,6 +1,7 @@
 #include "libft.h"
 #include "minishell.h"
 #include <readline/readline.h>
+#include <stdio.h>
 
 static void	treat_input(char *input, t_info *info)
 {
@@ -22,6 +23,7 @@ int	m_prompt(const char *prompt, char **envp)
 	t_info	*info;
 
 	info = init_info(envp);
+	input = NULL;
 	while (1)
 	{
 		reset_info(info);
@@ -35,9 +37,8 @@ int	m_prompt(const char *prompt, char **envp)
 			//free_info(info);
 			//return (free(input), 0);
 		}
-		treat_input(input, info);
 		add_history(input);
-		free(input);
+		treat_input(input, info);
 	}
 	return (0);
 }
