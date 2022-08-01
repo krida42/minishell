@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 20:20:55 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 20:21:11 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static char	*next_token(char *input)
+char	*next_token(char *input)
 {
 	int	i;
 	int	dquote;
@@ -58,7 +70,7 @@ static int	set_ag(t_cmd *cmd, char *cursor)
 	return (0);
 }
 
-static int	set_token(t_cmd **cmd, char *cursor)
+int	set_token(t_cmd **cmd, char *cursor)
 {
 	int	ret;
 
@@ -74,44 +86,3 @@ static int	set_token(t_cmd **cmd, char *cursor)
 	}
 	return (0);
 }
-
-int	parse(char *input, t_info *info)
-{
-	char	*cursor;
-	char	*tmp;
-	t_cmd	*cmd;
-	int		ret;
-
-	cmd = NULL;
-	cursor = ft_strtrim(input, " \t");
-	tmp = cursor;
-	free(input);
-	while (cursor && *cursor)
-	{
-		ret = set_token(&cmd, cursor);
-		if (ret == -1)
-		{
-			free_allcmd(cmd);
-			free(tmp);
-			return (-1);
-		}
-		cursor = cursor + ret;
-		cursor = next_token(cursor);
-	}
-	free(tmp);
-	set_cmd(info, cmd);
-	if (is_cmd_err(info))
-		return (-2);
-	ret = treat_allcmd(info);
-	//if (ret == -1)
-	//	return -1;
-	printf("ret : %d\n", ret);
-	if (ret == 1){
-		desc_info(info);
-		g_err = execute(info);
-	}
-	else if (ret == 0)
-		desc_info(info);
-	return (ret);
-}
-

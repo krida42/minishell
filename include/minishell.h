@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/01 20:39:46 by kisikaya          #+#    #+#             */
+/*   Updated: 2022/08/01 20:39:47 by kisikaya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include "libft.h"
@@ -30,13 +42,13 @@ typedef struct s_cmd {
 	char			*out;
 	char			*append;
 	char			*heredoc;
-	char			*cmd_path; // execution: pour execve
-	int				pipefd[2]; // execution: pour pipe
-	int				fdin; // execution: pour entrée
-	int				fdout; // execution: pour sortie
+	char			*cmd_path;
+	int				pipefd[2];
+	int				fdin;
+	int				fdout;
 	int				status;
 	int				error_n;
-	pid_t			pid; // execution: pour fork
+	pid_t			pid;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
@@ -82,6 +94,8 @@ void	redefault_signals(void);
 int		end_token_i(char *input);
 int		set_redirect(t_cmd *cmd, char *cursor);
 
+char	*next_token(char *input);
+int		set_token(t_cmd **cmd, char *cursor);
 int		parse(char *input, t_info *info);
 //
 void	set_quote_state(char c, int *squote, int *dquote);

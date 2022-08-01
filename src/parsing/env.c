@@ -6,7 +6,7 @@
 /*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 20:10:08 by kisikaya          #+#    #+#             */
-/*   Updated: 2022/08/01 20:10:08 by kisikaya         ###   ########.fr       */
+/*   Updated: 2022/08/01 20:13:00 by kisikaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ static void	env_add_lexico(t_env **env, t_env *new)
 	cur = *env;
 	while (cur)
 	{
-		if (ft_strcmp(cur->name, new->name) == 0)
-			exit(printf(RED"DANGER - - env_add_lexico - - adding variable that exists already\n"WHITE));
 		if (ft_strcmp(cur->name, new->name) > 0)
 		{
 			new->prev = cur->prev;
