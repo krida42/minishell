@@ -47,7 +47,7 @@ GRAY_COLOR = \033[0;37m
 DGRAY_COLOR = \033[1;30m
 WHITE_COLOR = \033[1;37m
 
-all : obj_dir $(NAME)
+all : lib obj_dir $(NAME)
 
 obj_dir :
 	@mkdir -p obj
