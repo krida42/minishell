@@ -6,7 +6,7 @@
 /*   By: kisikaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/01 20:00:07 by kisikaya          #+#    #+#             */
-/*   Updated: 2022/08/01 20:00:08 by kisikaya         ###   ########.fr       */
+/*   Updated: 2022/08/02 03:03:30 by kisikaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,13 @@ static void	export_display(t_env *env)
 {
 	while (env)
 	{
-		printf("declare -x %s", env->name);
-		if (env->val)
-			printf("=\"%s\"", env->val);
-		printf("\n");
+		if (env->is_export)
+		{
+			printf("declare -x %s", env->name);
+			if (env->val)
+				printf("=\"%s\"", env->val);
+			printf("\n");
+		}
 		env = env->next;
 	}
 }
