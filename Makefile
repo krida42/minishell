@@ -64,7 +64,7 @@ $(NAME) : $(OBJ)
 $(OBJ) : $(INC_PATH)color.h $(INC_PATH)minishell.h Makefile
 
 lib :
-	make -C libft
+	@make -C libft
 
 $(OBJ_PATH)%.o : $(SRC_PATH)%.c
 	@$(CC) $(CFLAGS) -I$(INC_PATH) -c $< -o $@ $(SANI)
